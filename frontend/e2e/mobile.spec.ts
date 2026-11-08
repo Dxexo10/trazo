@@ -4,9 +4,9 @@ test.use({ ...devices['Pixel 7'] })
 
 test('navegación y filtros móviles', async ({ page }) => {
   await page.goto('/dashboard')
-  await expect(
-    page.getByRole('heading', { level: 1 }),
-  ).toContainText(/Sofía|Un nuevo día, nuevas metas/)
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    /Sofía|Un nuevo día, nuevas metas/,
+  )
 
   await page.getByRole('button', { name: 'Abrir navegación' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
@@ -16,7 +16,7 @@ test('navegación y filtros móviles', async ({ page }) => {
 
   await page.getByRole('button', { name: /^Filtros/ }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
-  await expect(page.getByText('Incluir archivados')).toBeVisible()
+  await expect(page.getByRole('combobox', { name: 'Archivados' })).toBeVisible()
 
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toBeHidden()

@@ -26,6 +26,14 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 
 Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 
+## Índice
+
+- [Identidad](#identidad) · [Estado del proyecto](#estado-del-proyecto) ·
+  [Stack](#stack) · [Cómo ejecutar](#cómo-ejecutar) ·
+  [Arquitectura](#arquitectura) · [Datos simulados](#datos-simulados) ·
+  [Pruebas y calidad](#pruebas-y-calidad) · [Capturas](#capturas) ·
+  [Limitaciones conocidas](#limitaciones-conocidas)
+
 ## Identidad
 
 - **Paleta:** grafito `#252824`, terracota `#C65D3A`, marfil `#F5F2EB`,
@@ -56,16 +64,19 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   mensual y la comparación contra el periodo anterior, mientras los totales
   siempre representan el portafolio activo completo.
 - Navegación flotante de altura completa con perfil demo, saludo por hora local,
-  submenús con «Próximamente» honesto, modo expandido/compacto, tooltips y
-  preferencia persistida.
+  submenús con rutas reales (incluye Archivados e Historial de versiones),
+  modo expandido/compacto, tooltips y preferencia persistida.
 - Selector de apariencia Claro / Oscuro / Sistema con tema propio «Trazo
   Nocturno», script anti-flash y reacción a `prefers-color-scheme`.
 - Layout responsive completo: compacta desde tablet, drawer móvil con foco,
   Escape y scroll bloqueado; topbar flotante independiente.
 - Portafolio `/projects` con búsqueda, filtros combinables de estado, prioridad,
-  sector, responsable y riesgo, orden, paginación y estado de archivados.
+  sector, responsable y riesgo, orden, paginación y modo de archivados
+  (ocultar, incluir o solo archivados).
 - Vista de tabla en desktop y tarjetas en móvil, con acciones de ver, editar y
   archivar (con confirmación y archivado lógico).
+- Vista `Archivados` (`/projects?archivados=solo`) con encabezado propio y un
+  estado vacío que explica cómo archivar proyectos.
 - Formulario crear/editar con React Hook Form + Zod: información general,
   línea base vs. presupuesto actual, cronograma, avance y reglas de completado.
 - Edición transaccional: cada cambio relevante crea una versión inmutable, un
@@ -97,8 +108,8 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 - **React Router 7**, **TanStack Query 5**, **Recharts**
 - **React Hook Form + Zod** (base de formularios de la Fase 2)
 - **idb** para persistencia local
-- **Vitest + React Testing Library** · **ESLint + Prettier**
-- _Planificado:_ TanStack Table, Playwright, Node.js + Express, Prisma, PostgreSQL
+- **Vitest + React Testing Library** · **Playwright** (E2E + axe) · **ESLint + Prettier**
+- _Planificado:_ Node.js + Express, Prisma, PostgreSQL
 
 ## Cómo ejecutar
 
@@ -118,8 +129,13 @@ npm run build          # compilación de producción
 npm run preview        # sirve el build
 npm run typecheck      # TypeScript sin emitir
 npm run lint           # ESLint
+npm run lint:fix       # ESLint con correcciones
 npm run format         # Prettier
+npm run format:check   # Verificar formato sin escribir
 npm run test           # Vitest
+npm run test:coverage  # Vitest con cobertura
+npm run test:e2e       # Playwright (flujo estrella, móvil y axe)
+npm run test:e2e:ui    # Playwright en modo interactivo
 ```
 
 > Si tu entorno define `NODE_ENV=production`, instala con
@@ -200,11 +216,13 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 - La accesibilidad AA se audita automáticamente con axe en las pantallas
   principales; falta validación manual con lectores de pantalla.
 - Los escenarios se ejecutan en el navegador, no con jobs reales.
-- Las capturas se tomaron en 1440 px; la interfaz también se verificó en 768 y
-  390 px.
+- Las capturas de escritorio se tomaron en 1440 px (el dashboard, en 1280 px);
+  la interfaz también se verificó en 768 y 390 px.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al
   periodo anterior; los totales y la distribución representan el portafolio
   activo completo.
+- No hay demo pública desplegada todavía: para probarla hay que ejecutarla en
+  local. No se publica un enlace `Live Demo` hasta que exista.
 
 ## Licencia
 

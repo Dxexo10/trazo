@@ -18,7 +18,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Switch } from '@/components/ui/switch'
 import { PRIORITY_LABELS, SECTOR_LABELS, STATUS_LABELS } from '@/lib/labels'
 import {
   PROJECT_PRIORITIES,
@@ -65,6 +64,12 @@ const RISK_OPTIONS: FilterOption[] = [
   ALL,
   { value: 'alto', label: 'Riesgo alto' },
   { value: 'medio', label: 'Riesgo medio' },
+]
+
+const ARCHIVED_OPTIONS: FilterOption[] = [
+  { value: 'no', label: 'Ocultar archivados' },
+  { value: 'include', label: 'Incluir archivados' },
+  { value: 'only', label: 'Solo archivados' },
 ]
 
 interface FilterChipProps {
@@ -152,18 +157,19 @@ export function ProjectsFilters({
       clear: () => onChange({ risk: 'all' }),
     })
   }
-  if (filters.includeArchived) {
+  if (filters.archived !== 'no') {
     chips.push({
       key: 'archived',
-      label: 'Incluye archivados',
-      clear: () => onChange({ includeArchived: false }),
+      label:
+        filters.archived === 'only' ? 'Solo archivados' : 'Incluye archivados',
+      clear: () => onChange({ archived: 'no' }),
     })
   }
 
   const moreFiltersCount =
     (filters.ownerId ? 1 : 0) +
     (filters.risk !== 'all' ? 1 : 0) +
-    (filters.includeArchived ? 1 : 0)
+    (filters.archived !== 'no' ? 1 : 0)
   const appliedFilterCount = chips.length - (filters.search ? 1 : 0)
   const active = hasActiveFilters(filters)
 
@@ -277,16 +283,18 @@ export function ProjectsFilters({
                   onChange({ risk: risk as ProjectFilters['risk'] })
                 }
               />
-              <label className="col-span-2 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
-                <Switch
-                  checked={filters.includeArchived}
-                  onCheckedChange={(checked) =>
-                    onChange({ includeArchived: Boolean(checked) })
+              <div className="col-span-2">
+                <FilterSelect
+                  label="Archivados"
+                  value={filters.archived}
+                  options={ARCHIVED_OPTIONS}
+                  onChange={(archived) =>
+                    onChange({
+                      archived: archived as ProjectFilters['archived'],
+                    })
                   }
-                  aria-label="Incluir proyectos archivados"
                 />
-                Incluir archivados
-              </label>
+              </div>
             </div>
 
             <SheetFooter className="flex-row items-center justify-between gap-3 border-t border-border px-5 py-4">
@@ -371,16 +379,14 @@ export function ProjectsFilters({
                   onChange({ risk: risk as ProjectFilters['risk'] })
                 }
               />
-              <label className="inline-flex cursor-pointer items-center gap-2 pt-1 text-sm text-muted-foreground">
-                <Switch
-                  checked={filters.includeArchived}
-                  onCheckedChange={(checked) =>
-                    onChange({ includeArchived: Boolean(checked) })
-                  }
-                  aria-label="Incluir proyectos archivados"
-                />
-                Incluir archivados
-              </label>
+              <FilterSelect
+                label="Archivados"
+                value={filters.archived}
+                options={ARCHIVED_OPTIONS}
+                onChange={(archived) =>
+                  onChange({ archived: archived as ProjectFilters['archived'] })
+                }
+              />
             </div>
           </PopoverContent>
         </Popover>

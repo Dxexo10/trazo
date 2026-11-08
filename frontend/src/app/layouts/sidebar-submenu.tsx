@@ -7,29 +7,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import type { NavChild, NavItem } from './nav-items'
+import type { NavItem } from './nav-items'
 
 const ACTIVE_ICON =
   'bg-primary text-primary-foreground shadow-[0_8px_18px_-10px_rgba(198,93,58,0.9)]'
 
 const FOCUS_RING =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-ivory/80'
-
-function ComingSoonItem({ child }: { child: NavChild }) {
-  return (
-    <span
-      aria-disabled="true"
-      title="Disponible en una próxima versión"
-      className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-sidebar-foreground/40 select-none"
-    >
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-white/15" />
-      <span>{child.label}</span>
-      <span className="ml-auto rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[9px] font-medium tracking-[0.08em] uppercase">
-        Próximamente
-      </span>
-    </span>
-  )
-}
 
 interface SidebarGroupProps {
   item: NavItem
@@ -117,8 +101,7 @@ export function SidebarGroup({
           className="relative mt-1 ml-6 space-y-0.5 border-l border-white/10 py-0.5 pl-3"
         >
           {(item.children ?? []).map((child) => {
-            const isActive =
-              child.href !== undefined && activeChildHref === child.href
+            const isActive = activeChildHref === child.href
 
             return (
               <li key={child.label} className="relative">
@@ -127,30 +110,26 @@ export function SidebarGroup({
                   className="absolute top-1/2 -left-3 h-px w-2 bg-white/15"
                 />
 
-                {child.href ? (
-                  <Link
-                    to={child.href}
-                    onClick={onNavigate}
-                    aria-current={isActive ? 'page' : undefined}
+                <Link
+                  to={child.href}
+                  onClick={onNavigate}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center rounded-lg px-2 py-1.5 text-[13px] transition-colors',
+                    isActive
+                      ? 'bg-white/[0.06] font-medium text-brand-ivory'
+                      : 'text-sidebar-foreground/70 hover:bg-white/[0.05] hover:text-brand-ivory',
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
                     className={cn(
-                      'flex items-center rounded-lg px-2 py-1.5 text-[13px] transition-colors',
-                      isActive
-                        ? 'bg-white/[0.06] font-medium text-brand-ivory'
-                        : 'text-sidebar-foreground/70 hover:bg-white/[0.05] hover:text-brand-ivory',
+                      'mr-2 size-1.5 rounded-full',
+                      isActive ? 'bg-brand-terracotta' : 'bg-white/20',
                     )}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        'mr-2 size-1.5 rounded-full',
-                        isActive ? 'bg-brand-terracotta' : 'bg-white/20',
-                      )}
-                    />
-                    {child.label}
-                  </Link>
-                ) : (
-                  <ComingSoonItem child={child} />
-                )}
+                  />
+                  {child.label}
+                </Link>
               </li>
             )
           })}
@@ -238,40 +217,35 @@ export function SidebarCompactGroup({
         </p>
         <ul className="space-y-0.5">
           {(item.children ?? []).map((child, index) => {
-            const isActive =
-              child.href !== undefined && activeChildHref === child.href
+            const isActive = activeChildHref === child.href
 
             return (
               <li key={child.label}>
-                {child.href ? (
-                  <Link
-                    ref={index === 0 ? firstLinkRef : undefined}
-                    to={child.href}
-                    onClick={() => {
-                      close()
-                      onNavigate?.()
-                    }}
-                    aria-current={isActive ? 'page' : undefined}
+                <Link
+                  ref={index === 0 ? firstLinkRef : undefined}
+                  to={child.href}
+                  onClick={() => {
+                    close()
+                    onNavigate?.()
+                  }}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors',
+                    isActive
+                      ? 'bg-white/[0.08] font-medium text-brand-ivory'
+                      : 'text-sidebar-foreground/80 hover:bg-white/[0.06] hover:text-brand-ivory',
+                    FOCUS_RING,
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
                     className={cn(
-                      'flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors',
-                      isActive
-                        ? 'bg-white/[0.08] font-medium text-brand-ivory'
-                        : 'text-sidebar-foreground/80 hover:bg-white/[0.06] hover:text-brand-ivory',
-                      FOCUS_RING,
+                      'size-1.5 rounded-full',
+                      isActive ? 'bg-brand-terracotta' : 'bg-white/20',
                     )}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        'size-1.5 rounded-full',
-                        isActive ? 'bg-brand-terracotta' : 'bg-white/20',
-                      )}
-                    />
-                    {child.label}
-                  </Link>
-                ) : (
-                  <ComingSoonItem child={child} />
-                )}
+                  />
+                  {child.label}
+                </Link>
               </li>
             )
           })}

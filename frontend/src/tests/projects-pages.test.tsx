@@ -43,14 +43,25 @@ describe('ProjectsPage', () => {
       (project) => project.status === 'completed',
     ).length
 
-    renderRoute(
-      '/projects?estado=completed',
-      '/projects',
-      <ProjectsPage />,
-    )
+    renderRoute('/projects?estado=completed', '/projects', <ProjectsPage />)
 
     expect(
       await screen.findByText(`${completed} proyectos`, {}, { timeout: 8000 }),
+    ).toBeInTheDocument()
+  })
+
+  it('shows the archived view when the URL asks for it', async () => {
+    renderRoute('/projects?archivados=solo', '/projects', <ProjectsPage />)
+
+    expect(
+      await screen.findByRole(
+        'heading',
+        { name: 'Proyectos archivados', level: 1 },
+        { timeout: 8000 },
+      ),
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByText('Todavía no hay proyectos archivados'),
     ).toBeInTheDocument()
   })
 })
@@ -60,11 +71,7 @@ describe('ProjectDetailPage', () => {
     const dataset = generateDemoDataset()
     const project = dataset.projects.find((item) => item.id === 'prj_0001')
 
-    renderRoute(
-      '/projects/prj_0001',
-      '/projects/:id',
-      <ProjectDetailPage />,
-    )
+    renderRoute('/projects/prj_0001', '/projects/:id', <ProjectDetailPage />)
 
     expect(
       await screen.findByRole(

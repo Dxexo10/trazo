@@ -20,6 +20,7 @@ export interface ProjectQuery extends PageQuery {
   ownerId?: string
   createdAfter?: string
   includeArchived?: boolean
+  onlyArchived?: boolean
   sortBy?: ProjectSortField
   sortDirection?: 'asc' | 'desc'
 }

@@ -20,9 +20,9 @@ describe('mock repositories over IndexedDB', () => {
     })
 
     expect(page.items).toHaveLength(5)
-    expect(page.items.every((project) => project.status === 'in_progress')).toBe(
-      true,
-    )
+    expect(
+      page.items.every((project) => project.status === 'in_progress'),
+    ).toBe(true)
     expect(page.total).toBeGreaterThan(5)
   })
 
@@ -49,5 +49,26 @@ describe('mock repositories over IndexedDB', () => {
 
     expect(open).toBeGreaterThan(0)
     expect(open).toBeLessThanOrEqual(all.length)
+  })
+
+  it('separates archived projects from the active portfolio', async () => {
+    const active = await projectRepository.list({ pageSize: 200 })
+    const [target] = active.items
+    await projectRepository.archive(target!.id)
+
+    const archived = await projectRepository.list({
+      pageSize: 200,
+      onlyArchived: true,
+    })
+
+    expect(archived.items.map((project) => project.id)).toContain(target!.id)
+    expect(archived.items.every((project) => project.archivedAt !== null)).toBe(
+      true,
+    )
+
+    const withoutArchived = await projectRepository.list({ pageSize: 200 })
+    expect(withoutArchived.items.map((project) => project.id)).not.toContain(
+      target!.id,
+    )
   })
 })

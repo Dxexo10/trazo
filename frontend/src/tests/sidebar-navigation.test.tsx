@@ -40,8 +40,10 @@ describe('Sidebar navigation', () => {
       screen.getByRole('link', { name: 'Todos los proyectos' }),
     ).not.toHaveAttribute('aria-current')
 
-    expect(screen.getByText('Archivados')).toBeInTheDocument()
-    expect(screen.getByText('Próximamente')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Archivados' })).toHaveAttribute(
+      'href',
+      '/projects?archivados=solo',
+    )
   })
 
   it('collapses and expands a group on demand', async () => {

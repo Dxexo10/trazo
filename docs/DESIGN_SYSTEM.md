@@ -133,16 +133,17 @@ Sin logo, wordmark, subtítulo ni aviso de entorno demo dentro de la sidebar.
 ### Submenús
 
 - Proyectos: Todos los proyectos (`/projects`), En ejecución
-  (`/projects?estado=in_progress`), Archivados (Próximamente).
+  (`/projects?estado=in_progress`), Archivados
+  (`/projects?archivados=solo`).
 - Monitor de cambios: Cambios recientes (`/monitor`), Historial de versiones
-  (Próximamente).
+  (`/activity?accion=version.created`).
 - Centro de alertas: Alertas abiertas (`/alerts?estado=open`) y Alertas
   revisadas (`/alerts?estado=reviewed`).
 - Expandido: rama debajo del módulo con línea vertical, conector y chevron;
   `aria-expanded` + `aria-controls`; el grupo del módulo activo abre por defecto.
 - Compacto: popover lateral alineado al icono, cierre con Escape, selección con
   teclado y retorno de foco al disparador.
-- «Próximamente» es texto explícito, no una ruta ficticia.
+- Cada hijo del menú apunta a una ruta real; no hay entradas deshabilitadas.
 
 ### Saludo
 

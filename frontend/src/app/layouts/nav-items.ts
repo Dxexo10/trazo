@@ -11,8 +11,7 @@ import { isRouteActive } from '@/lib/navigation'
 
 export interface NavChild {
   label: string
-  href?: string
-  comingSoon?: boolean
+  href: string
 }
 
 export interface NavItem {
@@ -32,7 +31,7 @@ export const PRIMARY_NAV: NavItem[] = [
     children: [
       { label: 'Todos los proyectos', href: '/projects' },
       { label: 'En ejecución', href: '/projects?estado=in_progress' },
-      { label: 'Archivados', comingSoon: true },
+      { label: 'Archivados', href: '/projects?archivados=solo' },
     ],
   },
   {
@@ -41,7 +40,10 @@ export const PRIMARY_NAV: NavItem[] = [
     icon: Radar,
     children: [
       { label: 'Cambios recientes', href: '/monitor' },
-      { label: 'Historial de versiones', comingSoon: true },
+      {
+        label: 'Historial de versiones',
+        href: '/activity?accion=version.created',
+      },
     ],
   },
   {
@@ -74,11 +76,7 @@ export const ROUTE_TITLES: Record<string, string> = {
   '/settings': 'Configuración demo',
 }
 
-function matchesChild(
-  pathname: string,
-  search: string,
-  href: string,
-): boolean {
+function matchesChild(pathname: string, search: string, href: string): boolean {
   const url = new URL(href, 'http://trazo.local')
   if (pathname !== url.pathname) return false
 

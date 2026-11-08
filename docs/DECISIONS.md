@@ -53,9 +53,12 @@ al desplegar.
 
 ## ADR-008 · Módulos pendientes visibles, no simulados
 
-**Decisión:** las rutas de Fases 2–4 muestran `ComingSoon` con alcance y fase.
-**Consecuencia:** no hay pantallas vacías ni funcionalidad ficticia; cada botón
-navega, ejecuta algo real o está deshabilitado con explicación.
+**Contexto:** durante las fases tempranas existían rutas aún sin implementar.
+**Decisión:** las rutas de Fases 2–4 se completaron y no queda ninguna pantalla
+simulada; cada botón navega o ejecuta una acción real, o está deshabilitado con
+explicación.
+**Consecuencia:** no hay pantallas vacías ni funcionalidad ficticia. Las fases
+5–7 (backend y PostgreSQL) permanecen fuera del frontend hasta su aprobación.
 
 ## ADR-009 · Apariencia por clases y tokens, sin duplicar paletas
 
@@ -68,11 +71,11 @@ escucha `prefers-color-scheme`/`storage`.
 **Consecuencia:** los componentes consumen los mismos tokens en ambos temas; el
 contraste AA se prueba por separado para `:root` y `.dark`.
 
-## ADR-010 · Submenús con rutas reales y «Próximamente» explícito
+## ADR-010 · Submenús con rutas reales
 
 **Contexto:** la navegación debía crecer en jerarquía sin inventar pantallas.
-**Decisión:** `nav-items.ts` modela hijos con `href` o `comingSoon`. Proyectos,
-Monitor y Alertas enlazan únicamente filtros existentes; Archivados e Historial
-global de versiones se muestran deshabilitados con badge «Próximamente».
-**Consecuencia:** el estado activo se calcula con `pathname` + query params y no
-se prometen funcionalidades pendientes como implementadas.
+**Decisión:** `nav-items.ts` modela cada hijo con un `href` obligatorio.
+Archivados apunta a `/projects?archivados=solo` y el historial global de
+versiones a `/activity?accion=version.created`.
+**Consecuencia:** el estado activo se calcula con `pathname` + query params y
+no existen entradas de menú deshabilitadas.

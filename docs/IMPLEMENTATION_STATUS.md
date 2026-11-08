@@ -1,7 +1,32 @@
 # Estado de implementación
 
-Actualizado tras el cierre de la **Fase 3**, el rebranding visual a **Trazo** y el
-rediseño de navegación y apariencia.
+Actualizado tras el **cierre del Frente 1** (coherencia de navegación,
+documentación y metadatos), previo a la aprobación del backend.
+
+## Cierre del Frente 1 — completado
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Archivados reales | `nav-items.ts` enlaza `/projects?archivados=solo`; el filtro pasa a tres modos (`no`/`include`/`only`) con `onlyArchived` en el contrato y el repositorio mock | este bloque |
+| Historial de versiones | El submenú apunta a `/activity?accion=version.created` en lugar de «Próximamente» | este bloque |
+| Navegación honesta | `NavChild.href` es obligatorio; se elimina `ComingSoonItem` y el componente huérfano `shared/coming-soon.tsx` | este bloque |
+| Vista de archivados | Encabezado propio y estado vacío contextual en `/projects?archivados=solo` | este bloque |
+| Metadatos sociales | `og:image`, `og:title`, `twitter:card` y `public/og-cover.png` (captura real del dashboard) | este bloque |
+| `.env.example` | Documenta que el frontend no requiere variables y reserva `VITE_API_BASE_URL` para la Fase 5 | este bloque |
+| README y docs | Stack y scripts corregidos (Playwright y `test:e2e` ya no figuran como planificados); design system, ADR-008/010 y guía de marca alineados | este bloque |
+
+### Verificación ejecutada
+
+```text
+npm run lint       → 0 errores, 0 advertencias
+npm run typecheck  → sin errores
+NODE_ENV=test npm run test → 28 archivos, 174 pruebas aprobadas
+npm run test:e2e   → 13 pruebas aprobadas (Chromium), incluye el submenú Archivados
+npm run build      → dist generado
+```
+
+La validación manual con lectores de pantalla y la revisión visual en navegador
+real siguen pendientes en el equipo del propietario.
 
 ## Rediseño de sidebar y apariencia — completado
 

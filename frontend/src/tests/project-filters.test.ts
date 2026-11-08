@@ -16,7 +16,7 @@ describe('project filters', () => {
       sector: 'all',
       ownerId: '',
       risk: 'all',
-      includeArchived: false,
+      archived: 'no',
       sortBy: 'updatedAt',
       sortDirection: 'desc',
       page: 1,
@@ -37,7 +37,7 @@ describe('project filters', () => {
       sector: 'technology',
       ownerId: 'usr_0001',
       risk: 'alto',
-      includeArchived: true,
+      archived: 'include',
       sortBy: 'name',
       sortDirection: 'asc',
       page: 3,
@@ -58,6 +58,24 @@ describe('project filters', () => {
 
     expect(params.toString()).toBe('')
     expect(parseProjectFilters(params)).toEqual(filters)
+  })
+
+  it('round-trips the archived modes through the URL', () => {
+    const only = parseProjectFilters(new URLSearchParams('archivados=solo'))
+
+    expect(only.archived).toBe('only')
+    expect(serialiseProjectFilters(only).get('archivados')).toBe('solo')
+
+    const include = parseProjectFilters(new URLSearchParams('archivados=1'))
+
+    expect(include.archived).toBe('include')
+    expect(serialiseProjectFilters(include).get('archivados')).toBe('1')
+
+    expect(
+      serialiseProjectFilters(parseProjectFilters(new URLSearchParams())).has(
+        'archivados',
+      ),
+    ).toBe(false)
   })
 
   it('detects active filters', () => {

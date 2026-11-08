@@ -116,7 +116,7 @@ legibilidad.
 - Módulos arriba; Apariencia y Configuración ancladas abajo. Sin bloques
   decorativos ni aviso demo dentro de la navegación.
 - Submenús jerárquicos con línea vertical sutil en expandido y popover lateral
-  en compacto. Lo no implementado se marca «Próximamente».
+  en compacto. Cada entrada enlaza a una ruta real.
 - Activo: rail terracota, icono terracota, texto marfil y fondo blanco al 6 %.
 - Topbar flotante independiente, radio 20 px, borde sand, sombra muy sutil.
 - Contenido máximo 1600 px, padding 16–32 px según breakpoint.

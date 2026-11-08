@@ -1,11 +1,11 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { projectRepository, type ProjectQuery } from '@/data'
 import { assessProjectRisk } from '@/domain/services/project-metrics'
-import { DEMO_REFERENCE_DATE, PROJECT_QUERY_MAX_PAGE_SIZE } from '@/lib/demo-config'
 import {
-  PROJECTS_PAGE_SIZE,
-  type ProjectFilters,
-} from './use-project-filters'
+  DEMO_REFERENCE_DATE,
+  PROJECT_QUERY_MAX_PAGE_SIZE,
+} from '@/lib/demo-config'
+import { PROJECTS_PAGE_SIZE, type ProjectFilters } from './use-project-filters'
 
 function toQuery(filters: ProjectFilters): ProjectQuery {
   return {
@@ -16,7 +16,8 @@ function toQuery(filters: ProjectFilters): ProjectQuery {
     priority: filters.priority === 'all' ? undefined : [filters.priority],
     sector: filters.sector === 'all' ? undefined : [filters.sector],
     ownerId: filters.ownerId || undefined,
-    includeArchived: filters.includeArchived,
+    includeArchived: filters.archived === 'include',
+    onlyArchived: filters.archived === 'only',
     sortBy: filters.sortBy,
     sortDirection: filters.sortDirection,
   }

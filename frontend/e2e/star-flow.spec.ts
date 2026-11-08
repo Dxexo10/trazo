@@ -9,9 +9,9 @@ test('editar presupuesto crea versión, alerta y trazabilidad', async ({
   page,
 }) => {
   await page.goto('/dashboard')
-  await expect(
-    page.getByRole('heading', { level: 1 }),
-  ).toContainText(/Sofía|Un nuevo día, nuevas metas/)
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    /Sofía|Un nuevo día, nuevas metas/,
+  )
 
   await page.goto('/projects/prj_0001')
   await expect(
@@ -59,6 +59,20 @@ test('editar presupuesto crea versión, alerta y trazabilidad', async ({
 
   await page.getByRole('button', { name: 'Revisar' }).first().click()
   await expect(page.getByText('Alerta marcada como revisada.')).toBeVisible()
+})
+
+test('el submenú Archivados abre la vista real', async ({ page }) => {
+  await page.goto('/projects')
+
+  await page.getByRole('link', { name: 'Archivados' }).click()
+
+  await expect(page).toHaveURL(/archivados=solo/)
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Proyectos archivados',
+    }),
+  ).toBeVisible()
 })
 
 test('el reset demo restaura el portafolio inicial', async ({ page }) => {

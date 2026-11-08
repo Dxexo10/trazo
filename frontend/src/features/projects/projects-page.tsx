@@ -1,10 +1,5 @@
 import { Link } from 'react-router-dom'
-import {
-  ChevronLeft,
-  ChevronRight,
-  FolderSearch,
-  Plus,
-} from 'lucide-react'
+import { ChevronLeft, ChevronRight, FolderSearch, Plus } from 'lucide-react'
 import { DemoBadge } from '@/components/shared/demo-badge'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
@@ -47,15 +42,21 @@ export function ProjectsPage() {
   const total = query.data?.total ?? 0
   const items = query.data?.items ?? []
   const totalPages = Math.max(1, Math.ceil(total / PROJECTS_PAGE_SIZE))
-  const rangeStart = total === 0 ? 0 : (filters.page - 1) * PROJECTS_PAGE_SIZE + 1
+  const rangeStart =
+    total === 0 ? 0 : (filters.page - 1) * PROJECTS_PAGE_SIZE + 1
   const rangeEnd = Math.min(total, filters.page * PROJECTS_PAGE_SIZE)
   const active = hasActiveFilters(filters)
+  const onlyArchived = filters.archived === 'only'
 
   return (
     <div className="space-y-5 lg:space-y-6">
       <PageHeader
-        title="Proyectos"
-        description="Explora, filtra y gestiona el portafolio completo."
+        title={onlyArchived ? 'Proyectos archivados' : 'Proyectos'}
+        description={
+          onlyArchived
+            ? 'Proyectos fuera del portafolio activo. Sus datos e historial se conservan.'
+            : 'Explora, filtra y gestiona el portafolio completo.'
+        }
         meta={
           <div className="flex flex-wrap items-center gap-2">
             <DemoBadge />
@@ -112,13 +113,23 @@ export function ProjectsPage() {
             {items.length === 0 ? (
               <EmptyState
                 icon={FolderSearch}
-                title="No encontramos proyectos"
-                description="Prueba con otros filtros o crea el primer proyecto del portafolio."
+                title={
+                  onlyArchived
+                    ? 'Todavía no hay proyectos archivados'
+                    : 'No encontramos proyectos'
+                }
+                description={
+                  onlyArchived
+                    ? 'Cuando archives un proyecto desde su menú de acciones aparecerá aquí, con su historial intacto.'
+                    : 'Prueba con otros filtros o crea el primer proyecto del portafolio.'
+                }
                 action={
                   <div className="flex flex-wrap justify-center gap-2">
                     {active ? (
                       <Button variant="outline" size="sm" onClick={clear}>
-                        Limpiar filtros
+                        {onlyArchived
+                          ? 'Ver portafolio activo'
+                          : 'Limpiar filtros'}
                       </Button>
                     ) : null}
                     <Button size="sm" render={<Link to="/projects/new" />}>

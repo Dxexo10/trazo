@@ -15,7 +15,11 @@ import { getDatabase } from '../storage/db'
 import { withLatency } from './latency'
 
 function matchesQuery(project: Project, query: ProjectQuery): boolean {
-  if (!query.includeArchived && project.archivedAt !== null) return false
+  if (query.onlyArchived) {
+    if (project.archivedAt === null) return false
+  } else if (!query.includeArchived && project.archivedAt !== null) {
+    return false
+  }
 
   if (query.search) {
     const term = query.search.trim().toLowerCase()
