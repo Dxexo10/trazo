@@ -8,6 +8,15 @@ import { SectionCard } from '@/components/shared/section-card'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DEMO_USERS } from '@/data/mock/seed/users'
 import type { AlertFilters } from '@/features/alerts/hooks/use-alert-filters'
@@ -111,42 +120,45 @@ function ReportPreview({ document }: { document: ReportDocument }) {
   const rows = document.rows.slice(0, PREVIEW_ROWS)
 
   return (
-    <div
-      role="region"
-      aria-label={`${document.metadata.title} (tabla con desplazamiento horizontal)`}
-      tabIndex={0}
-      className="overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-terracotta"
-    >
-      <table className="w-full min-w-[820px] text-left text-sm">
-        <caption className="sr-only">{document.metadata.title}</caption>
-        <thead>
-          <tr className="border-y border-border/70 bg-sand-soft/60 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase">
+    <>
+      <Table
+        label={`${document.metadata.title} (tabla con desplazamiento horizontal)`}
+        className="min-w-[820px] text-left"
+      >
+        <TableCaption className="sr-only">
+          {document.metadata.title}
+        </TableCaption>
+        <TableHeader>
+          <TableRow className="border-y border-border/70 bg-sand-soft/60 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:bg-sand-soft/60">
             {document.columns.map((column) => (
-              <th
+              <TableHead
                 key={column.key}
                 scope="col"
-                className="px-3 py-2 font-semibold whitespace-nowrap"
+                className="h-auto py-2 tracking-[0.06em] whitespace-nowrap"
               >
                 {column.label}
-              </th>
+              </TableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {rows.map((row, index) => (
-            <tr
+            <TableRow
               key={index}
               className="border-b border-border/50 align-top last:border-0"
             >
               {document.columns.map((column) => (
-                <td key={column.key} className="px-3 py-2 text-foreground">
+                <TableCell
+                  key={column.key}
+                  className="py-2 align-top text-foreground"
+                >
                   {formatReportCell(column, row[column.key])}
-                </td>
+                </TableCell>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       {document.rows.length > rows.length ? (
         <p className="border-t border-border/60 px-5 py-2 text-xs text-muted-foreground">
           Vista previa de {formatNumber(rows.length)} de{' '}
@@ -154,7 +166,7 @@ function ReportPreview({ document }: { document: ReportDocument }) {
           todas las filas del filtro activo.
         </p>
       ) : null}
-    </div>
+    </>
   )
 }
 

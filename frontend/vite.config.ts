@@ -43,5 +43,10 @@ export default defineConfig({
     setupFiles: ['./src/tests/setup.ts'],
     css: false,
     restoreMocks: true,
+    // Igual que el CI: sin esto, los entornos donde NODE_ENV no está definido
+    // resuelven el build de producción de React y `render()` falla con
+    // "React.act is not a function".
+    env: { NODE_ENV: 'test' },
+    testTimeout: 10_000,
   },
 })
