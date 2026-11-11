@@ -32,5 +32,6 @@ las pruebas unitarias no dependan de la red.
 - Los usuarios (responsables, filtros y autores) se leen de `GET /users`. El
   perfil de topbar/sidebar mantiene la identidad demo porque la API aún no tiene
   autenticación.
-- `POST /demo/scenarios/:id/run` todavía no existe en el backend; los escenarios
-  se ejecutan en el navegador y usan `PATCH /projects/:id`.
+- `POST /demo/scenarios/:id/run` ya existe en el backend (aplica el escenario con
+  origen `simulated`); falta que `use-simulate-update` llame a ese endpoint en
+  modo HTTP en lugar de usar `PATCH /projects/:id`.

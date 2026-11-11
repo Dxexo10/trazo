@@ -32,7 +32,6 @@ node dist/server.js → GET /api/v1/health responde 200 con x-request-id
 
 ### Pendiente de F5
 
-- Escenarios de simulación en el servidor (`/demo/scenarios/:id/run`).
 - Autenticación y protección de la API (hoy usa el perfil demo fijo).
 - Adaptador HTTP del frontend en F7.
 
@@ -341,6 +340,7 @@ configuración. También verifica que el primer Tab enfoca el enlace de salto.
 | Adaptadores | Proyectos, alertas, actividad, versiones, cambios, reglas y usuarios implementan los contratos existentes | este bloque |
 | Reset y usuarios | `resetDemoData()` usa `POST /demo/reset` con API; nuevo `UserRepository` con adaptadores mock y HTTP (`GET /users`) | este bloque |
 | Usuarios de la API | `useUsers()` alimenta filtros, formularios, chips y autores reales; se eliminan las lecturas de `DEMO_USERS` en las vistas | este bloque |
+| Escenarios en servidor | `POST /demo/scenarios/:id/run` valida el escenario y `{ projectId }`, aplica el cambio con origen `simulated` y devuelve el `ProjectUpdateResult` | este bloque |
 | Pruebas | 11 pruebas del cliente y adaptadores: serialización, errores, 404→null y paginación | este bloque |
 
 ### Verificación ejecutada
@@ -351,6 +351,7 @@ npm run lint      → 0 errores
 npm run typecheck → sin errores
 npm run build     → dist generado
 npm run test:e2e  → 14 pruebas aprobadas (modo mock)
+backend npm test  → 62 pruebas aprobadas
 ```
 
 Contra la API real con SQL Server local se comprobaron `/health`, `/projects`
@@ -364,11 +365,16 @@ muestra 50 proyectos y 10 filas sin ningún «Sin asignar», el select de
 responsable ofrece los 10 usuarios de `/users`, el dashboard refleja 50 y la
 actividad resuelve autores del servidor, con 0 errores de consola.
 
+El endpoint de escenarios se probó contra la API real: `budget-increase` sobre un
+proyecto devolvió `changed: true`, versión nueva con `source: "simulated"` y su
+motivo, 1 cambio y 2 alertas (+15 % de presupuesto); un escenario desconocido
+responde 400 y un proyecto inexistente 404. Después se ejecutó `/demo/reset` y se
+recuperó el dataset inicial (50 proyectos, 133 versiones).
+
 ### Pendiente de F7
 
-- Implementar `POST /demo/scenarios/:id/run` en el backend; hoy los escenarios
-  corren en el navegador y usan `PATCH /projects/:id`.
-- Preservar `source: 'simulated'` en las escrituras (el backend fija `manual`).
+- Conectar el simulador del frontend (`use-simulate-update`) a
+  `POST /demo/scenarios/:id/run` para que en modo HTTP lo ejecute el servidor.
 - Autenticación/roles si procede y despliegue.
 
 ## Pendiente inmediato
@@ -379,8 +385,8 @@ actividad resuelve autores del servidor, con 0 errores de consola.
 
 ## Pendiente posterior
 
-- **Fase 7:** vistas con usuarios de la API, endpoint de escenarios demo en el
-  servidor, autenticación/protección de la API y despliegue.
+- **Fase 7:** conectar el simulador del frontend al endpoint de escenarios,
+  autenticación/protección de la API y despliegue.
 
 ## Bloqueos conocidos
 

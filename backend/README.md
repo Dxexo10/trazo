@@ -117,6 +117,7 @@ datos reales.
 | PATCH  | `/api/v1/rules/:id`                         | Umbral, severidad o habilitación                 |
 | GET    | `/api/v1/users`                             | Responsables del demo                            |
 | POST   | `/api/v1/demo/reset`                        | Restaura el dataset inicial                      |
+| POST   | `/api/v1/demo/scenarios/:id/run`            | Aplica un escenario demo y registra versión simulada |
 
 Las escrituras usan el perfil demo fijo (`DEMO_CURRENT_USER`) porque todavía no
 hay autenticación. El endpoint de reset está pensado solo para el entorno de

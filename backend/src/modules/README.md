@@ -17,7 +17,9 @@ routes/controllers  →  services (dominio)  →  repositories  →  Prisma
 | `activity`  | `GET /api/v1/activity`                                                                                                   |
 | `rules`     | `GET /api/v1/rules`, `PATCH /api/v1/rules/:id`                                                                           |
 | `users`     | `GET /api/v1/users`                                                                                                      |
-| `demo`      | `POST /api/v1/demo/reset` (solo demo)                                                                                    |
+| `demo`      | `POST /api/v1/demo/reset`, `POST /api/v1/demo/scenarios/:id/run` (solo demo)                                             |
 
-Los escenarios de simulación (`/demo/scenarios/:id/run`) siguen en el frontend;
-no se exponen hasta implementar su lógica en el servidor.
+Los escenarios (`budget-increase`, `deadline-postponed`, `project-on-hold` y
+`priority-critical`) se aplican en el servidor sobre `POST
+/demo/scenarios/:id/run` con `{ "projectId": "<uuid>" }`, registrando la versión
+con origen `simulated`, los cambios y las alertas derivadas de las reglas.
