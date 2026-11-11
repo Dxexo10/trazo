@@ -1,7 +1,41 @@
 # Estado de implementación
 
-Actualizado tras el **cierre del Frente 1** (coherencia de navegación,
-documentación y metadatos), previo a la aprobación del backend.
+Actualizado tras completar **M06 · Reportes** y el **cierre del Frente 1**
+(coherencia de navegación, documentación y metadatos), previo a la aprobación
+del backend.
+
+## M06 · Reportes — completado
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Documento de reporte | `ReportDocument` puro con columnas tipadas, filas, métricas y metadatos de corte, generación, filtros y rótulo demo para portafolio y alertas | `223b0e9` |
+| Exportadores | CSV con BOM y escapado RFC 4180; XLSX OOXML comprimido con `fflate` y celdas numéricas reales para dinero, porcentaje y avance | `223b0e9` |
+| Pantalla `/reports` | Pestañas Portafolio/Alertas, filtros en URL, resumen ejecutivo, vista previa, descarga CSV/XLSX e impresión a PDF | `fc47523` |
+| Navegación y accesibilidad | Entrada «Reportes» en la navegación, título de ruta y `/reports` añadida a la auditoría axe | `fc47523` |
+| Pruebas | Documentos, CSV/XLSX, filtros en URL, render de la página y cambio de pestaña | `223b0e9` / `fc47523` |
+| Documentación | README, arquitectura y ADR-011 | este bloque |
+
+### Verificación ejecutada
+
+```text
+npm run typecheck → sin errores
+npm run lint      → 0 errores, 0 advertencias
+NODE_ENV=test npm run test → 30 archivos, 184 pruebas aprobadas y 1 timeout
+                             aislado en dashboard-page que pasa al reejecutarse solo
+npm run build     → dist generado (reports-page 30,70 kB · gzip 11,61 kB)
+npx playwright test e2e/accessibility.spec.ts → 9 pruebas aprobadas,
+                             incluida /reports, sin violaciones graves
+```
+
+No se ejecutó la suite E2E completa (`npm run test:e2e`) en esta sesión; sí la
+auditoría de accesibilidad. `npm run format:check` sigue fallando por 47 archivos
+preexistentes sin formato; los archivos nuevos de reportes sí se formatearon con
+Prettier.
+
+### Pendiente de M06
+
+- Validar a mano la impresión/«Guardar como PDF» y la apertura de los XLSX en
+  Excel y LibreOffice.
 
 ## Cierre del Frente 1 — completado
 

@@ -79,3 +79,15 @@ Archivados apunta a `/projects?archivados=solo` y el historial global de
 versiones a `/activity?accion=version.created`.
 **Consecuencia:** el estado activo se calcula con `pathname` + query params y
 no existen entradas de menú deshabilitadas.
+
+## ADR-011 · Reportes sin dependencias de hojas de cálculo
+
+**Contexto:** M06 exige exportar proyectos y alertas a CSV/XLSX respetando los
+filtros activos, además de un resumen ejecutivo en PDF, todo en el frontend.
+**Decisión:** construir el reporte como un `ReportDocument` puro; serializar CSV
+nativo con BOM UTF-8 y escapado RFC 4180; generar XLSX como paquete OOXML mínimo
+comprimido con `fflate`; y producir el PDF con la impresión del navegador.
+**Consecuencia:** sin librerías pesadas ni binarios opacos; los archivos abren en
+Excel y LibreOffice, las celdas numéricas conservan su tipo y las
+transformaciones se prueban en Vitest. La interfaz declara que el PDF depende del
+diálogo de impresión del navegador.

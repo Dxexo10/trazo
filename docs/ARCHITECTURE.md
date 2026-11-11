@@ -59,6 +59,12 @@ implementar `HttpProjectRepository`, `HttpAlertRepository` y
   alertas para monitor; filtros y paginación puros.
 - `domain/services/dashboard-summary`: agrega KPIs, series y distribuciones a
   partir de proyectos y alertas. Sin acceso a red, 100 % testeable.
+- `features/reports/report-data`: transforma proyectos o alertas en un
+  `ReportDocument` (columnas tipadas, filas, métricas y metadatos de corte,
+  generación, filtros y rótulo demo). Es una función pura, sin acceso a red.
+- `features/reports/export`: CSV nativo con BOM UTF-8 y escapado RFC 4180, y
+  XLSX como paquete OOXML mínimo comprimido con `fflate`; las columnas de dinero,
+  porcentaje y avance conservan celdas numéricas reales.
 - `domain/utils`: formato de moneda (`Intl.NumberFormat('es-PE')`), fechas y
   utilidades de identificadores.
 
@@ -128,6 +134,22 @@ producción no hay esperas artificiales.
 - Periodo del dashboard = ventana de meses sobre `createdAt` para la tendencia
   mensual y los deltas contra la ventana anterior. Los totales, la distribución
   y las alertas representan el portafolio activo completo.
+
+## Reportes
+
+- `/reports` comparte el estado de filtros en la URL: `vista`, `q`, `estado`,
+  `prioridad`, `sector`, `responsable`, `riesgo` y `archivados` para portafolio;
+  `a_estado`, `a_severidad`, `a_proyecto` y `a_periodo` para alertas. Cambiar de
+  pestaña conserva el filtro de la otra, y cada pestaña limpia solo el suyo.
+- La consulta pide hasta `REPORT_MAX_ROWS = 500` filas al repositorio (el dataset
+  demo tiene 50 proyectos) y aplica el filtro de riesgo en memoria con la misma
+  función del dashboard.
+- El mismo `ReportDocument` alimenta el resumen ejecutivo, la vista previa y la
+  exportación; no se recalculan cifras por separado.
+- Los metadatos del archivo incluyen fecha de corte, fecha de generación,
+  filtros activos y la etiqueta `Entorno de demostración · Datos simulados`.
+- El PDF se obtiene con `window.print()` y utilidades `print:hidden` en sidebar,
+  topbar, pie, pestañas, filtros y botones; no se simula un generador embebido.
 
 ## Pruebas
 

@@ -53,6 +53,7 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 | **F2 · Proyectos**                                 | Portafolio con filtros en URL, alta/edición, archivado y detalle                                           | **Disponible** |
 | **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
 | **F4 · Pulido y QA**                               | Actividad, ajustes y reset demo, E2E con Playwright, CI y capturas                                         | **Disponible** |
+| **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
 | F5–F7 · Backend                                    | API REST con Node/Express, Prisma y PostgreSQL                                                             | Planificado    |
 
 ### Disponible hoy
@@ -93,6 +94,10 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   acción, origen y periodo, más paginación.
 - Configuración `/settings`: perfil demo, umbrales de reglas editables, versión
   del dataset y reset con confirmación.
+- Reportes `/reports`: resumen ejecutivo y detalle del portafolio o de las
+  alertas con los filtros activos, exportación real a CSV y XLSX (con corte,
+  fecha de generación y rótulo de datos simulados) e impresión del resumen para
+  guardarlo como PDF.
 - Dataset determinista de 50 proyectos, versiones, cambios, alertas, actividad y
   reglas persistidos en IndexedDB (sobreviven a la recarga).
 - Suite E2E con Playwright del flujo estrella y workflow de CI con lint,
@@ -108,6 +113,7 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 - **React Router 7**, **TanStack Query 5**, **Recharts**
 - **React Hook Form + Zod** (base de formularios de la Fase 2)
 - **idb** para persistencia local
+- **fflate** para generar archivos XLSX (ZIP + OOXML) sin librerías de hojas de cálculo
 - **Vitest + React Testing Library** · **Playwright** (E2E + axe) · **ESLint + Prettier**
 - _Planificado:_ Node.js + Express, Prisma, PostgreSQL
 
@@ -182,9 +188,10 @@ npm run lint && npm run typecheck && NODE_ENV=test npm run test && npm run build
 Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinismo
 del dataset, repositorios sobre IndexedDB, diff de versiones, motor de reglas y
 alertas, feed de cambios, dashboard, filtros de portafolio, validación del
-formulario, historial/comparador, monitor, alertas, actividad, configuración y
-navegación. La suite E2E cubre el flujo estrella, el reset, el simulador, la
-navegación móvil y una auditoría axe AA en las pantallas principales.
+formulario, historial/comparador, monitor, alertas, actividad, configuración,
+navegación y reportes (documentos, CSV y XLSX). La suite E2E cubre el flujo
+estrella, el reset, el simulador, la navegación móvil y una auditoría axe AA en
+las pantallas principales.
 
 ## Capturas
 
@@ -223,6 +230,8 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
   activo completo.
 - No hay demo pública desplegada todavía: para probarla hay que ejecutarla en
   local. No se publica un enlace `Live Demo` hasta que exista.
+- El PDF de reportes se obtiene con la impresión del navegador («Guardar como
+  PDF»), no con un generador embebido; el CSV/XLSX sí se descargan como archivo.
 
 ## Licencia
 
