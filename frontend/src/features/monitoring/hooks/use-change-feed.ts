@@ -3,9 +3,9 @@ import {
   alertRepository,
   changeEventRepository,
   projectRepository,
+  userRepository,
   versionRepository,
 } from '@/data'
-import { DEMO_USERS } from '@/data/mock/seed/users'
 import { buildChangeFeed } from '@/domain/services/change-feed'
 import { parseDate } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
@@ -25,11 +25,12 @@ function periodStart(period: MonitorPeriod): string | undefined {
 }
 
 async function fetchChangeFeed(filters: MonitorFilters) {
-  const [changes, versions, alerts, projects] = await Promise.all([
+  const [changes, versions, alerts, projects, users] = await Promise.all([
     changeEventRepository.getAll(),
     versionRepository.getAll(),
     alertRepository.getAll(),
     projectRepository.getAll(),
+    userRepository.list(),
   ])
 
   return buildChangeFeed({
@@ -37,7 +38,7 @@ async function fetchChangeFeed(filters: MonitorFilters) {
     versions,
     alerts,
     projects,
-    users: DEMO_USERS,
+    users,
     filters: {
       projectId: filters.projectId || undefined,
       field: filters.field,

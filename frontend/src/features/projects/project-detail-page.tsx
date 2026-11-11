@@ -24,7 +24,7 @@ import { UserChip } from '@/components/shared/user-chip'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { AlertSeverity } from '@/domain/models'
 import { isOverdue } from '@/domain/services/project-metrics'
 import { formatDate, formatRelative } from '@/domain/utils/date'
@@ -85,6 +85,7 @@ export function ProjectDetailPage() {
   const projectQuery = useProjectQuery(id)
   const alertsQuery = useProjectAlerts(id)
   const activityQuery = useProjectActivity(id)
+  const { data: users = [] } = useUsers()
   const activeTab = resolveTab(searchParams.get('tab'))
 
   const changeTab = (next: string) => {
@@ -130,7 +131,7 @@ export function ProjectDetailPage() {
     )
   }
 
-  const owner = DEMO_USERS.find((user) => user.id === project.ownerId)
+  const owner = users.find((user) => user.id === project.ownerId)
   const alerts = alertsQuery.data?.items ?? []
   const openAlerts = alerts.filter((alert) => alert.status === 'open')
   const variation = percentageChange(
@@ -422,7 +423,7 @@ export function ProjectDetailPage() {
             <RecentActivity
               activity={activityQuery.data.items}
               projects={[project]}
-              users={DEMO_USERS}
+              users={users}
             />
           ) : null}
         </TabsContent>

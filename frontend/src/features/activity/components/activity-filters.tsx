@@ -5,11 +5,11 @@ import {
 } from '@/components/shared/filter-select'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { DEMO_USERS } from '@/data/mock/seed/users'
 import {
   ACTIVITY_SOURCES,
   type ActivitySource,
   type Project,
+  type User,
 } from '@/domain/models'
 import { ACTIVITY_ACTION_LABELS, SOURCE_LABELS } from '@/lib/labels'
 import {
@@ -51,6 +51,7 @@ const PERIOD_OPTIONS: FilterOption[] = ACTIVITY_PERIODS.map((period) => ({
 interface ActivityFiltersProps {
   filters: ActivityFiltersState
   projects: readonly Project[]
+  users: readonly User[]
   onChange: (patch: Partial<ActivityFiltersState>) => void
   onClear: () => void
 }
@@ -58,6 +59,7 @@ interface ActivityFiltersProps {
 export function ActivityFilters({
   filters,
   projects,
+  users,
   onChange,
   onClear,
 }: ActivityFiltersProps) {
@@ -71,7 +73,7 @@ export function ActivityFilters({
 
   const actorOptions: FilterOption[] = [
     { value: 'all', label: 'Todos los usuarios' },
-    ...DEMO_USERS.map((user) => ({ value: user.id, label: user.name })),
+    ...users.map((user) => ({ value: user.id, label: user.name })),
   ]
 
   const active = hasActiveActivityFilters(filters)

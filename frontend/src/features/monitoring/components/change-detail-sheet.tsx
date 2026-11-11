@@ -10,7 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { RuleKey } from '@/domain/models'
 import type { ChangeFeedItem } from '@/domain/services/change-feed'
 import { formatDate, formatRelative } from '@/domain/utils/date'
@@ -23,6 +23,7 @@ interface ChangeDetailSheetProps {
 }
 
 export function ChangeDetailSheet({ item, onClose }: ChangeDetailSheetProps) {
+  const { data: users = [] } = useUsers()
   return (
     <Sheet
       open={item !== null}
@@ -80,7 +81,7 @@ export function ChangeDetailSheet({ item, onClose }: ChangeDetailSheetProps) {
                   <ChangeValue
                     field={item.change.field}
                     value={item.change.oldValue}
-                    users={DEMO_USERS}
+                    users={users}
                     className="text-muted-foreground line-through"
                   />
                   <ArrowRight
@@ -90,7 +91,7 @@ export function ChangeDetailSheet({ item, onClose }: ChangeDetailSheetProps) {
                   <ChangeValue
                     field={item.change.field}
                     value={item.change.newValue}
-                    users={DEMO_USERS}
+                    users={users}
                     className="font-semibold text-foreground"
                   />
                 </div>

@@ -79,6 +79,7 @@ export function ActivityPage() {
           <ActivityFilters
             filters={filters}
             projects={query.data.projects}
+            users={query.data.users}
             onChange={update}
             onClear={clear}
           />

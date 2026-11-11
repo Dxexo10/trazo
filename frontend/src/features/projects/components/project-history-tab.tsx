@@ -5,7 +5,7 @@ import { ErrorState } from '@/components/shared/error-state'
 import { SectionCard } from '@/components/shared/section-card'
 import { SeverityBadge } from '@/components/shared/severity-badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { Alert, ChangeEvent, RuleKey } from '@/domain/models'
 import { formatDate, formatRelative } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
@@ -40,6 +40,7 @@ export function ProjectHistoryTab({ projectId }: ProjectHistoryTabProps) {
   const versionsQuery = useProjectVersions(projectId)
   const changesQuery = useProjectChanges(projectId)
   const alertsQuery = useProjectAlerts(projectId)
+  const { data: users = [] } = useUsers()
 
   if (versionsQuery.isPending) return <HistorySkeleton />
 
@@ -89,7 +90,7 @@ export function ProjectHistoryTab({ projectId }: ProjectHistoryTabProps) {
     }
   }
 
-  const usersById = new Map(DEMO_USERS.map((user) => [user.id, user]))
+  const usersById = new Map(users.map((user) => [user.id, user]))
 
   return (
     <SectionCard
@@ -159,7 +160,7 @@ export function ProjectHistoryTab({ projectId }: ProjectHistoryTabProps) {
                         <ChangeValue
                           field={change.field}
                           value={change.oldValue}
-                          users={DEMO_USERS}
+                          users={users}
                           className="text-muted-foreground line-through"
                         />
                         <span
@@ -171,7 +172,7 @@ export function ProjectHistoryTab({ projectId }: ProjectHistoryTabProps) {
                         <ChangeValue
                           field={change.field}
                           value={change.newValue}
-                          users={DEMO_USERS}
+                          users={users}
                           className="font-medium text-foreground"
                         />
                       </li>

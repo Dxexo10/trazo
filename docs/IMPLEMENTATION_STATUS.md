@@ -340,6 +340,7 @@ configuración. También verifica que el primer Tab enfoca el enlace de salto.
 | Cliente HTTP | `data/http/client.ts`: query CSV, `204`, `ApiError` con el mensaje del backend, `apiGetAllPages` (páginas de 100) y `apiList` (agrega páginas cuando el contrato pide más de 100 filas) | este bloque |
 | Adaptadores | Proyectos, alertas, actividad, versiones, cambios, reglas y usuarios implementan los contratos existentes | este bloque |
 | Reset y usuarios | `resetDemoData()` usa `POST /demo/reset` con API; nuevo `UserRepository` con adaptadores mock y HTTP (`GET /users`) | este bloque |
+| Usuarios de la API | `useUsers()` alimenta filtros, formularios, chips y autores reales; se eliminan las lecturas de `DEMO_USERS` en las vistas | este bloque |
 | Pruebas | 11 pruebas del cliente y adaptadores: serialización, errores, 404→null y paginación | este bloque |
 
 ### Verificación ejecutada
@@ -358,10 +359,13 @@ Contra la API real con SQL Server local se comprobaron `/health`, `/projects`
 `/dashboard/summary` y un `PATCH` sin cambios (`changed: false`), con los mismos
 shapes que consumen los adaptadores.
 
+Smoke en Chromium con `VITE_API_BASE_URL` y la API/SQL Server reales: `/projects`
+muestra 50 proyectos y 10 filas sin ningún «Sin asignar», el select de
+responsable ofrece los 10 usuarios de `/users`, el dashboard refleja 50 y la
+actividad resuelve autores del servidor, con 0 errores de consola.
+
 ### Pendiente de F7
 
-- Migrar chips, selects y filtros de responsable de `DEMO_USERS` a
-  `userRepository` (`GET /users`) para crear y filtrar con los UUID del servidor.
 - Implementar `POST /demo/scenarios/:id/run` en el backend; hoy los escenarios
   corren en el navegador y usan `PATCH /projects/:id`.
 - Preservar `source: 'simulated'` en las escrituras (el backend fija `manual`).

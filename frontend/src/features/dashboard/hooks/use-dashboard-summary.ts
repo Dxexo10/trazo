@@ -1,6 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { activityRepository, alertRepository, projectRepository } from '@/data'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import {
+  activityRepository,
+  alertRepository,
+  projectRepository,
+  userRepository,
+} from '@/data'
 import type { ActivityLog, Project, User } from '@/domain/models'
 import {
   buildDashboardSummary,
@@ -17,10 +21,11 @@ export interface DashboardData {
 }
 
 async function fetchDashboard(period: DashboardPeriod): Promise<DashboardData> {
-  const [projects, alerts, activity] = await Promise.all([
+  const [projects, alerts, activity, users] = await Promise.all([
     projectRepository.getAll(),
     alertRepository.getAll(),
     activityRepository.list({ page: 1, pageSize: 8 }),
+    userRepository.list(),
   ])
 
   return {
@@ -32,7 +37,7 @@ async function fetchDashboard(period: DashboardPeriod): Promise<DashboardData> {
     }),
     activity: activity.items,
     projects,
-    users: DEMO_USERS,
+    users,
   }
 }
 

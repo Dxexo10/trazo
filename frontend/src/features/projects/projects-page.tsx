@@ -8,7 +8,7 @@ import { SectionCard } from '@/components/shared/section-card'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import { formatNumber } from '@/lib/format-number'
 import {
   hasActiveFilters,
@@ -39,6 +39,7 @@ function ProjectsSkeleton() {
 export function ProjectsPage() {
   const { filters, update, clear } = useProjectFilters()
   const query = useProjectsQuery(filters)
+  const { data: users = [] } = useUsers()
   const total = query.data?.total ?? 0
   const items = query.data?.items ?? []
   const totalPages = Math.max(1, Math.ceil(total / PROJECTS_PAGE_SIZE))
@@ -77,7 +78,7 @@ export function ProjectsPage() {
 
       <ProjectsFilters
         filters={filters}
-        users={DEMO_USERS}
+        users={users}
         onChange={update}
         onClear={clear}
       />
@@ -152,10 +153,10 @@ export function ProjectsPage() {
                   />
                 </div>
                 <div className="hidden md:block">
-                  <ProjectsTable projects={items} users={DEMO_USERS} />
+                  <ProjectsTable projects={items} users={users} />
                 </div>
                 <div className="md:hidden">
-                  <ProjectMobileList projects={items} users={DEMO_USERS} />
+                  <ProjectMobileList projects={items} users={users} />
                 </div>
               </>
             )}

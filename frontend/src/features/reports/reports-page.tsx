@@ -18,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { AlertFilters } from '@/features/alerts/hooks/use-alert-filters'
 import type { ProjectFilters } from '@/features/projects/hooks/use-project-filters'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
@@ -172,6 +172,7 @@ function ReportPreview({ document }: { document: ReportDocument }) {
 
 export function ReportsPage() {
   const { filters, update, clear } = useReportFilters()
+  const { data: users = [] } = useUsers()
   const projectQuery = useProjectReportQuery(filters)
   const alertQuery = useAlertReportQuery(filters)
   const generatedAt = useMemo(() => new Date().toISOString(), [])
@@ -188,10 +189,10 @@ export function ReportsPage() {
 
       return buildProjectsReport({
         projects: projectQuery.data,
-        users: DEMO_USERS,
+        users,
         filters: describeProjectReportFilters(
           toProjectFilters(filters),
-          DEMO_USERS,
+          users,
         ),
         referenceDate: DEMO_REFERENCE_DATE,
         generatedAt,
@@ -210,7 +211,7 @@ export function ReportsPage() {
       referenceDate: DEMO_REFERENCE_DATE,
       generatedAt,
     })
-  }, [filters, projectQuery.data, alertQuery.data, generatedAt])
+  }, [filters, projectQuery.data, alertQuery.data, generatedAt, users])
 
   const hasRows = (document?.rows.length ?? 0) > 0
   const title =
@@ -248,7 +249,7 @@ export function ReportsPage() {
 
       <ReportsFilters
         filters={filters}
-        users={DEMO_USERS}
+        users={users}
         projects={projects}
         onChange={update}
         onClear={clear}

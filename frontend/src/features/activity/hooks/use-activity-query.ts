@@ -1,6 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { activityRepository, projectRepository } from '@/data'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { activityRepository, projectRepository, userRepository } from '@/data'
 import type { ActivityLog, Project, User } from '@/domain/models'
 import { parseDate } from '@/domain/utils/date'
 import type { Paginated } from '@/data/contracts'
@@ -29,7 +28,7 @@ function periodStart(period: ActivityPeriod): string | undefined {
 async function fetchActivity(
   filters: ActivityFilters,
 ): Promise<ActivityPageResult> {
-  const [page, projects] = await Promise.all([
+  const [page, projects, users] = await Promise.all([
     activityRepository.list({
       projectId: filters.projectId || undefined,
       actorId: filters.actorId || undefined,
@@ -40,9 +39,10 @@ async function fetchActivity(
       pageSize: ACTIVITY_PAGE_SIZE,
     }),
     projectRepository.getAll(),
+    userRepository.list(),
   ])
 
-  return { page, projects, users: DEMO_USERS }
+  return { page, projects, users }
 }
 
 export function useActivityQuery(filters: ActivityFilters) {

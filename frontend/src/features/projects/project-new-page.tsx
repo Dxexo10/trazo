@@ -3,9 +3,9 @@ import { ArrowLeft } from 'lucide-react'
 import { DemoBadge } from '@/components/shared/demo-badge'
 import { PageHeader } from '@/components/shared/page-header'
 import { Button } from '@/components/ui/button'
-import { DEMO_USERS } from '@/data/mock/seed/users'
 import { addDays, parseDate, toISODate } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
+import { useUsers } from '@/features/users/hooks/use-users'
 import { useCreateProject } from './hooks/use-project-mutations'
 import { ProjectForm } from './project-form'
 import {
@@ -18,7 +18,7 @@ const DEFAULT_DATES: ProjectFormValues = {
   client: '',
   description: '',
   sector: 'technology',
-  ownerId: DEMO_USERS[0]?.id ?? '',
+  ownerId: '',
   status: 'planned',
   priority: 'medium',
   initialBudget: '0',
@@ -33,6 +33,11 @@ const DEFAULT_DATES: ProjectFormValues = {
 export function ProjectNewPage() {
   const navigate = useNavigate()
   const create = useCreateProject()
+  const { data: users = [] } = useUsers()
+  const defaultValues: ProjectFormValues = {
+    ...DEFAULT_DATES,
+    ownerId: users[0]?.id ?? '',
+  }
 
   return (
     <div className="space-y-5 lg:space-y-6">
@@ -49,8 +54,8 @@ export function ProjectNewPage() {
       />
 
       <ProjectForm
-        defaultValues={DEFAULT_DATES}
-        users={DEMO_USERS}
+        defaultValues={defaultValues}
+        users={users}
         isSubmitting={create.isPending}
         submitLabel="Crear proyecto"
         cancelHref="/projects"

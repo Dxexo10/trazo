@@ -29,7 +29,8 @@ las pruebas unitarias no dependan de la red.
 - El backend fija `actorId` y `source` en el servidor: las escrituras se
   registran como `manual` aunque la simulación use `source: 'simulated'`.
 - Los ids de proyecto/servidor son UUID, no `prj_####`.
-- Las vistas que aún leen `DEMO_USERS` desde el seed necesitan migrarse a
-  `userRepository` para mostrar responsables reales (siguiente paso de F7).
+- Los usuarios (responsables, filtros y autores) se leen de `GET /users`. El
+  perfil de topbar/sidebar mantiene la identidad demo porque la API aún no tiene
+  autenticación.
 - `POST /demo/scenarios/:id/run` todavía no existe en el backend; los escenarios
   se ejecutan en el navegador y usan `PATCH /projects/:id`.

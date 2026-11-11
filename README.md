@@ -109,7 +109,8 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   edición transaccional y reset demo.
 - **Capa de datos HTTP** (`frontend/src/data/http`) que implementa los mismos
   contratos que los mocks. Sin `VITE_API_BASE_URL` la app usa IndexedDB; con ella
-  consume la API real. Falta migrar los selects de usuario al endpoint `/users`.
+  consume la API real, incluidos los usuarios de `/api/v1/users` en filtros,
+  formularios, chips y autores.
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
 ## Stack
@@ -253,8 +254,8 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 ## Limitaciones conocidas
 
 - El frontend usa IndexedDB por defecto. Con `VITE_API_BASE_URL` consume la API
-  REST, pero los selects y chips de responsable todavía leen los usuarios demo
-  del seed; migrarlos a `/api/v1/users` es el siguiente paso de F7.
+  REST; el perfil del topbar/sidebar sigue siendo la identidad demo porque la API
+  aún no tiene autenticación.
 - La API no tiene autenticación y el reset demo no está protegido: es un
   entorno local de demostración, no una exposición pública.
 - No hay multiempresa real: el perfil es fijo y de demo.

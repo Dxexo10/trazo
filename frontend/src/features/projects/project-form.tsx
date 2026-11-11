@@ -80,6 +80,8 @@ export function ProjectForm({
     register,
     control,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors, isDirty },
   } = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -109,6 +111,15 @@ export function ProjectForm({
     window.addEventListener('beforeunload', handler)
     return () => window.removeEventListener('beforeunload', handler)
   }, [isDirty])
+
+  useEffect(() => {
+    if (users.length === 0 || getValues('ownerId')) return
+
+    const firstOwner = users[0]
+    if (firstOwner) {
+      setValue('ownerId', firstOwner.id, { shouldValidate: true })
+    }
+  }, [users, getValues, setValue])
 
   const ownerItems = Object.fromEntries(
     users.map((user) => [user.id, user.name]),

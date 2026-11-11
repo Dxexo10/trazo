@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { ChangeValue } from '@/components/shared/change-value'
 import { SeverityBadge } from '@/components/shared/severity-badge'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { ChangeType } from '@/domain/models'
 import type { ChangeFeedItem } from '@/domain/services/change-feed'
 import { formatDate, formatRelative } from '@/domain/utils/date'
@@ -32,6 +32,7 @@ interface ChangeFeedListProps {
 }
 
 export function ChangeFeedList({ items, onSelect }: ChangeFeedListProps) {
+  const { data: users = [] } = useUsers()
   const groups = new Map<string, ChangeFeedItem[]>()
 
   for (const item of items) {
@@ -103,7 +104,7 @@ export function ChangeFeedList({ items, onSelect }: ChangeFeedListProps) {
                         <ChangeValue
                           field={item.change.field}
                           value={item.change.oldValue}
-                          users={DEMO_USERS}
+                          users={users}
                           className="text-muted-foreground line-through"
                         />
                         <span
@@ -115,7 +116,7 @@ export function ChangeFeedList({ items, onSelect }: ChangeFeedListProps) {
                         <ChangeValue
                           field={item.change.field}
                           value={item.change.newValue}
-                          users={DEMO_USERS}
+                          users={users}
                           className="font-medium text-foreground"
                         />
                       </p>

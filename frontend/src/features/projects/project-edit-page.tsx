@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import { useUpdateProject } from './hooks/use-project-mutations'
 import { useProjectQuery } from './hooks/use-project-query'
 import { ProjectForm } from './project-form'
@@ -26,6 +26,7 @@ export function ProjectEditPage() {
   const projectQuery = useProjectQuery(id)
   const update = useUpdateProject(id ?? '')
   const [reason, setReason] = useState('')
+  const { data: users = [] } = useUsers()
 
   if (projectQuery.isPending) {
     return (
@@ -116,7 +117,7 @@ export function ProjectEditPage() {
       <ProjectForm
         key={project.id}
         defaultValues={values}
-        users={DEMO_USERS}
+        users={users}
         isSubmitting={update.isPending}
         submitLabel="Guardar cambios"
         cancelHref={`/projects/${project.id}`}

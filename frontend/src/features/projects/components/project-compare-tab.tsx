@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { DEMO_USERS } from '@/data/mock/seed/users'
+import { useUsers } from '@/features/users/hooks/use-users'
 import type { RuleKey } from '@/domain/models'
 import { diffProject } from '@/domain/services/project-diff'
 import { formatDate } from '@/domain/utils/date'
@@ -32,6 +32,7 @@ interface ProjectCompareTabProps {
 export function ProjectCompareTab({ projectId }: ProjectCompareTabProps) {
   const versionsQuery = useProjectVersions(projectId)
   const alertsQuery = useProjectAlerts(projectId)
+  const { data: users = [] } = useUsers()
   const [fromId, setFromId] = useState('')
   const [toId, setToId] = useState('')
   const versions = versionsQuery.data ?? []
@@ -149,14 +150,14 @@ export function ProjectCompareTab({ projectId }: ProjectCompareTabProps) {
                       <ChangeValue
                         field={difference.field}
                         value={difference.oldValue}
-                        users={DEMO_USERS}
+                        users={users}
                       />
                     </TableCell>
                     <TableCell className="font-medium text-foreground">
                       <ChangeValue
                         field={difference.field}
                         value={difference.newValue}
-                        users={DEMO_USERS}
+                        users={users}
                       />
                     </TableCell>
                   </TableRow>
