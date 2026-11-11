@@ -45,6 +45,10 @@ Definidos en `src/data/contracts`:
 implementar `HttpProjectRepository`, `HttpAlertRepository` y
 `HttpActivityRepository` contra `/api/v1` y cambiar esas tres líneas.
 
+La Fase 5–7 se construye sobre **SQL Server** (`Trazo` en `localhost,1433`) con
+Prisma y el conector `sqlserver`, según ADR-012. El frontend no cambia: solo se
+sustituyen los adaptadores mock por los HTTP.
+
 ## Dominio
 
 - `domain/models`: entidades serializables (dinero en céntimos, fechas ISO).
@@ -85,6 +89,41 @@ alertas sean coherentes desde el primer render.
 
 Los adaptadores simulan latencia de 120–320 ms **solo en desarrollo**; en tests y
 producción no hay esperas artificiales.
+
+## Backend (Fase 5, en curso)
+
+El directorio `backend/` contiene el esqueleto de la API, no todavía los módulos
+de negocio:
+
+```text
+src/config/env.ts        Validación de entorno con Zod (PORT, CORS_ORIGINS, NODE_ENV)
+src/app.ts               Ensamblado de Express (helmet, CORS, JSON, request-id, logging)
+src/server.ts            Arranque HTTP y cierre ordenado ante SIGINT/SIGTERM
+src/middleware/**        request-id, request-logger, notFound y errorHandler
+src/routes/**            Router versionado /api/v1 (por ahora solo /health)
+src/domain/models/**     Entidades serializables de la API
+src/domain/schemas/**    Validaciones Zod compartidas por los módulos
+src/lib/prisma.ts        Cliente Prisma único (conexión diferida)
+prisma/schema.prisma     Modelo relacional para SQL Server
+src/modules/**           Módulos previstos: dashboard, projects, versions, changes,
+                         alerts, activity y demo (sin implementar)
+```
+
+- Respuesta de salud: `GET /api/v1/health` → `{ status, service, uptimeSeconds, timestamp }`.
+- Errores uniformes: `{ error: { code, message, details?, requestId } }`; los
+  detalles solo se exponen fuera de producción.
+- CORS restringido por `CORS_ORIGINS`, cuerpo JSON limitado a 1 MB y cabecera
+  `x-request-id` reflejada en cada respuesta.
+- `src/domain/models` replica las entidades serializables del frontend y
+  `src/domain/schemas` concentra las validaciones Zod (proyecto, consultas de
+  proyectos, alertas y actividad) que usarán los módulos.
+- `prisma/schema.prisma` define el modelo relacional para SQL Server, ya
+  validado: enums como `nvarchar`, JSON serializado en `nvarchar(max)` y
+  relaciones `NoAction` para evitar cascadas múltiples.
+- La migración inicial ya está aplicada en SQL Server 2022 Express (base
+  `Trazo`). `DATABASE_URL` vive solo en `backend/.env` (ignorado por git), la
+  cuenta `trazo_mcp` es `db_owner` únicamente de `Trazo` y
+  `prisma/migrations` conserva el historial.
 
 ## Apariencia y navegación
 

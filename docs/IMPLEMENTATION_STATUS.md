@@ -1,8 +1,84 @@
 # Estado de implementación
 
-Actualizado tras completar **M06 · Reportes** y el **cierre del Frente 1**
-(coherencia de navegación, documentación y metadatos), previo a la aprobación
-del backend.
+Actualizado tras aprobar el arranque del backend y completar el **esqueleto de
+la Fase 5**; antes, **M06 · Reportes** y el **cierre del Frente 1**
+(coherencia de navegación, documentación y metadatos).
+
+## F5 · Esqueleto del backend — completado
+
+| Tarea | Resultado |
+| --- | --- |
+| Workspace `backend/` | Node.js + Express 5 + TypeScript (NodeNext), ESM, scripts de dev/build/start |
+| Configuración | `src/config/env.ts` valida `NODE_ENV`, `PORT`, `CORS_ORIGINS` y `DATABASE_URL` (opcional hasta F6) con Zod |
+| Aplicación | `helmet`, CORS por lista de orígenes, JSON limitado a 1 MB, `x-request-id` y logging de peticiones |
+| Errores | `AppError`/`NotFoundError`, `notFound` y `errorHandler` con cuerpo uniforme y sin filtrar detalles en producción |
+| Rutas | `GET /api/v1/health`; `/api/v1` versionado y sin endpoints de negocio ficticios |
+| Robustez | Cierre ordenado ante `SIGINT`/`SIGTERM` con límite de 10 s |
+| Pruebas | Vitest + Supertest: salud, propagación de `x-request-id`, 404 y JSON malformado |
+| CI | Job `backend` con lint, typecheck, pruebas y build |
+| Documentación | `backend/README.md`, `backend/src/modules/README.md`, arquitectura y README raíz |
+
+### Verificación ejecutada
+
+```text
+npm run typecheck   → sin errores
+npm run lint        → 0 errores
+npm run test        → 1 archivo, 4 pruebas aprobadas
+npm run build       → dist generado
+npm run format:check → sin diferencias
+node dist/server.js → GET /api/v1/health responde 200 con x-request-id
+```
+
+### Pendiente de F5
+
+- Módulos de negocio (dashboard, proyectos, versiones, cambios, alertas,
+  actividad y demo) y sus validaciones.
+- Prisma y SQL Server en F6; el adaptador HTTP del frontend en F7.
+
+## F5 · Modelo Prisma y dominio — completado
+
+| Tarea | Resultado |
+| --- | --- |
+| Esquema Prisma | `prisma/schema.prisma` con `User`, `Project`, `ProjectVersion`, `ChangeEvent`, `Alert`, `ActivityLog`, `RuleConfig` y `DemoScenario` para SQL Server |
+| Restricciones del motor | Enums como `nvarchar`, JSON serializado en `nvarchar(max)`, relaciones `NoAction` y dinero/céntimos, UUID y `datetime2` |
+| Cliente Prisma | `src/lib/prisma.ts` con instancia única y conexión diferida; `postinstall` genera el cliente |
+| Dominio | `src/domain/models` replica las entidades serializables del frontend |
+| Validaciones | `src/domain/schemas` con Zod: alta/edición de proyecto, consultas de proyectos, alertas y actividad, paginación, UUID y fechas |
+| Pruebas | 18 pruebas nuevas de esquemas: valores por defecto, reglas de completado, filtros CSV, límites y campos desconocidos |
+| CI | Validación del esquema Prisma con `DATABASE_URL` de placeholder |
+| Documentación | README del backend, arquitectura, ADR-013 y este estado |
+
+### Verificación ejecutada
+
+```text
+npm run typecheck    → sin errores
+npm run lint         → 0 errores
+npm run test         → 3 archivos, 22 pruebas aprobadas
+npm run build        → dist generado
+npx prisma validate  → esquema válido
+npx prisma generate  → cliente generado (v6.19.3)
+```
+
+### Base de datos (adelanto de F6)
+
+- El login `trazo_mcp` existía y estaba habilitado, pero su contraseña no
+  coincidía con la cadena del MCP. Se sincronizó usando la cuenta de Windows
+  (`sysadmin`) y se confirmó que ya era `db_owner` de `Trazo`.
+- La migración inicial `20261111030000_init` se aplicó con
+  `prisma migrate deploy` y creó las 8 tablas de dominio más
+  `_prisma_migrations`.
+- `backend/.env` contiene `DATABASE_URL` y está ignorado por git; no hay
+  credenciales versionadas.
+
+### Verificación ejecutada
+
+```text
+npx prisma migrate status → Database schema is up to date!
+MCP test_connection      → SQL Server 2022 Express, base Trazo
+MCP list_tables          → users, projects, project_versions, change_events,
+                           alerts, activity_logs, rule_configs, demo_scenarios
+```
+
 
 ## M06 · Reportes — completado
 
@@ -212,7 +288,7 @@ También verifica que el primer Tab enfoca el enlace de salto.
 
 ## Pendiente posterior
 
-- **Fases 5–7:** API Express, Prisma + PostgreSQL, adaptador HTTP y despliegue.
+- **Fases 5–7:** API Express, Prisma + SQL Server, adaptador HTTP y despliegue.
 
 ## Bloqueos conocidos
 

@@ -54,7 +54,8 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 | **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
 | **F4 · Pulido y QA**                               | Actividad, ajustes y reset demo, E2E con Playwright, CI y capturas                                         | **Disponible** |
 | **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
-| F5–F7 · Backend                                    | API REST con Node/Express, Prisma y PostgreSQL                                                             | Planificado    |
+| **F5 · Backend (esqueleto)**                       | API REST con Node/Express, TypeScript y Zod; configuración, errores, CORS, logging, salud, dominio y modelo Prisma | **En curso**   |
+| F6–F7 · Datos e integración                        | SQL Server migrado, seed, adaptador HTTP en el frontend, autenticación si procede y despliegue             | En curso       |
 
 ### Disponible hoy
 
@@ -115,7 +116,9 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 - **idb** para persistencia local
 - **fflate** para generar archivos XLSX (ZIP + OOXML) sin librerías de hojas de cálculo
 - **Vitest + React Testing Library** · **Playwright** (E2E + axe) · **ESLint + Prettier**
-- _Planificado:_ Node.js + Express, Prisma, PostgreSQL
+- **Node.js + Express 5 + TypeScript + Zod** (backend en `backend/`)
+- **Prisma 6** con la migración inicial aplicada en SQL Server 2022 Express
+  (base `Trazo`); `DATABASE_URL` vive en `backend/.env`, ignorado por git.
 
 ## Cómo ejecutar
 
@@ -126,6 +129,17 @@ cd frontend
 npm install
 npm run dev        # http://localhost:5173
 ```
+
+Backend (esqueleto de la Fase 5):
+
+```bash
+cd backend
+npm install
+npm run dev        # http://localhost:4000/api/v1/health
+```
+
+La base requiere `backend/.env` con `DATABASE_URL` (ignorado por git). Para
+aplicar migraciones: `npm run db:deploy`.
 
 Scripts disponibles:
 
@@ -185,13 +199,20 @@ de dominio no cambian. Detalle completo en
 npm run lint && npm run typecheck && NODE_ENV=test npm run test && npm run build
 ```
 
+El backend se verifica por separado:
+
+```bash
+cd backend && npm run lint && npm run typecheck && npm test && npm run build
+```
+
 Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinismo
 del dataset, repositorios sobre IndexedDB, diff de versiones, motor de reglas y
 alertas, feed de cambios, dashboard, filtros de portafolio, validación del
 formulario, historial/comparador, monitor, alertas, actividad, configuración,
 navegación y reportes (documentos, CSV y XLSX). La suite E2E cubre el flujo
 estrella, el reset, el simulador, la navegación móvil y una auditoría axe AA en
-las pantallas principales.
+las pantallas principales. El backend prueba los esquemas Zod del dominio y el
+esqueleto de la API (salud, errores, `x-request-id` y 404).
 
 ## Capturas
 
@@ -219,7 +240,9 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 
 ## Limitaciones conocidas
 
-- No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
+- El backend todavía no sirve datos: la base `Trazo` ya está migrada, pero
+  faltan el seed y los endpoints de negocio.
+- No hay autenticación ni multiempresa: el perfil es fijo y de demo.
 - La accesibilidad AA se audita automáticamente con axe en las pantallas
   principales; falta validación manual con lectores de pantalla.
 - Los escenarios se ejecutan en el navegador, no con jobs reales.

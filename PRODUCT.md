@@ -24,7 +24,7 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 
 ## Operating Context
 
-- Aplicación web frontend-first en React + TypeScript; el backend, la autenticación y PostgreSQL llegan en fases posteriores.
+- Aplicación web frontend-first en React + TypeScript; el backend, la autenticación y SQL Server llegan en fases posteriores.
 - Dataset determinista de 50 proyectos de tecnología, construcción y consultoría, con semilla fija y fecha de referencia `2026-10-31`; se persiste en IndexedDB y sobrevive a la recarga.
 - La etiqueta “Entorno de demostración · Datos simulados” es permanente y visible en toda la aplicación.
 - El trabajo avanza por fases: F1 dashboard y fundamentos; F2 proyectos; F3 versiones y alertas; F4 QA; F5–F7 backend.
@@ -37,7 +37,7 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 - Los KPIs, gráficos, tablas y alertas se calculan desde el mismo estado; no se escriben cifras a mano.
 - Dinero en céntimos enteros y moneda PEN; fechas ISO-8601 UTC; interfaz en español y nombres de código en inglés.
 - Sin IA generativa, pagos, integraciones externas ni multiempresa real mientras no se apruebe.
-- No iniciar backend, autenticación ni PostgreSQL sin autorización explícita del propietario.
+- No iniciar backend, autenticación ni SQL Server sin autorización explícita del propietario.
 - **Decisiones abiertas:** dominio definitivo y disponibilidad de marca, identidad gráfica final (wordmark/logo definitivos), hosting, autenticación y multiempresa reales, formato de exportación de reportes.
 
 ## Brand Commitments

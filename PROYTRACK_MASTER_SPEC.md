@@ -1,8 +1,10 @@
 # PROYTRACK — Documento maestro de producto y desarrollo
 
-> **Versión:** 1.1 · **Estado:** especificación inicial · **Modalidad:** proyecto personal de portafolio, demo funcional con datos ficticios claramente identificados.
+> **Versión:** 1.2 · **Estado:** especificación inicial · **Modalidad:** proyecto personal de portafolio, demo funcional con datos ficticios claramente identificados.
 >
-> **Instrucción principal para CMDC / agente desarrollador:** Implementar **PRIMERO EL FRONTEND** en React + TypeScript, con interfaz premium, flujos funcionales y datos mock persistidos localmente. **No construir backend ni conectar PostgreSQL hasta aprobar el frontend**. Diseñar contratos y capas de acceso a datos que permitan reemplazar mocks por API REST sin reescribir las vistas. No afirmar que una función existe si es solo visual.
+> **Cambio v1.2 (2026-11-11):** el motor de base de datos objetivo pasa de PostgreSQL a **SQL Server** (ADR-012), con Prisma como ORM y dinero en céntimos enteros (`INT`). El frontend F1–F4 y los reportes ya están completos.
+>
+> **Instrucción principal para CMDC / agente desarrollador:** Implementar **PRIMERO EL FRONTEND** en React + TypeScript, con interfaz premium, flujos funcionales y datos mock persistidos localmente. **No construir backend ni conectar SQL Server hasta aprobar el frontend**. Diseñar contratos y capas de acceso a datos que permitan reemplazar mocks por API REST sin reescribir las vistas. No afirmar que una función existe si es solo visual.
 
 ---
 
@@ -22,7 +24,7 @@ Ser una plataforma de referencia para que equipos y empresas tengan visibilidad 
 Facilitar el seguimiento y control de proyectos mediante una experiencia intuitiva, datos centralizados, trazabilidad de modificaciones y alertas automáticas que transformen actualizaciones operativas en información útil.
 
 ### 1.3 Objetivo general
-Desarrollar una aplicación web full stack de gestión inteligente de proyectos empresariales, iniciando con un frontend de alta calidad y posteriormente incorporando backend y persistencia PostgreSQL, que permita monitorear cambios y riesgos con indicadores visuales.
+Desarrollar una aplicación web full stack de gestión inteligente de proyectos empresariales, iniciando con un frontend de alta calidad y posteriormente incorporando backend y persistencia SQL Server, que permita monitorear cambios y riesgos con indicadores visuales.
 
 ### 1.4 Objetivos específicos
 1. Gestionar un portafolio de proyectos y sus datos esenciales.
@@ -31,7 +33,7 @@ Desarrollar una aplicación web full stack de gestión inteligente de proyectos 
 4. Registrar historial de versiones y eventos de cambio.
 5. Emitir alertas explicables basadas en reglas configurables.
 6. Construir una demo interactiva, accesible, responsiva y reproducible.
-7. Separar presentación, dominio y datos para facilitar el paso de mocks a PostgreSQL.
+7. Separar presentación, dominio y datos para facilitar el paso de mocks a SQL Server.
 
 ### 1.5 Audiencia
 - **Gerente de proyectos:** visión del portafolio, desviaciones, alertas y decisiones.
@@ -285,16 +287,18 @@ src/
 └── tests/
 ```
 
-### 7.2 Etapa 2: backend y PostgreSQL (NO IMPLEMENTAR TODAVÍA)
+### 7.2 Etapa 2: backend y SQL Server
 
 - **Backend:** Node.js + Express + TypeScript; validación con Zod.
-- **Base de datos:** PostgreSQL + Prisma ORM.
+- **Base de datos:** SQL Server + Prisma ORM (conector `sqlserver`). En desarrollo,
+  instancia local en `localhost,1433` con la base `Trazo`; el acceso desde el
+  agente usa el MCP `sqlserver` (login de mínimo privilegio).
 - **Estilo:** monolito modular; rutas/controladores → servicios de dominio → repositorios.
 - **API:** REST JSON bajo `/api/v1`.
 - **Persistencia:** transacciones para editar proyecto, crear versión, registrar eventos y alertas.
 - **Scheduler:** job de actualización de escenarios/importaciones, con idempotencia y registro de ejecuciones.
 - **Seguridad posterior:** autenticación, autorización por organización, rate limiting, logging y validación del lado servidor.
-- **Despliegue tentativo:** frontend en Vercel; backend en hosting Node; PostgreSQL administrado. Verificar límites/costos antes de seleccionar proveedor.
+- **Despliegue tentativo:** frontend en Vercel; backend en hosting Node; SQL Server administrado. Verificar límites/costos antes de seleccionar proveedor.
 
 ```text
 [React UI]
@@ -311,7 +315,7 @@ src/
              ↓
        [Prisma ORM]
              ↓
-       [PostgreSQL]
+       [SQL Server]
 ```
 
 ### 7.3 Entidades previstas
@@ -327,7 +331,7 @@ src/
 | `RuleConfig` | id, ruleKey, enabled, threshold?, severity |
 | `DemoScenario` | id, name, description, changes, seedVersion |
 
-**Notas:** usar UUID, timestamps UTC y dinero en decimal exacto en PostgreSQL. Los snapshots deben preservar una representación consistente y serializable. Los índices, claves foráneas y restricciones se diseñarán al implementar la base. En mocks, evitar cálculos financieros con floats sin normalización.
+**Notas:** usar `UNIQUEIDENTIFIER` para los identificadores, `DATETIME2` en UTC y dinero en céntimos enteros (`INT`) en SQL Server. Los snapshots deben preservar una representación consistente y serializable. Los índices, claves foráneas y restricciones se diseñarán al implementar la base. En mocks, evitar cálculos financieros con floats sin normalización.
 
 ### 7.4 Contratos de repositorios sugeridos
 
@@ -504,12 +508,12 @@ En la etapa frontend, ofrecer un **simulador de actualización** con escenarios 
 | F3. Inteligencia de cambios | Alta | Versiones, comparador, reglas y alertas sincronizadas |
 | F4. Pulido y QA | Alta | Accesibilidad, estados UI, pruebas, demo guiada, README |
 | **Hito: aprobación del frontend** | **Bloqueante** | **Revisión visual y funcional antes de backend** |
-| F5. Backend | Posterior | API Express, servicios, validaciones, Prisma |
-| F6. PostgreSQL | Posterior | Modelo relacional, migraciones, seeds, transacciones |
+| F5. Backend | Posterior | API Express, servicios, validaciones, Prisma con SQL Server |
+| F6. SQL Server | Posterior | Modelo relacional, migraciones, seeds, transacciones |
 | F7. Integración | Posterior | Adaptador HTTP, autenticación si procede, despliegue y pruebas |
 | F8. Evolución | Opcional | Reportes, roles, organizaciones, scheduler real, integraciones |
 
-**Orden estricto:** diseño → frontend completo → revisión → backend → base de datos → integración. PostgreSQL es la base objetivo, pero no una dependencia de la primera entrega.
+**Orden estricto:** diseño → frontend completo → revisión → backend → base de datos → integración. SQL Server es la base objetivo, pero no una dependencia de la primera entrega.
 
 ---
 
@@ -539,10 +543,10 @@ proytrack/
 ## 13. Instrucciones de ejecución para el agente CMDC
 
 ### Rol
-Actúa como ingeniero frontend senior, diseñador de producto SaaS B2B y arquitecto de software. Construye un frontend funcional, mantenible, atractivo y listo para integrarse posteriormente con un backend Node.js y PostgreSQL.
+Actúa como ingeniero frontend senior, diseñador de producto SaaS B2B y arquitecto de software. Construye un frontend funcional, mantenible, atractivo y listo para integrarse posteriormente con un backend Node.js y SQL Server.
 
 ### Reglas obligatorias
-1. **Primero frontend. No implementar backend ni PostgreSQL todavía.**
+1. **Primero frontend. No implementar backend ni SQL Server todavía.**
 2. Priorizar calidad visual profesional, consistencia y usabilidad sin sacrificar funcionamiento.
 3. Implementar por fases pequeñas; comprobar build y pruebas al finalizar cada fase.
 4. No usar componentes falsos: cada botón visible debe navegar, ejecutar una acción real de la demo o estar explícitamente deshabilitado con explicación.
@@ -579,9 +583,9 @@ Una persona que nunca ha visto ProyTrack puede entrar a la demo, entender el est
 3. **0:45–1:20:** abrir proyecto y cambiar presupuesto/fecha.
 4. **1:20–1:50:** enseñar comparación de versiones y alerta.
 5. **1:50–2:20:** volver al dashboard y mostrar indicadores actualizados.
-6. **2:20–3:00:** explicar arquitectura frontend-first, pruebas y transición prevista a PostgreSQL.
+6. **2:20–3:00:** explicar arquitectura frontend-first, pruebas y transición prevista a SQL Server.
 
-**Mensaje para CV (una vez implementado):** `Desarrollé ProyTrack, plataforma de gestión de proyectos con dashboard analítico, historial de versiones y motor de detección de cambios y alertas; frontend en React/TypeScript y arquitectura desacoplada preparada para API REST y PostgreSQL.`
+**Mensaje para CV (una vez implementado):** `Desarrollé ProyTrack, plataforma de gestión de proyectos con dashboard analítico, historial de versiones y motor de detección de cambios y alertas; frontend en React/TypeScript y arquitectura desacoplada preparada para API REST y SQL Server.`
 
 ---
 
@@ -636,7 +640,7 @@ docs(readme): add architecture and demo instructions
 ci(checks): run lint, typecheck and tests on pull requests
 ```
 
-Los mensajes deben describir **exactamente** lo implementado, sin atribuir funcionalidades futuras. Un commit de UI no debe presentarse como una integración real con PostgreSQL.
+Los mensajes deben describir **exactamente** lo implementado, sin atribuir funcionalidades futuras. Un commit de UI no debe presentarse como una integración real con SQL Server.
 
 ### 16.3 Flujo Git sugerido
 
@@ -674,8 +678,8 @@ README recomendado, en este orden:
 3. **Capturas reales** de dashboard, proyectos, detalle, monitor y alertas; preferir capturas de la aplicación implementada y no renders ficticios.
 4. **Demo en 3 pasos:** abrir proyecto, modificar presupuesto, revisar alerta e historial.
 5. **Funcionalidades implementadas** con estado verificable; separar claramente `Available`, `In progress` y `Planned`.
-6. **Stack:** React, TypeScript, Vite, Tailwind, shadcn/ui; Node.js y PostgreSQL etiquetados como *planned* hasta que se implementen.
-7. **Arquitectura:** diagrama simple de UI → servicios/repositorios mock → persistencia local, con la API/PostgreSQL como fase posterior.
+6. **Stack:** React, TypeScript, Vite, Tailwind, shadcn/ui; Node.js y SQL Server etiquetados como *planned* hasta que se implementen.
+7. **Arquitectura:** diagrama simple de UI → servicios/repositorios mock → persistencia local, con la API/SQL Server como fase posterior.
 8. **Instalación:** requisitos, comandos reproducibles y modo demo sin credenciales reales.
 9. **Pruebas y calidad:** comandos de lint, typecheck, tests y build; badges CI solo si hay workflows operativos.
 10. **Roadmap, decisiones técnicas, limitaciones, licencia y autoría.** Indicar explícitamente que los datos son sintéticos y que se trata de un proyecto personal de demostración.
@@ -730,6 +734,6 @@ docs/screenshots/
 
 ## 18. Instrucción adicional prioritaria para CMDC
 
-> **A partir de la primera tarea del frontend, trabaja con disciplina Git.** Divide el desarrollo en tareas pequeñas, funcionales y comprobables. Por cada tarea lógica completada, ejecuta las verificaciones pertinentes, crea un commit local con Conventional Commits y reporta su hash. Documenta el progreso. Prioriza primero el frontend en React/TypeScript con mocks reales y experiencia visual premium; NO implementes backend ni PostgreSQL sin aprobación. Prepara un README de alto nivel visual, pero usa capturas reales y no afirmes que hay funciones o integraciones que aún no existen. No generes commits vacíos ni manipules fechas para aumentar contribuciones. **Nunca hagas `git push` ni publiques nada sin mi autorización explícita.**
+> **A partir de la primera tarea del frontend, trabaja con disciplina Git.** Divide el desarrollo en tareas pequeñas, funcionales y comprobables. Por cada tarea lógica completada, ejecuta las verificaciones pertinentes, crea un commit local con Conventional Commits y reporta su hash. Documenta el progreso. Prioriza primero el frontend en React/TypeScript con mocks reales y experiencia visual premium; NO implementes backend ni SQL Server sin aprobación. Prepara un README de alto nivel visual, pero usa capturas reales y no afirmes que hay funciones o integraciones que aún no existen. No generes commits vacíos ni manipules fechas para aumentar contribuciones. **Nunca hagas `git push` ni publiques nada sin mi autorización explícita.**
 
 **Fin del documento.**
