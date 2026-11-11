@@ -1,0 +1,169 @@
+// Esquema de datos de Trazo para SQL Server.
+// - Los enums se guardan como nvarchar validados por Zod: el conector sqlserver
+//   de Prisma no soporta enums nativos.
+// - El conector tampoco soporta Json: tags, snapshots, metadata y cambios se
+//   guardan como JSON serializado en nvarchar(max).
+// - Sin cascadas: SQL Server rechaza rutas de cascada múltiples y el producto
+//   no elimina proyectos, así que las relaciones usan NoAction.
+// - Dinero en céntimos enteros, identificadores UNIQUEIDENTIFIER y fechas UTC.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.UniqueIdentifier
+  name      String   @db.NVarChar(160)
+  email     String   @unique @db.NVarChar(320)
+  role      String   @db.NVarChar(20)
+  avatarUrl String?  @db.NVarChar(500)
+  createdAt DateTime @default(now()) @db.DateTime2
+  updatedAt DateTime @updatedAt @db.DateTime2
+
+  projects Project[]
+  versions ProjectVersion[]
+  activity ActivityLog[]
+
+  @@map("users")
+}
+
+model Project {
+  id                 String    @id @default(uuid()) @db.UniqueIdentifier
+  code               String    @unique @db.NVarChar(20)
+  name               String    @db.NVarChar(120)
+  description        String    @db.NVarChar(Max)
+  sector             String    @db.NVarChar(20)
+  client             String    @db.NVarChar(100)
+  ownerId            String    @db.UniqueIdentifier
+  status             String    @db.NVarChar(20)
+  priority           String    @db.NVarChar(20)
+  initialBudgetCents Int
+  currentBudgetCents Int
+  currency           String    @default("PEN") @db.NVarChar(3)
+  progress           Int
+  startDate          DateTime  @db.DateTime2
+  dueDate            DateTime  @db.DateTime2
+  completedAt        DateTime? @db.DateTime2
+  tags               String    @db.NVarChar(Max)
+  createdAt          DateTime  @default(now()) @db.DateTime2
+  updatedAt          DateTime  @updatedAt @db.DateTime2
+  archivedAt         DateTime? @db.DateTime2
+
+  owner    User             @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  versions ProjectVersion[]
+  changes  ChangeEvent[]
+  alerts   Alert[]
+  activity ActivityLog[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([sector])
+  @@index([ownerId])
+  @@index([archivedAt])
+  @@index([dueDate])
+  @@map("projects")
+}
+
+model ProjectVersion {
+  id            String   @id @default(uuid()) @db.UniqueIdentifier
+  projectId     String   @db.UniqueIdentifier
+  versionNumber Int
+  snapshot      String   @db.NVarChar(Max)
+  changedAt     DateTime @default(now()) @db.DateTime2
+  changedBy     String   @db.UniqueIdentifier
+  source        String   @db.NVarChar(20)
+  reason        String?  @db.NVarChar(500)
+
+  project       Project       @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  changedByUser User          @relation(fields: [changedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  changes       ChangeEvent[]
+  alerts        Alert[]
+
+  @@unique([projectId, versionNumber])
+  @@index([projectId, changedAt])
+  @@map("project_versions")
+}
+
+model ChangeEvent {
+  id         String @id @default(uuid()) @db.UniqueIdentifier
+  versionId  String @db.UniqueIdentifier
+  projectId  String @db.UniqueIdentifier
+  field      String @db.NVarChar(20)
+  oldValue   String @db.NVarChar(Max)
+  newValue   String @db.NVarChar(Max)
+  changeType String @db.NVarChar(20)
+
+  version ProjectVersion @relation(fields: [versionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  project Project        @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([projectId])
+  @@index([versionId])
+  @@map("change_events")
+}
+
+model Alert {
+  id          String    @id @default(uuid()) @db.UniqueIdentifier
+  projectId   String    @db.UniqueIdentifier
+  versionId   String?   @db.UniqueIdentifier
+  ruleId      String    @db.NVarChar(60)
+  severity    String    @db.NVarChar(20)
+  status      String    @default("open") @db.NVarChar(20)
+  title       String    @db.NVarChar(200)
+  description String    @db.NVarChar(Max)
+  createdAt   DateTime  @default(now()) @db.DateTime2
+  reviewedAt  DateTime? @db.DateTime2
+  resolvedAt  DateTime? @db.DateTime2
+
+  project Project         @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  version ProjectVersion? @relation(fields: [versionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([projectId, versionId, ruleId])
+  @@index([status])
+  @@index([severity])
+  @@index([projectId, createdAt])
+  @@map("alerts")
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid()) @db.UniqueIdentifier
+  projectId String?  @db.UniqueIdentifier
+  actorId   String?  @db.UniqueIdentifier
+  action    String   @db.NVarChar(60)
+  source    String   @db.NVarChar(20)
+  createdAt DateTime @default(now()) @db.DateTime2
+  metadata  String   @db.NVarChar(Max)
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  actor   User?    @relation(fields: [actorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([createdAt])
+  @@index([projectId, createdAt])
+  @@map("activity_logs")
+}
+
+model RuleConfig {
+  id        String   @id @default(uuid()) @db.UniqueIdentifier
+  ruleKey   String   @unique @db.NVarChar(60)
+  enabled   Boolean  @default(true)
+  threshold Int?
+  severity  String   @db.NVarChar(20)
+  updatedAt DateTime @updatedAt @db.DateTime2
+
+  @@map("rule_configs")
+}
+
+model DemoScenario {
+  id          String   @id @default(uuid()) @db.UniqueIdentifier
+  name        String   @db.NVarChar(120)
+  description String   @db.NVarChar(Max)
+  changes     String   @db.NVarChar(Max)
+  seedVersion Int
+  createdAt   DateTime @default(now()) @db.DateTime2
+
+  @@map("demo_scenarios")
+}
