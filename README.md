@@ -56,7 +56,7 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 | **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
 | **F5 · Backend**                                   | API REST con Node/Express, dominio, validación Zod, seed y módulos de negocio | **Disponible (local)** |
 | **F6 · SQL Server**                                | Esquema Prisma, migración inicial, seed determinista y transacciones              | **Disponible (local)** |
-| F7 · Integración                                   | Adaptadores HTTP del frontend tras `VITE_API_BASE_URL` y escenarios en servidor; faltan conectar el simulador y el despliegue | **En curso** |
+| F7 · Integración                                   | Adaptadores HTTP del frontend, usuarios y simulador de escenarios en servidor; faltan autenticación y despliegue | **En curso** |
 
 ### Disponible hoy
 
@@ -110,8 +110,7 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   (`POST /demo/scenarios/:id/run` con origen `simulated`).
 - **Capa de datos HTTP** (`frontend/src/data/http`) que implementa los mismos
   contratos que los mocks. Sin `VITE_API_BASE_URL` la app usa IndexedDB; con ella
-  consume la API real, incluidos los usuarios de `/api/v1/users` en filtros,
-  formularios, chips y autores.
+  consume la API real, incluidos usuarios y el simulador de escenarios.
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
 ## Stack
@@ -262,9 +261,8 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 - No hay multiempresa real: el perfil es fijo y de demo.
 - La accesibilidad AA se audita automáticamente con axe en las pantallas
   principales; falta validación manual con lectores de pantalla.
-- El simulador del frontend ejecuta los escenarios en el navegador; la API ya
-  expone `/demo/scenarios/:id/run` y falta conectarlo en modo HTTP. No hay jobs
-  persistentes.
+- Con la API configurada los escenarios se ejecutan en el servidor; sin ella se
+  simulan en el navegador. No hay jobs persistentes.
 - Las capturas de escritorio se tomaron en 1440 px (el dashboard, en 1280 px);
   la interfaz también se verificó en 768 y 390 px.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al

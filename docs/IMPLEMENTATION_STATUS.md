@@ -341,6 +341,7 @@ configuración. También verifica que el primer Tab enfoca el enlace de salto.
 | Reset y usuarios | `resetDemoData()` usa `POST /demo/reset` con API; nuevo `UserRepository` con adaptadores mock y HTTP (`GET /users`) | este bloque |
 | Usuarios de la API | `useUsers()` alimenta filtros, formularios, chips y autores reales; se eliminan las lecturas de `DEMO_USERS` en las vistas | este bloque |
 | Escenarios en servidor | `POST /demo/scenarios/:id/run` valida el escenario y `{ projectId }`, aplica el cambio con origen `simulated` y devuelve el `ProjectUpdateResult` | este bloque |
+| Simulador conectado | `use-simulate-update` usa `demoRepository.runScenario`: el mock aplica el escenario en IndexedDB y el adaptador HTTP llama al endpoint | este bloque |
 | Pruebas | 11 pruebas del cliente y adaptadores: serialización, errores, 404→null y paginación | este bloque |
 
 ### Verificación ejecutada
@@ -371,10 +372,14 @@ motivo, 1 cambio y 2 alertas (+15 % de presupuesto); un escenario desconocido
 responde 400 y un proyecto inexistente 404. Después se ejecutó `/demo/reset` y se
 recuperó el dataset inicial (50 proyectos, 133 versiones).
 
+También se verificó el simulador en la UI con `VITE_API_BASE_URL`: desde
+`/monitor` → «Simular actualización» → `budget-increase` sobre `PRJ-048`, apareció
+el toast de éxito y el backend registró la versión 3 con `source: "simulated"` y
+el presupuesto 32.000.000 → 36.800.000, sin errores de consola. El dataset se
+restauró con `/demo/reset`.
+
 ### Pendiente de F7
 
-- Conectar el simulador del frontend (`use-simulate-update`) a
-  `POST /demo/scenarios/:id/run` para que en modo HTTP lo ejecute el servidor.
 - Autenticación/roles si procede y despliegue.
 
 ## Pendiente inmediato
@@ -385,8 +390,7 @@ recuperó el dataset inicial (50 proyectos, 133 versiones).
 
 ## Pendiente posterior
 
-- **Fase 7:** conectar el simulador del frontend al endpoint de escenarios,
-  autenticación/protección de la API y despliegue.
+- **Fase 7:** autenticación/protección de la API y despliegue.
 
 ## Bloqueos conocidos
 

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { CreateProjectInput } from '@/data/contracts'
+import { HttpDemoRepository } from '@/data/http/http-demo-repository'
 import { HttpProjectRepository } from '@/data/http/http-project-repository'
 import type { Project } from '@/domain/models'
 
@@ -50,6 +51,27 @@ afterEach(() => {
   vi.unstubAllEnvs()
   vi.unstubAllGlobals()
   vi.restoreAllMocks()
+})
+
+describe('HttpDemoRepository', () => {
+  it('ejecuta un escenario en el endpoint del backend', async () => {
+    const fetchMock = stubResponse({
+      project,
+      changed: true,
+      version: null,
+      changes: [],
+      alerts: [],
+    })
+
+    await new HttpDemoRepository().runScenario('budget-increase', project.id)
+
+    const { url, init } = lastRequest(fetchMock)
+    expect(url).toBe(
+      'http://api.test/api/v1/demo/scenarios/budget-increase/run',
+    )
+    expect(init?.method).toBe('POST')
+    expect(JSON.parse(String(init?.body))).toEqual({ projectId: project.id })
+  })
 })
 
 describe('HttpProjectRepository', () => {

@@ -21,17 +21,17 @@ las pruebas unitarias no dependan de la red.
   backend, `apiGetAllPages` (recorre páginas de 100) y `apiList` (traduce
   `page`/`pageSize`, agregando páginas si el contrato pide más de 100 filas).
 - `http-*-repository.ts`: un adaptador por contrato.
-- `reset.ts`: `resetDemoData()` → `POST /demo/reset`.
+- `http-demo-repository.ts`: `reset()` → `POST /demo/reset` y `runScenario()` →
+  `POST /demo/scenarios/:id/run`.
 - `http-user-repository.ts`: `GET /users`.
 
 ## Diferencias conocidas con el mock
 
-- El backend fija `actorId` y `source` en el servidor: las escrituras se
-  registran como `manual` aunque la simulación use `source: 'simulated'`.
+- El backend fija el actor en el servidor: las escrituras manuales se registran
+  como `manual` y el endpoint de escenarios como `simulated`.
 - Los ids de proyecto/servidor son UUID, no `prj_####`.
 - Los usuarios (responsables, filtros y autores) se leen de `GET /users`. El
   perfil de topbar/sidebar mantiene la identidad demo porque la API aún no tiene
   autenticación.
-- `POST /demo/scenarios/:id/run` ya existe en el backend (aplica el escenario con
-  origen `simulated`); falta que `use-simulate-update` llame a ese endpoint en
-  modo HTTP en lugar de usar `PATCH /projects/:id`.
+- El simulador de escenarios usa `demoRepository`: en mock aplica el cambio en
+  IndexedDB y en HTTP llama al endpoint, que registra el origen `simulated`.

@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { projectRepository } from '@/data'
-import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
+import { demoRepository } from '@/data'
 import type { Project } from '@/domain/models'
-import { SCENARIOS, type SimulationScenario } from '../scenarios'
+import type { SimulationScenario } from '../scenarios'
 
 interface SimulateUpdatePayload {
   project: Project
@@ -18,19 +17,8 @@ export function useSimulateUpdate() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ project, scenario }: SimulateUpdatePayload) => {
-      const definition = SCENARIOS[scenario]
-
-      return projectRepository.update(
-        project.id,
-        definition.buildInput(project),
-        {
-          actorId: DEMO_CURRENT_USER.id,
-          source: 'simulated',
-          reason: definition.reason,
-        },
-      )
-    },
+    mutationFn: ({ project, scenario }: SimulateUpdatePayload) =>
+      demoRepository.runScenario(scenario, project.id),
     onSuccess: (result) => {
       void queryClient.invalidateQueries({ queryKey: ['monitor'] })
       void queryClient.invalidateQueries({ queryKey: ['projects'] })

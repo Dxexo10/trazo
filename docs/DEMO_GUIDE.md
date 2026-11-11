@@ -99,8 +99,9 @@ escenario y verifica también accesibilidad AA con axe.
 
 ## Límites
 
-- No hay backend, autenticación ni multiempresa.
+- No hay autenticación ni multiempresa; la API local es opcional.
 - Los datos son ficticios y el reloj es fijo; no representa producción.
-- Los escenarios se ejecutan en el navegador, no con jobs reales.
+- Con la API configurada, los escenarios se ejecutan en el servidor; sin ella se
+  simulan en el navegador. No hay jobs persistentes.
 - La accesibilidad se audita automáticamente con axe; falta validación manual
   con lectores de pantalla.
