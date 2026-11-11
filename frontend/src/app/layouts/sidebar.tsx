@@ -222,7 +222,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed top-4 bottom-4 left-3 z-40 hidden flex-col overflow-hidden rounded-[22px] border border-white/[0.07] bg-sidebar bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.12),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-200 ease-out md:flex',
+        'fixed top-4 bottom-4 left-3 z-40 hidden flex-col overflow-hidden rounded-[22px] border border-white/[0.07] bg-sidebar bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.12),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-200 ease-out md:flex print:hidden',
         collapsed ? 'w-[76px]' : 'w-[248px]',
       )}
     >

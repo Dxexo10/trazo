@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   BellRing,
+  FileSpreadsheet,
   FolderKanban,
   History,
   LayoutDashboard,
@@ -56,6 +57,7 @@ export const PRIMARY_NAV: NavItem[] = [
     ],
   },
   { label: 'Actividad', href: '/activity', icon: History },
+  { label: 'Reportes', href: '/reports', icon: FileSpreadsheet },
 ]
 
 export const SECONDARY_NAV: NavItem[] = [
@@ -73,6 +75,7 @@ export const ROUTE_TITLES: Record<string, string> = {
   '/monitor': 'Monitor de cambios',
   '/alerts': 'Centro de alertas',
   '/activity': 'Actividad',
+  '/reports': 'Reportes',
   '/settings': 'Configuración demo',
 }
 

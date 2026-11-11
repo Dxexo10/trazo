@@ -148,7 +148,7 @@ function UserMenu() {
 
 export function Topbar() {
   return (
-    <header className="sticky top-0 z-30 bg-canvas px-3 pt-3 sm:px-5 lg:px-6">
+    <header className="sticky top-0 z-30 bg-canvas px-3 pt-3 sm:px-5 lg:px-6 print:hidden">
       <div className="mx-auto w-full max-w-[1600px]">
         <div className="flex h-14 items-center gap-2 rounded-3xl border border-brand-sand/90 bg-surface/95 px-3 shadow-card backdrop-blur-sm sm:px-4">
           <MobileNav />

@@ -45,6 +45,11 @@ const ActivityPage = lazy(() =>
     default: module.ActivityPage,
   })),
 )
+const ReportsPage = lazy(() =>
+  import('@/features/reports/reports-page').then((module) => ({
+    default: module.ReportsPage,
+  })),
+)
 const SettingsPage = lazy(() =>
   import('@/features/settings/settings-page').then((module) => ({
     default: module.SettingsPage,
@@ -70,6 +75,7 @@ export const router = createBrowserRouter([
       { path: 'monitor', element: page(<MonitorPage />) },
       { path: 'alerts', element: page(<AlertsPage />) },
       { path: 'activity', element: page(<ActivityPage />) },
+      { path: 'reports', element: page(<ReportsPage />) },
       { path: 'settings', element: page(<SettingsPage />) },
       { path: '*', element: <NotFoundPage /> },
     ],

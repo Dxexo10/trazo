@@ -8,6 +8,7 @@ const PAGES = [
   { path: '/monitor', name: 'monitor de cambios' },
   { path: '/alerts', name: 'centro de alertas' },
   { path: '/activity', name: 'actividad' },
+  { path: '/reports', name: 'reportes' },
   { path: '/settings', name: 'configuración' },
 ] as const
 

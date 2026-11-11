@@ -60,6 +60,7 @@ export function AppShell() {
         className={cn(
           'flex min-h-svh min-w-0 flex-col transition-[padding-left] duration-200 ease-out',
           collapsed ? 'md:pl-[100px]' : 'md:pl-[272px]',
+          'print:pl-0 print:md:pl-0',
         )}
       >
         <Topbar />
@@ -72,7 +73,7 @@ export function AppShell() {
           <Outlet />
         </main>
 
-        <footer className="px-3 pb-4 sm:px-5 lg:px-6">
+        <footer className="px-3 pb-4 sm:px-5 lg:px-6 print:hidden">
           <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/70 bg-surface/60 px-4 py-3 text-xs text-muted-foreground">
             <span>trazo · Project Management &amp; Intelligence</span>
             <span>{DEMO_LABEL}</span>
