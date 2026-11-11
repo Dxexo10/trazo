@@ -1,8 +1,9 @@
 # Estado de implementación
 
-Actualizado tras aprobar el arranque del backend y completar el **esqueleto de
-la Fase 5**; antes, **M06 · Reportes** y el **cierre del Frente 1**
-(coherencia de navegación, documentación y metadatos).
+Actualizado tras completar el **seed y los módulos de negocio del backend**,
+corregir la **accesibilidad de las tablas con scroll**
+(`scrollable-region-focusable`) y estabilizar las pruebas de Vitest; antes, el
+esqueleto de la Fase 5, **M06 · Reportes** y el **cierre del Frente 1**.
 
 ## F5 · Esqueleto del backend — completado
 
@@ -31,9 +32,42 @@ node dist/server.js → GET /api/v1/health responde 200 con x-request-id
 
 ### Pendiente de F5
 
-- Módulos de negocio (dashboard, proyectos, versiones, cambios, alertas,
-  actividad y demo) y sus validaciones.
-- Prisma y SQL Server en F6; el adaptador HTTP del frontend en F7.
+- Escenarios de simulación en el servidor (`/demo/scenarios/:id/run`).
+- Autenticación y protección de la API (hoy usa el perfil demo fijo).
+- Adaptador HTTP del frontend en F7.
+
+## F5 · Módulos de negocio y seed — completado
+
+| Tarea | Resultado |
+| --- | --- |
+| Seed determinista | 10 usuarios, 50 proyectos, 133 versiones, 248 cambios, 49 alertas, 288 eventos de actividad y 7 reglas; UUID deterministas y `npm run db:seed` |
+| Dominio portado | Fechas, dinero, diff de proyecto, motor de reglas, métricas de riesgo, dashboard y feed de cambios con las mismas reglas del frontend |
+| Repositorios Prisma | Proyectos, versiones, cambios, alertas, actividad, reglas y usuarios con filtros, orden y paginación |
+| Proyectos | Listado, detalle, alta con versión 1, edición transaccional (versión, cambios, alertas), archivado, historial y cambios |
+| Alertas | Listado, detalle, contador de abiertas y cambio de estado con auditoría |
+| Resto de módulos | Actividad, versiones, cambios, reglas, usuarios y resumen del dashboard |
+| Demo | `POST /api/v1/demo/reset` restaura el dataset inicial |
+| Pruebas | 34 pruebas nuevas de diff, reglas, dashboard y determinismo del seed; 56 en total |
+| Documentación | README del backend, módulos y este estado |
+
+### Verificación ejecutada
+
+```text
+npm run typecheck → sin errores
+npm run lint      → 0 errores
+npm test          → 7 archivos, 56 pruebas aprobadas
+npm run build     → dist generado
+
+Prueba manual con el servidor y SQL Server real:
+GET  /api/v1/projects?pageSize=2        → 50 proyectos paginados
+GET  /api/v1/dashboard/summary          → KPIs, tendencia y atención
+PATCH /api/v1/projects/PRJ-001          → versión 5, 1 cambio y 2 alertas
+POST /api/v1/projects                   → PRJ-051 con versión 1
+POST /api/v1/projects/:id/archive       → archivedAt asignado
+PATCH /api/v1/alerts/:id/status         → resolved con actividad
+PATCH /api/v1/rules/:id                 → umbral y severidad actualizados
+POST /api/v1/demo/reset                 → dataset restaurado
+```
 
 ## F5 · Modelo Prisma y dominio — completado
 
@@ -96,22 +130,40 @@ MCP list_tables          → users, projects, project_versions, change_events,
 ```text
 npm run typecheck → sin errores
 npm run lint      → 0 errores, 0 advertencias
-NODE_ENV=test npm run test → 30 archivos, 184 pruebas aprobadas y 1 timeout
-                             aislado en dashboard-page que pasa al reejecutarse solo
-npm run build     → dist generado (reports-page 30,70 kB · gzip 11,61 kB)
-npx playwright test e2e/accessibility.spec.ts → 9 pruebas aprobadas,
-                             incluida /reports, sin violaciones graves
+npm run test      → 30 archivos, 185 pruebas aprobadas (sin NODE_ENV)
+npm run build     → dist generado (reports-page 30,79 kB · gzip 11,66 kB)
+npm run test:e2e  → 14 pruebas aprobadas (Chromium), incluida /reports y la
+                    auditoría axe en 8 pantallas sin violaciones graves
 ```
 
-No se ejecutó la suite E2E completa (`npm run test:e2e`) en esta sesión; sí la
-auditoría de accesibilidad. `npm run format:check` sigue fallando por 47 archivos
-preexistentes sin formato; los archivos nuevos de reportes sí se formatearon con
-Prettier.
+`npm run format:check` no se ejecutó en esta sesión; se comprobó Prettier sobre
+los ficheros tocados (`npx prettier --check`) sin diferencias.
 
 ### Pendiente de M06
 
 - Validar a mano la impresión/«Guardar como PDF» y la apertura de los XLSX en
   Excel y LibreOffice.
+
+## Accesibilidad de tablas y estabilización de Vitest — completado
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Tablas desplazables accesibles | El contenedor de `components/ui/table.tsx` es enfocable (`tabIndex`) y acepta `label` para exponer `role="region"` con nombre accesible y anillo de foco con los tokens del proyecto | `d23fabd` |
+| Uso en la app | Portafolio, «Proyectos que requieren atención» y comparador de versiones pasan `label`; se elimina el `overflow-x-auto` redundante del comparador | `d23fabd` |
+| Reportes | La vista previa usa el primitivo `Table` —región enfocable y etiquetada— en lugar de un `div` con `<table>` manual | `2325f9b` |
+| Vitest | `vite.config.ts` fija `NODE_ENV=test` y `testTimeout` de 10 s para que `npm test` funcione sin exportar la variable y sin timeouts intermitentes | `2325f9b` |
+| Causa raíz del fallo E2E | `scrollable-region-focusable` (serious) marcaba el `div.overflow-x-auto` de `/reports` en los tres reintentos del CI | — |
+
+### Verificación ejecutada
+
+```text
+npm run test:e2e   → 14 pruebas aprobadas (Chromium)
+npm run test       → 30 archivos, 185 pruebas aprobadas (sin NODE_ENV)
+npm run lint       → 0 errores
+npm run typecheck  → sin errores
+npm run build      → dist generado
+npx prettier --check (ficheros tocados) → sin diferencias
+```
 
 ## Cierre del Frente 1 — completado
 
@@ -277,24 +329,25 @@ npm run build      → dist generado
 La E2E arranca un servidor Vite en el puerto 4173 y cubre: flujo estrella
 (editar → versión 5 → alerta → monitor → revisar), reset demo, simulador de
 presupuesto, navegación/filtros móviles y auditoría axe sin violaciones graves
-en dashboard, proyectos, historial, monitor, alertas, actividad y configuración.
-También verifica que el primer Tab enfoca el enlace de salto.
+en dashboard, proyectos, historial, monitor, alertas, actividad, reportes y
+configuración. También verifica que el primer Tab enfoca el enlace de salto.
 
 ## Pendiente inmediato
 
 - Validación manual con lectores de pantalla y navegador real más allá de axe.
 - Portada social y metadata del repositorio en GitHub.
-- Confirmar el workflow CI en GitHub Actions tras el push.
+- Validar a mano la impresión a PDF y la apertura de los XLSX en Excel/LibreOffice.
 
 ## Pendiente posterior
 
-- **Fases 5–7:** API Express, Prisma + SQL Server, adaptador HTTP y despliegue.
+- **Fases 6–7:** adaptador HTTP del frontend, endpoint de escenarios demo en el
+  servidor, autenticación/protección de la API y despliegue.
 
 ## Bloqueos conocidos
 
-- Ninguno funcional. El entorno local define `NODE_ENV=production`, por lo que
-  hay que instalar con `npm install --include=dev` y ejecutar las pruebas con
-  `NODE_ENV=test`.
+- Ninguno funcional. La instalación en local requiere `npm install --include=dev`
+  porque el entorno define `NODE_ENV=production`; las pruebas ya no dependen de
+  exportar `NODE_ENV=test` porque Vitest lo fija en `vite.config.ts`.
 - El cambio a esquema 2 / semilla 3 fuerza una resiembra del dataset demo y
   descarta ediciones locales previas (comportamiento esperado del entorno mock).
 - La instalación de Google Chrome para Playwright requiere privilegios de

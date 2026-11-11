@@ -54,8 +54,9 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 | **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
 | **F4 · Pulido y QA**                               | Actividad, ajustes y reset demo, E2E con Playwright, CI y capturas                                         | **Disponible** |
 | **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
-| **F5 · Backend (esqueleto)**                       | API REST con Node/Express, TypeScript y Zod; configuración, errores, CORS, logging, salud, dominio y modelo Prisma | **En curso**   |
-| F6–F7 · Datos e integración                        | SQL Server migrado, seed, adaptador HTTP en el frontend, autenticación si procede y despliegue             | En curso       |
+| **F5 · Backend**                                   | API REST con Node/Express, dominio, validación Zod, seed y módulos de negocio | **Disponible (local)** |
+| **F6 · SQL Server**                                | Esquema Prisma, migración inicial, seed determinista y transacciones              | **Disponible (local)** |
+| F7 · Integración                                   | Adaptador HTTP en el frontend, autenticación si procede y despliegue              | Planificado    |
 
 ### Disponible hoy
 
@@ -103,6 +104,10 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   reglas persistidos en IndexedDB (sobreviven a la recarga).
 - Suite E2E con Playwright del flujo estrella y workflow de CI con lint,
   typecheck, pruebas, build y E2E.
+- **API REST local** (`backend/`) con dashboard, proyectos, versiones, cambios,
+  alertas, actividad, reglas y usuarios sobre SQL Server, con seed determinista,
+  edición transaccional y reset demo. El frontend todavía consume IndexedDB; la
+  conexión HTTP llega en la Fase 7.
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
 ## Stack
@@ -139,7 +144,12 @@ npm run dev        # http://localhost:4000/api/v1/health
 ```
 
 La base requiere `backend/.env` con `DATABASE_URL` (ignorado por git). Para
-aplicar migraciones: `npm run db:deploy`.
+aplicar migraciones y sembrar el demo:
+
+```bash
+npm run db:deploy
+npm run db:seed
+```
 
 Scripts disponibles:
 
@@ -240,9 +250,11 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 
 ## Limitaciones conocidas
 
-- El backend todavía no sirve datos: la base `Trazo` ya está migrada, pero
-  faltan el seed y los endpoints de negocio.
-- No hay autenticación ni multiempresa: el perfil es fijo y de demo.
+- El frontend todavía consume el dataset de IndexedDB; la API ya sirve los
+  mismos datos desde SQL Server, pero el adaptador HTTP llega en la Fase 7.
+- La API no tiene autenticación y el reset demo no está protegido: es un
+  entorno local de demostración, no una exposición pública.
+- No hay multiempresa real: el perfil es fijo y de demo.
 - La accesibilidad AA se audita automáticamente con axe en las pantallas
   principales; falta validación manual con lectores de pantalla.
 - Los escenarios se ejecutan en el navegador, no con jobs reales.

@@ -100,13 +100,16 @@ src/config/env.ts        Validación de entorno con Zod (PORT, CORS_ORIGINS, NOD
 src/app.ts               Ensamblado de Express (helmet, CORS, JSON, request-id, logging)
 src/server.ts            Arranque HTTP y cierre ordenado ante SIGINT/SIGTERM
 src/middleware/**        request-id, request-logger, notFound y errorHandler
-src/routes/**            Router versionado /api/v1 (por ahora solo /health)
+src/routes/**            Router versionado /api/v1 y salud
 src/domain/models/**     Entidades serializables de la API
 src/domain/schemas/**    Validaciones Zod compartidas por los módulos
+src/domain/services/**   Diff, reglas, métricas, dashboard y seed determinista
+src/domain/seed/**       Generadores del dataset demo con UUID deterministas
+src/data/repositories/** Implementaciones Prisma de cada contrato
 src/lib/prisma.ts        Cliente Prisma único (conexión diferida)
 prisma/schema.prisma     Modelo relacional para SQL Server
-src/modules/**           Módulos previstos: dashboard, projects, versions, changes,
-                         alerts, activity y demo (sin implementar)
+src/modules/**           dashboard, projects, alerts, activity, versions,
+                         changes, rules, users y demo (implementados)
 ```
 
 - Respuesta de salud: `GET /api/v1/health` → `{ status, service, uptimeSeconds, timestamp }`.
@@ -124,6 +127,13 @@ src/modules/**           Módulos previstos: dashboard, projects, versions, chan
   `Trazo`). `DATABASE_URL` vive solo en `backend/.env` (ignorado por git), la
   cuenta `trazo_mcp` es `db_owner` únicamente de `Trazo` y
   `prisma/migrations` conserva el historial.
+- `npm run db:seed` recrea el dataset demo determinista (semilla `20261031`,
+  fecha de referencia `2026-10-31`) con 50 proyectos, versiones, cambios,
+  alertas, actividad y reglas.
+- Los módulos implementados cubren dashboard, proyectos (alta, edición
+  transaccional, archivado, historial y cambios), alertas, actividad, versiones,
+  cambios, reglas, usuarios y el reset demo. Las escrituras usan el perfil demo
+  fijo hasta que exista autenticación.
 
 ## Apariencia y navegación
 
