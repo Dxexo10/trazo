@@ -1,12 +1,35 @@
-# Adaptado HTTP (reservado para la Fase 5)
+# Adaptadores HTTP (Fase 7)
 
-Esta carpeta queda vacía de código a propósito.
+Implementan los contratos de `src/data/contracts` contra la API REST
+`/api/v1` del backend. `src/data/index.ts` elige automáticamente entre estos
+adaptadores y los mocks de `src/data/mock` según el entorno.
 
-La UI consume los repositorios definidos en `src/data/contracts` a través de
-`src/data/index.ts`. Para conectar la API REST real bastará con:
+## Activar la API real
 
-1. Implementar `HttpProjectRepository`, `HttpAlertRepository` y
-   `HttpActivityRepository` contra `/api/v1`.
-2. Cambiar las instancias exportadas en `src/data/index.ts`.
+1. Copia `frontend/.env.example` a `frontend/.env`.
+2. Define `VITE_API_BASE_URL=http://localhost:4000/api/v1` (o la URL del backend).
+3. Arranca el backend (`backend/`: `npm run dev`) con SQL Server accesible.
 
-Ninguna vista, hook ni servicio de dominio necesita modificarse.
+Sin `VITE_API_BASE_URL` la aplicación usa IndexedDB y no necesita backend. En
+modo test (`import.meta.env.MODE === 'test'`) siempre se usan los mocks para que
+las pruebas unitarias no dependan de la red.
+
+## Ficheros
+
+- `client.ts`: `fetch` tipado, serialización de query (arrays como CSV, que el
+  backend acepta), manejo de `204`, `ApiError` con el `error.message` del
+  backend, `apiGetAllPages` (recorre páginas de 100) y `apiList` (traduce
+  `page`/`pageSize`, agregando páginas si el contrato pide más de 100 filas).
+- `http-*-repository.ts`: un adaptador por contrato.
+- `reset.ts`: `resetDemoData()` → `POST /demo/reset`.
+- `http-user-repository.ts`: `GET /users`.
+
+## Diferencias conocidas con el mock
+
+- El backend fija `actorId` y `source` en el servidor: las escrituras se
+  registran como `manual` aunque la simulación use `source: 'simulated'`.
+- Los ids de proyecto/servidor son UUID, no `prj_####`.
+- Las vistas que aún leen `DEMO_USERS` desde el seed necesitan migrarse a
+  `userRepository` para mostrar responsables reales (siguiente paso de F7).
+- `POST /demo/scenarios/:id/run` todavía no existe en el backend; los escenarios
+  se ejecutan en el navegador y usan `PATCH /projects/:id`.

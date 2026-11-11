@@ -332,6 +332,41 @@ presupuesto, navegación/filtros móviles y auditoría axe sin violaciones grave
 en dashboard, proyectos, historial, monitor, alertas, actividad, reportes y
 configuración. También verifica que el primer Tab enfoca el enlace de salto.
 
+## F7 · Integración — en curso
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Configuración de entorno | `VITE_API_BASE_URL` selecciona adaptadores HTTP; sin ella se usan los mocks y en modo test siempre se usan los mocks | este bloque |
+| Cliente HTTP | `data/http/client.ts`: query CSV, `204`, `ApiError` con el mensaje del backend, `apiGetAllPages` (páginas de 100) y `apiList` (agrega páginas cuando el contrato pide más de 100 filas) | este bloque |
+| Adaptadores | Proyectos, alertas, actividad, versiones, cambios, reglas y usuarios implementan los contratos existentes | este bloque |
+| Reset y usuarios | `resetDemoData()` usa `POST /demo/reset` con API; nuevo `UserRepository` con adaptadores mock y HTTP (`GET /users`) | este bloque |
+| Pruebas | 11 pruebas del cliente y adaptadores: serialización, errores, 404→null y paginación | este bloque |
+
+### Verificación ejecutada
+
+```text
+npm run test      → 32 archivos, 196 pruebas aprobadas
+npm run lint      → 0 errores
+npm run typecheck → sin errores
+npm run build     → dist generado
+npm run test:e2e  → 14 pruebas aprobadas (modo mock)
+```
+
+Contra la API real con SQL Server local se comprobaron `/health`, `/projects`
+(26 filtrados y 50 con archivados), `/versions` (133), `/changes` (248),
+`/alerts` (49), `/alerts/count-open` (34), `/users` (10), `/rules` (7),
+`/dashboard/summary` y un `PATCH` sin cambios (`changed: false`), con los mismos
+shapes que consumen los adaptadores.
+
+### Pendiente de F7
+
+- Migrar chips, selects y filtros de responsable de `DEMO_USERS` a
+  `userRepository` (`GET /users`) para crear y filtrar con los UUID del servidor.
+- Implementar `POST /demo/scenarios/:id/run` en el backend; hoy los escenarios
+  corren en el navegador y usan `PATCH /projects/:id`.
+- Preservar `source: 'simulated'` en las escrituras (el backend fija `manual`).
+- Autenticación/roles si procede y despliegue.
+
 ## Pendiente inmediato
 
 - Validación manual con lectores de pantalla y navegador real más allá de axe.
@@ -340,7 +375,7 @@ configuración. También verifica que el primer Tab enfoca el enlace de salto.
 
 ## Pendiente posterior
 
-- **Fases 6–7:** adaptador HTTP del frontend, endpoint de escenarios demo en el
+- **Fase 7:** vistas con usuarios de la API, endpoint de escenarios demo en el
   servidor, autenticación/protección de la API y despliegue.
 
 ## Bloqueos conocidos

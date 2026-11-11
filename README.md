@@ -56,7 +56,7 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 | **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
 | **F5 · Backend**                                   | API REST con Node/Express, dominio, validación Zod, seed y módulos de negocio | **Disponible (local)** |
 | **F6 · SQL Server**                                | Esquema Prisma, migración inicial, seed determinista y transacciones              | **Disponible (local)** |
-| F7 · Integración                                   | Adaptador HTTP en el frontend, autenticación si procede y despliegue              | Planificado    |
+| F7 · Integración                                   | Adaptadores HTTP del frontend tras `VITE_API_BASE_URL`; faltan vistas con usuarios de la API, escenarios en servidor y despliegue | **En curso** |
 
 ### Disponible hoy
 
@@ -106,8 +106,10 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
   typecheck, pruebas, build y E2E.
 - **API REST local** (`backend/`) con dashboard, proyectos, versiones, cambios,
   alertas, actividad, reglas y usuarios sobre SQL Server, con seed determinista,
-  edición transaccional y reset demo. El frontend todavía consume IndexedDB; la
-  conexión HTTP llega en la Fase 7.
+  edición transaccional y reset demo.
+- **Capa de datos HTTP** (`frontend/src/data/http`) que implementa los mismos
+  contratos que los mocks. Sin `VITE_API_BASE_URL` la app usa IndexedDB; con ella
+  consume la API real. Falta migrar los selects de usuario al endpoint `/users`.
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
 ## Stack
@@ -250,8 +252,9 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 
 ## Limitaciones conocidas
 
-- El frontend todavía consume el dataset de IndexedDB; la API ya sirve los
-  mismos datos desde SQL Server, pero el adaptador HTTP llega en la Fase 7.
+- El frontend usa IndexedDB por defecto. Con `VITE_API_BASE_URL` consume la API
+  REST, pero los selects y chips de responsable todavía leen los usuarios demo
+  del seed; migrarlos a `/api/v1/users` es el siguiente paso de F7.
 - La API no tiene autenticación y el reset demo no está protegido: es un
   entorno local de demostración, no una exposición pública.
 - No hay multiempresa real: el perfil es fijo y de demo.
