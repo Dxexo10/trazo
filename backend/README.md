@@ -73,13 +73,51 @@ sobre SQL Server 2022 Express (`localhost,1433`, base `Trazo`). La cadena
 `src/domain/models` contiene las entidades serializables de la API y
 `src/domain/schemas` las validaciones Zod compartidas por los módulos:
 
-- `createProjectSchema` / `updateProjectSchema`: ciudades, presupuestos en
+- `createProjectSchema` / `updateProjectSchema`: textos, presupuestos en
   céntimos, fechas `YYYY-MM-DD`, reglas de completado y rechazo de campos
   desconocidos.
-- `projectQuerySchema`, `alertQuerySchema` y `activityQuerySchema`: filtros
-  repetidos o separados por coma, paginación acotada y fechas ISO.
+- `projectQuerySchema`, `alertQuerySchema`, `activityQuerySchema`,
+  `changeQuerySchema` y `versionQuerySchema`: filtros repetidos o separados por
+  coma, paginación acotada y fechas ISO.
 - `src/lib/prisma.ts` expone un `PrismaClient` único, sin conectar al arrancar.
 
-Los módulos de negocio, Prisma y SQL Server llegan en las siguientes tareas de
-la Fase 5 y la Fase 6. La lista de endpoints planeados está en
-[`src/modules/README.md`](src/modules/README.md).
+## Seed
+
+`npm run db:seed` recrea el dataset determinista del demo (semilla `20261031`,
+fecha de referencia `2026-10-31`): 10 usuarios, 50 proyectos, 133 versiones,
+248 cambios, 49 alertas, 288 eventos de actividad y 7 reglas. Los
+identificadores se generan como UUID deterministas para respetar
+`UNIQUEIDENTIFIER`.
+
+El seed **borra y vuelve a crear** las tablas del demo; no lo ejecutes sobre
+datos reales.
+
+## API implementada
+
+| Método | Ruta                                        | Descripción                                      |
+| ------ | ------------------------------------------- | ------------------------------------------------ |
+| GET    | `/api/v1/health`                            | Estado del servicio                              |
+| GET    | `/api/v1/dashboard/summary?periodMonths=12` | KPIs, tendencia, distribución y atención         |
+| GET    | `/api/v1/projects`                          | Portafolio con filtros, orden y paginación       |
+| POST   | `/api/v1/projects`                          | Alta con versión 1 y auditoría                   |
+| GET    | `/api/v1/projects/:id`                      | Detalle                                          |
+| PATCH  | `/api/v1/projects/:id?reason=`              | Edición transaccional: versión, cambios, alertas |
+| POST   | `/api/v1/projects/:id/archive`              | Archivado lógico                                 |
+| GET    | `/api/v1/projects/:id/versions`             | Historial de versiones                           |
+| GET    | `/api/v1/projects/:id/changes`              | Cambios auditados del proyecto                   |
+| GET    | `/api/v1/alerts`                            | Alertas con filtros y paginación                 |
+| GET    | `/api/v1/alerts/count-open`                 | Alertas abiertas del portafolio activo           |
+| GET    | `/api/v1/alerts/:id`                        | Detalle de alerta                                |
+| PATCH  | `/api/v1/alerts/:id/status`                 | Revisar o resolver con auditoría                 |
+| GET    | `/api/v1/activity`                          | Timeline de actividad                            |
+| GET    | `/api/v1/versions`                          | Versiones globales                               |
+| GET    | `/api/v1/versions/:id`                      | Detalle de versión                               |
+| GET    | `/api/v1/changes`                           | Cambios globales con filtros                     |
+| GET    | `/api/v1/rules`                             | Configuración de reglas                          |
+| PATCH  | `/api/v1/rules/:id`                         | Umbral, severidad o habilitación                 |
+| GET    | `/api/v1/users`                             | Responsables del demo                            |
+| POST   | `/api/v1/demo/reset`                        | Restaura el dataset inicial                      |
+
+Las escrituras usan el perfil demo fijo (`DEMO_CURRENT_USER`) porque todavía no
+hay autenticación. El endpoint de reset está pensado solo para el entorno de
+demostración; no expongas esta API públicamente sin protegerla.

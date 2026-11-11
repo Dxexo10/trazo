@@ -1,0 +1,9 @@
+export const DEMO_REFERENCE_DATE = '2026-10-31'
+
+export const DEMO_SEED = 20261031
+
+export const DEMO_SEED_VERSION = 3
+
+export const DEMO_CURRENCY = 'PEN' as const
+
+export const DEMO_CURRENT_USER_ID = '10000000-0000-4000-8000-000000000001'

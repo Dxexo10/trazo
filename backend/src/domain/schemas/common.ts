@@ -6,6 +6,10 @@ export const MAX_BUDGET_CENTS = 100_000_000_000
 
 export const uuidSchema = z.uuid('Debe ser un UUID válido.')
 
+export const idParamSchema = z.object({
+  id: uuidSchema,
+})
+
 export const dateOnlySchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Usa el formato YYYY-MM-DD.')

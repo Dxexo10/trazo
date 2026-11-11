@@ -8,6 +8,7 @@ import {
   booleanQuery,
   csvEnum,
   dateOnlySchema,
+  idParamSchema,
   isoDateTimeSchema,
   MAX_BUDGET_CENTS,
   paginationQuerySchema,
@@ -152,9 +153,7 @@ export const projectQuerySchema = paginationQuerySchema.extend({
   sortDirection: z.enum(['asc', 'desc']).default('desc'),
 })
 
-export const projectIdParamSchema = z.object({
-  id: uuidSchema,
-})
+export const projectIdParamSchema = idParamSchema
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>
