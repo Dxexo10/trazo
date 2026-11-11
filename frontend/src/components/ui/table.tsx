@@ -3,11 +3,23 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+interface TableProps extends React.ComponentProps<"table"> {
+  /**
+   * Nombre accesible del contenedor con desplazamiento horizontal. Cuando se
+   * indica, el contenedor expone `role="region"` para que el lector de pantalla
+   * anuncie la tabla desplazable.
+   */
+  label?: string
+}
+
+function Table({ className, label, ...props }: TableProps) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      role={label ? "region" : undefined}
+      aria-label={label}
+      tabIndex={0}
+      className="relative w-full overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-terracotta"
     >
       <table
         data-slot="table"

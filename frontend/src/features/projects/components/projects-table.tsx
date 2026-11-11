@@ -30,7 +30,7 @@ export function ProjectsTable({ projects, users }: ProjectsTableProps) {
   const usersById = new Map(users.map((user) => [user.id, user]))
 
   return (
-    <Table>
+    <Table label="Proyectos">
       <TableHeader>
         <TableRow className="hover:bg-transparent">
           <TableHead className="pl-5">Proyecto</TableHead>

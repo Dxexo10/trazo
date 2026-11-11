@@ -57,7 +57,7 @@ export function AttentionTable({ items, users }: AttentionTableProps) {
           description="Aún no hay proyectos que coincidan con tus filtros."
         />
       ) : (
-        <Table>
+        <Table label="Proyectos que requieren atención">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="pl-5">Proyecto</TableHead>

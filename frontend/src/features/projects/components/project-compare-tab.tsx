@@ -130,8 +130,8 @@ export function ProjectCompareTab({ projectId }: ProjectCompareTabProps) {
             description="Estas dos versiones tienen los mismos valores en los campos auditables."
           />
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <Table>
+          <div className="rounded-xl border border-border">
+            <Table label="Diferencias entre versiones">
               <TableHeader>
                 <TableRow>
                   <TableHead>Campo</TableHead>

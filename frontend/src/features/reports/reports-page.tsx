@@ -111,7 +111,12 @@ function ReportPreview({ document }: { document: ReportDocument }) {
   const rows = document.rows.slice(0, PREVIEW_ROWS)
 
   return (
-    <div className="overflow-x-auto">
+    <div
+      role="region"
+      aria-label={`${document.metadata.title} (tabla con desplazamiento horizontal)`}
+      tabIndex={0}
+      className="overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-terracotta"
+    >
       <table className="w-full min-w-[820px] text-left text-sm">
         <caption className="sr-only">{document.metadata.title}</caption>
         <thead>
