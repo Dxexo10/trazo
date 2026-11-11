@@ -38,6 +38,41 @@ jobs:
       - name: Build
         run: npm run build
 
+  backend:
+    name: Backend lint, types, tests and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --include=dev
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Validate Prisma schema
+        run: npm run db:validate
+        env:
+          DATABASE_URL: 'sqlserver://localhost:1433;database=Trazo;user=trazo_app;password=placeholder;encrypt=true;trustServerCertificate=true'
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
   e2e:
     name: Playwright end-to-end
     runs-on: ubuntu-latest
