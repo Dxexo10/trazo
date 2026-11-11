@@ -2,13 +2,9 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { alertRepository, projectRepository } from '@/data'
 import type { Alert, Project, ProjectStatus } from '@/domain/models'
 import type { AlertStatus } from '@/domain/models'
-import { parseDate } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
-import {
-  ALERTS_PAGE_SIZE,
-  type AlertFilters,
-  type AlertPeriod,
-} from './use-alert-filters'
+import { periodStart } from '@/lib/period'
+import { ALERTS_PAGE_SIZE, type AlertFilters } from './use-alert-filters'
 
 export interface AlertCounts {
   open: number
@@ -32,15 +28,6 @@ const ACTIVE_PROJECT_STATUSES: ProjectStatus[] = [
   'on_hold',
   'completed',
 ]
-
-function periodStart(period: AlertPeriod): string | undefined {
-  if (period === 'all') return undefined
-
-  const reference = parseDate(DEMO_REFERENCE_DATE)
-  return new Date(
-    reference.getTime() - Number(period) * 86_400_000,
-  ).toISOString()
-}
 
 function matchesStatus(alert: Alert, status: AlertStatus): boolean {
   return alert.status === status
@@ -81,7 +68,7 @@ async function fetchAlerts(filters: AlertFilters): Promise<AlertListResult> {
     ).length,
   }
 
-  const from = periodStart(filters.period)
+  const from = periodStart(filters.period, DEMO_REFERENCE_DATE)
   const filtered = portfolioAlerts.filter((alert) => {
     if (filters.status !== 'all' && alert.status !== filters.status)
       return false

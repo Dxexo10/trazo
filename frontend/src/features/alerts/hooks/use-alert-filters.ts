@@ -5,11 +5,12 @@ import {
   type AlertSeverity,
   type AlertStatus,
 } from '@/domain/models'
+import { PERIOD_DAYS, type PeriodDays } from '@/lib/period'
 
 export const ALERTS_PAGE_SIZE = 10
 
-export const ALERT_PERIODS = ['30', '90', '365', 'all'] as const
-export type AlertPeriod = (typeof ALERT_PERIODS)[number]
+export const ALERT_PERIODS = PERIOD_DAYS
+export type AlertPeriod = PeriodDays
 
 export interface AlertFilters {
   status: AlertStatus | 'all'
