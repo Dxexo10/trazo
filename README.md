@@ -6,292 +6,226 @@
 </p>
 
 <p align="center">
-  <em>Project Management &amp; Intelligence · demo funcional con datos simulados</em>
+  <em>Project Management &amp; Intelligence · demo con datos simulados</em>
 </p>
 
----
+<p align="center">
+  <a href="https://github.com/Dxexo10/trazo/actions/workflows/ci.yml">
+    <img src="https://github.com/Dxexo10/trazo/actions/workflows/ci.yml/badge.svg" alt="Estado del CI" />
+  </a>
+</p>
 
-Trazo es una plataforma SaaS de gestión y monitoreo inteligente de proyectos
-empresariales, orientada inicialmente al mercado peruano y latinoamericano.
-Centraliza portafolio, presupuestos, avances y alertas, y conserva el historial
-de cada cambio para explicar qué se modificó, cuándo y por qué.
+<p align="center">
+  <a href="https://trazo-nine.vercel.app"><strong>Demo online</strong></a> ·
+  <a href="docs/DEMO_GUIDE.md">Guía de demo</a> ·
+  <a href="docs/ARCHITECTURE.md">Arquitectura</a>
+</p>
 
-La demo usa **datos ficticios deterministas** y un reloj de referencia fijo, de
-modo que el portafolio siempre se ve coherente sin depender de un backend.
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" alt="Dashboard ejecutivo de Trazo" width="100%" />
+</p>
 
-> Repositorio: [`Dxexo10/trazo`](https://github.com/Dxexo10/trazo). La URL
-> anterior de GitHub redirige automáticamente al nuevo nombre.
+Trazo centraliza el portafolio de proyectos de una empresa —presupuestos, avance, fechas, responsables y estado— y convierte cada cambio relevante en información trazable. No es un CRUD: cada edición genera una **versión inmutable** y un **evento por campo auditado**, y la interfaz explica **qué cambió, cuándo, quién lo hizo y qué regla disparó la alerta**. Dinero en céntimos enteros, fechas ISO-8601 UTC y un dataset determinista. Incluye reglas de control de desviación presupuestal —advertencia por encima del 10 %, crítica por encima del 20 %— con trazabilidad auditable de cada cambio.
 
-[![CI](https://github.com/Dxexo10/trazo/actions/workflows/ci.yml/badge.svg)](https://github.com/Dxexo10/trazo/actions/workflows/ci.yml)
+## Aviso sobre la demo
 
-Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
+La demo online ejecuta **el frontend en modo mock**: datos simulados y deterministas guardados en IndexedDB, sin login ni backend. El backend **Express + Prisma + SQL Server** está incluido en el repositorio y se ejecuta en local; no está desplegado. Las instrucciones están en [Cómo ejecutarlo localmente](#cómo-ejecutarlo-localmente).
 
-## Flujo estrella en 30 segundos
+## Capturas
 
-| 1 · Portafolio | 2 · Nueva versión | 3 · Alerta y trazabilidad |
-| --- | --- | --- |
-| ![Portafolio](docs/screenshots/projects.png) | ![Historial de versiones](docs/screenshots/project-history.png) | ![Centro de alertas](docs/screenshots/alerts.png) |
-| Filtra el portafolio y abre un proyecto. | Edita presupuesto o fecha: se registra una versión inmutable. | La regla dispara la alerta y queda el historial. |
+| Portafolio | Historial de versiones |
+| --- | --- |
+| ![Portafolio con filtros](docs/screenshots/projects.png) | ![Historial de versiones](docs/screenshots/project-history.png) |
+| Búsqueda, filtros combinables, orden, paginación y archivado lógico. | Cada versión conserva autor, fecha, motivo, cambios y reglas disparadas. |
 
-## Índice
+| Comparador antes/después | Centro de alertas |
+| --- | --- |
+| ![Comparador de versiones](docs/screenshots/version-comparison.png) | ![Centro de alertas](docs/screenshots/alerts.png) |
+| Diff de campos auditables entre dos instantáneas del proyecto. | Alertas con severidad, estado y la regla que las originó. |
 
-- [Identidad](#identidad) · [Estado del proyecto](#estado-del-proyecto) ·
-  [Stack](#stack) · [Cómo ejecutar](#cómo-ejecutar) ·
-  [Arquitectura](#arquitectura) · [Datos simulados](#datos-simulados) ·
-  [Pruebas y calidad](#pruebas-y-calidad) · [Capturas](#capturas) ·
-  [Limitaciones conocidas](#limitaciones-conocidas)
+| Monitor de cambios | Actividad |
+| --- | --- |
+| ![Monitor de cambios](docs/screenshots/monitor.png) | ![Timeline de actividad](docs/screenshots/activity.png) |
+| Feed agrupado por fecha con filtros por proyecto, campo, origen y periodo. | Auditoría de acciones con filtros por usuario, acción, origen y periodo. |
 
-## Identidad
+## Funcionalidades principales
 
-- **Paleta:** grafito `#252824`, terracota `#C65D3A`, marfil `#F5F2EB`,
-  arena `#E7E0D5` y oliva `#60715A`.
-- **Tipografía:** Manrope para encabezados e Inter para interfaz y cifras.
-- **Layout:** Floating Workspace con sidebar de altura completa (248 px / 76 px),
-  perfil y saludo dinámico arriba, submenús jerárquicos y pie anclado.
-- **Apariencia:** tema claro, Trazo Nocturno y modo sistema con preferencia
-  persistida y contraste AA en ambos temas.
-- Guía completa: [`TRAZO_BRAND_GUIDELINES.md`](TRAZO_BRAND_GUIDELINES.md).
-
-## Estado del proyecto
-
-| Fase                                               | Alcance                                                                                                    | Estado         |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
-| **F1 · Fundamentos + Dashboard + identidad Trazo** | Design system, layout responsive, dataset simulado, repositorios mock sobre IndexedDB, dashboard ejecutivo | **Disponible** |
-| **F2 · Proyectos**                                 | Portafolio con filtros en URL, alta/edición, archivado y detalle                                           | **Disponible** |
-| **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
-| **F4 · Pulido y QA**                               | Actividad, ajustes y reset demo, E2E con Playwright, CI y capturas                                         | **Disponible** |
-| **M06 · Reportes**                                 | Exportación CSV/XLSX del portafolio y de las alertas con filtros, resumen ejecutivo imprimible             | **Disponible** |
-| **F5 · Backend**                                   | API REST con Node/Express, dominio, validación Zod, seed y módulos de negocio | **Disponible (local)** |
-| **F6 · SQL Server**                                | Esquema Prisma, migración inicial, seed determinista y transacciones              | **Disponible (local)** |
-| F7 · Integración                                   | Adaptadores HTTP del frontend, usuarios y simulador de escenarios en servidor; faltan autenticación y despliegue | **En curso** |
-
-### Disponible hoy
-
-- Dashboard ejecutivo (`/dashboard`) con saludo personalizado, KPIs calculados
-  desde los datos, tres gráficos, tabla de proyectos que requieren atención y
-  actividad reciente en formato timeline.
-- Filtro de periodo (3 / 6 / 12 meses) reflejado en la URL: ajusta la serie
-  mensual y la comparación contra el periodo anterior, mientras los totales
-  siempre representan el portafolio activo completo.
-- Navegación flotante de altura completa con perfil demo, saludo por hora local,
-  submenús con rutas reales (incluye Archivados e Historial de versiones),
-  modo expandido/compacto, tooltips y preferencia persistida.
-- Selector de apariencia Claro / Oscuro / Sistema con tema propio «Trazo
-  Nocturno», script anti-flash y reacción a `prefers-color-scheme`.
-- Layout responsive completo: compacta desde tablet, drawer móvil con foco,
-  Escape y scroll bloqueado; topbar flotante independiente.
-- Portafolio `/projects` con búsqueda, filtros combinables de estado, prioridad,
-  sector, responsable y riesgo, orden, paginación y modo de archivados
-  (ocultar, incluir o solo archivados).
-- Vista de tabla en desktop y tarjetas en móvil, con acciones de ver, editar y
-  archivar (con confirmación y archivado lógico).
-- Vista `Archivados` (`/projects?archivados=solo`) con encabezado propio y un
-  estado vacío que explica cómo archivar proyectos.
-- Formulario crear/editar con React Hook Form + Zod: información general,
-  línea base vs. presupuesto actual, cronograma, avance y reglas de completado.
-- Edición transaccional: cada cambio relevante crea una versión inmutable, un
-  evento por campo modificado y las alertas que dispare el motor de reglas.
-- Detalle `/projects/:id` con KPIs, alcance, presupuesto, alertas relacionadas,
-  actividad reciente y pestañas de historial y comparación antes/después.
-- Historial de versiones con autor, fecha, origen, motivo y campos cambiados;
-  comparador entre dos versiones con las reglas que se dispararon.
-- Monitor `/monitor` con feed agrupado por fecha, filtros por proyecto, campo,
-  origen, severidad y periodo, detalle del cambio y enlaces al proyecto.
-- Centro de alertas `/alerts` con contadores, filtros, la regla que originó cada
-  alerta y acciones para revisar o resolver con trazabilidad.
-- Actividad `/activity`: timeline de auditoría con filtros por proyecto, usuario,
-  acción, origen y periodo, más paginación.
-- Configuración `/settings`: perfil demo, umbrales de reglas editables, versión
-  del dataset y reset con confirmación.
-- Reportes `/reports`: resumen ejecutivo y detalle del portafolio o de las
-  alertas con los filtros activos, exportación real a CSV y XLSX (con corte,
-  fecha de generación y rótulo de datos simulados) e impresión del resumen para
-  guardarlo como PDF.
-- Dataset determinista de 50 proyectos, versiones, cambios, alertas, actividad y
-  reglas persistidos en IndexedDB (sobreviven a la recarga).
-- Suite E2E con Playwright del flujo estrella y workflow de CI con lint,
-  typecheck, pruebas, build y E2E.
-- **API REST local** (`backend/`) con dashboard, proyectos, versiones, cambios,
-  alertas, actividad, reglas y usuarios sobre SQL Server, con seed determinista,
-  edición transaccional, reset demo y escenarios en servidor
-  (`POST /demo/scenarios/:id/run` con origen `simulated`).
-- **Capa de datos HTTP** (`frontend/src/data/http`) que implementa los mismos
-  contratos que los mocks. Sin `VITE_API_BASE_URL` la app usa IndexedDB; con ella
-  consume la API real, incluidos usuarios y el simulador de escenarios.
-- Estados de carga, error y vacío; navegación por teclado y foco visible.
-
-## Stack
-
-- **React 19 + Vite + TypeScript** (modo estricto)
-- **Tailwind CSS v4** con tokens de diseño propios
-- **shadcn/ui** sobre Base UI + **Lucide React**
-- **Manrope + Inter** autohospedadas con `@fontsource-variable`
-- **React Router 7**, **TanStack Query 5**, **Recharts**
-- **React Hook Form + Zod** (base de formularios de la Fase 2)
-- **idb** para persistencia local
-- **fflate** para generar archivos XLSX (ZIP + OOXML) sin librerías de hojas de cálculo
-- **Vitest + React Testing Library** · **Playwright** (E2E + axe) · **ESLint + Prettier**
-- **Node.js + Express 5 + TypeScript + Zod** (backend en `backend/`)
-- **Prisma 6** con la migración inicial aplicada en SQL Server 2022 Express
-  (base `Trazo`); `DATABASE_URL` vive en `backend/.env`, ignorado por git.
-
-## Cómo ejecutar
-
-Requisitos: Node.js ≥ 20.19 y npm ≥ 10.
-
-```bash
-cd frontend
-npm install
-npm run dev        # http://localhost:5173
-```
-
-Backend (esqueleto de la Fase 5):
-
-```bash
-cd backend
-npm install
-npm run dev        # http://localhost:4000/api/v1/health
-```
-
-La base requiere `backend/.env` con `DATABASE_URL` (ignorado por git). Para
-aplicar migraciones y sembrar el demo:
-
-```bash
-npm run db:deploy
-npm run db:seed
-```
-
-En local, si tu shell define `NODE_ENV=production`, las escrituras quedan
-bloqueadas y la demo es de solo lectura. Arranca el backend con
-`DEMO_WRITES_ENABLED=true` y añade el origen del frontend a `CORS_ORIGINS`
-(`http://localhost:5173` por defecto). El E2E de integración usa el puerto 5173
-salvo que definas `E2E_APP_PORT`.
-
-Scripts disponibles:
-
-```bash
-npm run dev            # servidor de desarrollo
-npm run build          # compilación de producción
-npm run preview        # sirve el build
-npm run typecheck      # TypeScript sin emitir
-npm run lint           # ESLint
-npm run lint:fix       # ESLint con correcciones
-npm run format         # Prettier
-npm run format:check   # Verificar formato sin escribir
-npm run test           # Vitest
-npm run test:coverage  # Vitest con cobertura
-npm run test:e2e       # Playwright (flujo estrella, móvil y axe)
-npm run test:e2e:ui    # Playwright en modo interactivo
-```
-
-> Si tu entorno define `NODE_ENV=production`, instala con
-> `npm install --include=dev` para incluir las dependencias de desarrollo, y
-> ejecuta las pruebas con `NODE_ENV=test npm run test`.
+- **Dashboard ejecutivo:** KPIs calculados desde el mismo estado, tendencia mensual, distribución por estado, presupuesto inicial vs. actual y proyectos que requieren atención. El periodo vive en la URL.
+- **Portafolio:** búsqueda, filtros de estado, prioridad, sector, responsable y riesgo, orden, paginación y archivado lógico (sin borrado físico).
+- **Alta y edición transaccional:** una sola operación actualiza el proyecto, crea la versión, registra los cambios y evalúa las reglas.
+- **Historial y comparador:** versiones inmutables, diff antes/después y explicación de la regla que originó cada alerta.
+- **Motor de reglas y alertas:** siete reglas configurables (presupuesto, fechas, vencimiento, bloqueo y prioridad), con estados abierta/revisada/resuelta y auditoría.
+- **Monitor y actividad:** feed de cambios y timeline de auditoría, ambos con filtros reflejados en la URL.
+- **Reportes:** resumen ejecutivo, vista previa y exportación real a CSV y XLSX con los filtros activos; el PDF se obtiene con la impresión del navegador.
+- **Escenarios demo y capa de datos intercambiable:** cuatro escenarios simulados y adaptadores mock/HTTP detrás de los mismos contratos. Interfaz responsive, navegación por teclado y auditoría axe AA.
 
 ## Arquitectura
 
 ```text
 UI (features + components)
-        ↓
-Hooks / casos de uso (TanStack Query)
-        ↓
-Contratos de repositorio (src/data/contracts)
-        ↓
-Adaptador mock + IndexedDB  ← Fase 1
-        ↓
-Adaptador HTTP + API REST   ← Fase 5 (misma interfaz)
+  → hooks de datos (TanStack Query)
+  → contratos de repositorio (src/data/contracts)
+      ├── mock + IndexedDB     sin VITE_API_BASE_URL
+      └── HTTP + fetch         con VITE_API_BASE_URL
+              → Express 5 · /api/v1 (helmet, CORS, Zod, request-id)
+                  → dominio puro (diff, reglas, métricas, dashboard)
+                      → Prisma 6
+                          → SQL Server
 ```
 
-La UI nunca importa fixtures directamente. Para conectar el backend real solo se
-sustituyen las instancias exportadas en `src/data/index.ts`; vistas y servicios
-de dominio no cambian. Detalle completo en
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+`src/data/index.ts` es el **único punto de composición**: decide entre los adaptadores mock y HTTP según el entorno. Las vistas, los hooks y el dominio no cambian al conectar la API. Detalle completo en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Datos simulados
+## Decisiones técnicas
 
-- Semilla fija `20261031`, generador propio (mulberry32) y fecha de referencia
-  `2026-10-31`, documentados en [`docs/DECISIONS.md`](docs/DECISIONS.md).
-- 50 proyectos de tecnología, construcción y consultoría, 10 responsables
-  ficticios, alertas y actividad derivadas del mismo estado.
-- Persistencia local en la base IndexedDB `trazo-demo`; la resiembra se fuerza
-  con `seedVersion`.
-- Dinero como enteros en céntimos; fechas en ISO-8601 UTC.
-- La etiqueta **“Entorno de demostración · Datos simulados”** es visible en toda
-  la aplicación.
+- **Dinero en céntimos enteros** (ADR-004): sin errores de coma flotante; se persiste como `INT` y se formatea con `Intl.NumberFormat('es-PE')`.
+- **Dataset determinista con reloj fijo** (ADR-005): semilla `20261031` y fecha de referencia `2026-10-31`; la demo no envejece y las pruebas son reproducibles.
+- **Reportes sin librerías de hojas de cálculo** (ADR-011): `ReportDocument` puro, CSV con RFC 4180, XLSX OOXML comprimido con `fflate` y PDF vía impresión del navegador.
+- **SQL Server con Prisma** (ADR-012 y ADR-013): UUID, `datetime2` UTC, enums como `nvarchar`, JSON en `nvarchar(max)` y relaciones `NoAction`.
+- **Navegación honesta** (ADR-008 y ADR-010): cada enlace apunta a una ruta real; no hay pantallas simuladas ni botones decorativos.
 
-## Pruebas y calidad
+Contexto y consecuencias en [docs/DECISIONS.md](docs/DECISIONS.md).
+
+## Stack tecnológico
+
+- **Frontend:** React 19, Vite 8, TypeScript 6, Tailwind CSS 4, shadcn/ui sobre Base UI, TanStack Query 5, React Hook Form + Zod 4, Recharts, Lucide, `idb`, `fflate`.
+- **Backend:** Node.js ≥ 20.19, Express 5, TypeScript 6, Zod 4, Prisma 6.
+- **Datos:** SQL Server 2022 Express en local; IndexedDB para el modo mock.
+- **Calidad:** Vitest 5, React Testing Library, Playwright 1.64 + axe, ESLint 10, Prettier 3.
+- **CI:** GitHub Actions con lint, typecheck, formato, cobertura, build y E2E.
+
+## Calidad y pruebas
+
+Resultados de la última verificación local:
+
+- **199 pruebas unitarias** en el frontend, **82,34 % de líneas** cubiertas. En un equipo lento, la prueba de dashboard puede superar el timeout de 10 s; con `--testTimeout=30000` la suite pasa completa.
+- **64 pruebas** en el backend, **95,34 % de líneas** cubiertas (dominio, esquemas, rutas y middleware).
+- **14 flujos E2E** con Playwright sobre el entorno mock: flujo estrella, reset, simulador, móvil y auditoría axe AA.
+- **1 E2E de integración** contra la API y SQL Server reales; requiere backend y base de datos, por eso no se ejecuta en CI.
+- Umbrales de cobertura y `format:check` obligatorios en CI.
 
 ```bash
-npm run lint && npm run typecheck && npm run format:check && npm run test:coverage && npm run build
+# Frontend
+cd frontend
+npm run lint
+npm run typecheck
+npm run format:check
+npm run test:coverage
+npm run build
 ```
-
-El backend se verifica por separado:
 
 ```bash
-cd backend && npm run lint && npm run typecheck && npm run format:check && npm run test:coverage && npm run build
+# Backend
+cd backend
+npm run lint
+npm run typecheck
+npm run format:check
+npm run test:coverage
+npm run build
 ```
 
-Estado actual de la batería automatizada:
+```bash
+# E2E
+cd frontend
+npx playwright install chromium   # primera vez
+npm run test:e2e                  # modo mock
+npm run test:e2e:api              # requiere backend y SQL Server en marcha
+```
 
-- **199 pruebas unitarias** en el frontend con umbral de cobertura en CI.
-- **64 pruebas** en el backend (dominio, esquemas, seed, escenarios, guard de
-  solo lectura) con umbral de cobertura en CI.
-- **14 flujos E2E** con Playwright sobre el entorno mock: flujo estrella, reset,
-  simulador, navegación móvil y auditoría axe AA en las pantallas principales.
-- **E2E de integración** (`npm run test:e2e:api`): edita un proyecto contra la API
-  y SQL Server reales y comprueba la versión creada. Requiere el backend
-  arrancado con `DEMO_WRITES_ENABLED=true`, por lo que no corre en CI.
+El E2E de integración necesita el backend arrancado con `DEMO_WRITES_ENABLED=true`; por eso no se ejecuta en CI.
 
-El CI ejecuta lint, typecheck, formato, pruebas con cobertura y build en ambos
-proyectos, y la suite E2E del frontend sobre el entorno mock.
+## Cómo ejecutarlo localmente
 
-## Capturas
+Requisito: Node.js ≥ 20.19.
 
-Capturas reales de la aplicación en ejecución con el dataset ficticio del demo.
+### (a) Modo mock, solo frontend
 
-| Dashboard                                              | Proyectos                                                |
-| ------------------------------------------------------ | -------------------------------------------------------- |
-| ![Dashboard ejecutivo](docs/screenshots/dashboard.png) | ![Portafolio con filtros](docs/screenshots/projects.png) |
+No requiere backend ni base de datos.
 
-| Historial de versiones                                          | Comparador antes/después                                            |
-| --------------------------------------------------------------- | ------------------------------------------------------------------- |
-| ![Historial de versiones](docs/screenshots/project-history.png) | ![Comparador de versiones](docs/screenshots/version-comparison.png) |
+```bash
+cd frontend
+npm ci --include=dev
+npm run dev        # http://localhost:5173
+```
 
-| Monitor de cambios                                  | Detalle de un cambio                                       |
-| --------------------------------------------------- | ---------------------------------------------------------- |
-| ![Monitor de cambios](docs/screenshots/monitor.png) | ![Detalle del cambio](docs/screenshots/monitor-detail.png) |
+La primera carga siembra IndexedDB. Sin `VITE_API_BASE_URL`, la aplicación usa los repositorios mock.
 
-| Centro de alertas                                 | Actividad                                               |
-| ------------------------------------------------- | ------------------------------------------------------- |
-| ![Centro de alertas](docs/screenshots/alerts.png) | ![Timeline de actividad](docs/screenshots/activity.png) |
+### (b) Modo completo con API y SQL Server
 
-| Configuración                                        | Móvil                                                        |
-| ---------------------------------------------------- | ------------------------------------------------------------ |
-| ![Configuración demo](docs/screenshots/settings.png) | ![Portafolio en móvil](docs/screenshots/projects-mobile.png) |
+1. Crear `backend/.env` a partir de `backend/.env.example` y definir:
+   - `DATABASE_URL` con la cadena de SQL Server.
+   - `CORS_ORIGINS=http://localhost:5173`.
+2. Instalar, migrar y sembrar:
 
-## Limitaciones conocidas
+```bash
+cd backend
+npm ci --include=dev
+npm run db:deploy
+npm run db:seed
+npm run dev        # http://localhost:4000/api/v1/health
+```
 
-- El frontend usa IndexedDB por defecto. Con `VITE_API_BASE_URL` consume la API
-  REST; el perfil del topbar/sidebar sigue siendo la identidad demo porque la API
-  aún no tiene autenticación.
-- La API no tiene autenticación y el reset demo no está protegido: es un
-  entorno local de demostración, no una exposición pública.
-- No hay multiempresa real: el perfil es fijo y de demo.
-- La accesibilidad AA se audita automáticamente con axe en las pantallas
-  principales; falta validación manual con lectores de pantalla.
-- Con la API configurada los escenarios se ejecutan en el servidor; sin ella se
-  simulan en el navegador. No hay jobs persistentes.
-- Las capturas de escritorio se tomaron en 1440 px (el dashboard, en 1280 px);
-  la interfaz también se verificó en 768 y 390 px.
-- El periodo del dashboard afecta a la tendencia y a los deltas frente al
-  periodo anterior; los totales y la distribución representan el portafolio
-  activo completo.
-- No hay demo pública desplegada todavía: para probarla hay que ejecutarla en
-  local. No se publica un enlace `Live Demo` hasta que exista.
-- El PDF de reportes se obtiene con la impresión del navegador («Guardar como
-  PDF»), no con un generador embebido; el CSV/XLSX sí se descargan como archivo.
+`npm run db:seed` **recrea** el dataset demo; ejecútalo solo cuando quieras restaurarlo.
+
+3. Crear `frontend/.env` a partir de `frontend/.env.example`:
+
+```text
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+```
+
+4. Arrancar el frontend:
+
+```bash
+cd frontend
+npm ci --include=dev
+npm run dev        # http://localhost:5173
+```
+
+Notas de entorno:
+
+- Si tu shell define `NODE_ENV=production`, instala con `npm ci --include=dev` y define `DEMO_WRITES_ENABLED=true` en local; de lo contrario la API arranca en solo lectura y las escrituras responden `403 demo_read_only`.
+- El frontend decide mock o API en tiempo de build: si cambias `VITE_API_BASE_URL`, reinicia el servidor de desarrollo.
+
+## Alcance
+
+**Incluye:** portafolio y dashboard, versionado inmutable con comparador, motor de reglas y alertas, monitor, actividad, reportes CSV/XLSX/PDF, configuración y reset demo, escenarios simulados, API REST con SQL Server y capa de datos mock/HTTP, accesibilidad auditada con axe y CI con umbrales de cobertura.
+
+**No incluye:** autenticación ni roles reales, multiempresa, notificaciones por correo, scheduler o jobs persistentes, integraciones externas, importaciones, IA generativa, pagos, colaboración en tiempo real, app móvil nativa, observabilidad avanzada ni rate limiting.
+
+**Siguiente paso previsto:** autenticación y roles.
+
+**Estado actual:** frontend completo y demo pública en modo mock; backend y SQL Server verificados en local, con integración HTTP y escenarios en servidor. El perfil de usuario es fijo y de demostración.
+
+## Estructura del repositorio
+
+```text
+Trazo/
+├── frontend/        React + Vite; features, dominio, contratos y adaptadores
+│   ├── src/data/    mock (IndexedDB) y HTTP detrás de los mismos contratos
+│   ├── src/domain/  modelos, diff, reglas, métricas y agregaciones puras
+│   └── e2e/         Playwright: flujo estrella, accesibilidad e integración API
+├── backend/         Express + Zod + Prisma
+│   ├── src/modules/ un router por recurso de la API
+│   ├── src/domain/  schemas, servicios y seed determinista
+│   └── prisma/      esquema y migración de SQL Server
+├── docs/            arquitectura, ADRs, diseño, demo, estado y capturas
+├── .github/         workflow de CI
+├── PRODUCT.md
+├── TRAZO_MASTER_SPEC.md
+├── TRAZO_BRAND_GUIDELINES.md
+└── LICENSE
+```
+
+## Documentación adicional
+
+- [Arquitectura](docs/ARCHITECTURE.md)
+- [Decisiones técnicas (ADR)](docs/DECISIONS.md)
+- [Design system](docs/DESIGN_SYSTEM.md)
+- [Estado de implementación](docs/IMPLEMENTATION_STATUS.md)
+- [Guía de demo](docs/DEMO_GUIDE.md)
+- [Especificación maestra](TRAZO_MASTER_SPEC.md)
+- [Guía de marca](TRAZO_BRAND_GUIDELINES.md)
+- [Producto](PRODUCT.md)
 
 ## Licencia
 
-[MIT](LICENSE) · Proyecto personal de demostración. Los nombres de clientes,
-personas y montos son ficticios.
+[MIT](LICENSE) · Proyecto personal de demostración. Los nombres de clientes, personas y montos son ficticios.
