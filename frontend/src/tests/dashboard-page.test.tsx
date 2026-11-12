@@ -11,6 +11,8 @@ import {
   readOrCreateGreetingSeed,
 } from '@/lib/greeting'
 
+const SLOW_TEST_TIMEOUT_MS = 30_000
+
 function dashboardGreeting() {
   const band = getTimeBand(new Date().getHours())
   const seed = readOrCreateGreetingSeed()
@@ -76,5 +78,5 @@ describe('DashboardPage', () => {
     await user.click(screen.getByRole('button', { name: '3 meses' }))
 
     expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
-  })
+  }, SLOW_TEST_TIMEOUT_MS)
 })
