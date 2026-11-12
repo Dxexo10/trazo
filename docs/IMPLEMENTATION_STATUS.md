@@ -382,6 +382,34 @@ restauró con `/demo/reset`.
 
 - Autenticación/roles si procede y despliegue.
 
+## Despliegue seguro y calidad — completado
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Spec renombrado | `PROYTRACK_MASTER_SPEC.md` pasa a `TRAZO_MASTER_SPEC.md` y desaparecen las referencias al nombre anterior | este bloque |
+| Demo de solo lectura | `DEMO_WRITES_ENABLED` (por defecto desactivado en producción) protege create/update/archive, alertas, reglas, reset y escenarios con `403 demo_read_only`; las lecturas siguen disponibles | este bloque |
+| Cobertura backend | `@vitest/coverage-v8`, script `test:coverage`, cobertura acotada a código unit-testeable y umbrales (90 líneas / 88 sentencias / 90 funciones / 70 ramas) | este bloque |
+| Cobertura frontend | Umbrales en `vite.config.ts` y `test:coverage` en CI | este bloque |
+| CI | Añade `format:check` y ejecuta las pruebas con cobertura en ambos proyectos | este bloque |
+| E2E de integración | `playwright.api.config.ts` + `api-integration.spec.ts`: edita un proyecto contra la API y SQL Server reales y verifica la versión creada | este bloque |
+| README | Bloque visual del flujo estrella con capturas reales y estado de la batería automatizada | este bloque |
+
+### Verificación ejecutada
+
+```text
+npm run format:check   → sin diferencias (frontend y backend)
+npm run lint           → 0 errores (frontend y backend)
+npm run typecheck      → sin errores (frontend y backend)
+npm run test:coverage  → frontend 199 pruebas, 82,34 % líneas (umbral OK)
+npm run test:coverage  → backend 64 pruebas, 95,34 % líneas (umbral OK)
+npm run build          → dist generado (frontend y backend)
+npm run test:e2e       → 14 flujos aprobados (mock)
+npm run test:e2e:api   → 1 flujo aprobado contra API + SQL Server reales
+```
+
+Modo solo lectura comprobado con el backend en producción: `GET /projects`
+responde 200 y `POST /demo/reset` y `POST /projects` responden 403.
+
 ## Pendiente inmediato
 
 - Validación manual con lectores de pantalla y navegador real más allá de axe.
@@ -396,7 +424,12 @@ restauró con `/demo/reset`.
 
 - Ninguno funcional. La instalación en local requiere `npm install --include=dev`
   porque el entorno define `NODE_ENV=production`; las pruebas ya no dependen de
-  exportar `NODE_ENV=test` porque Vitest lo fija en `vite.config.ts`.
+  exportar `NODE_ENV=test` porque Vitest lo fija en `vite.config.ts`. Con ese
+  mismo `NODE_ENV`, el backend arranca en solo lectura salvo que definas
+  `DEMO_WRITES_ENABLED=true`.
+- La cobertura del backend mide dominio, esquemas, rutas y middleware; los
+  repositorios Prisma y el seed de base de datos quedan fuera porque requieren
+  SQL Server real.
 - El cambio a esquema 2 / semilla 3 fuerza una resiembra del dataset demo y
   descarta ediciones locales previas (comportamiento esperado del entorno mock).
 - La instalación de Google Chrome para Playwright requiere privilegios de

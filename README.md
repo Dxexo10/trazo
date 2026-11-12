@@ -26,6 +26,13 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 
 Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 
+## Flujo estrella en 30 segundos
+
+| 1 · Portafolio | 2 · Nueva versión | 3 · Alerta y trazabilidad |
+| --- | --- | --- |
+| ![Portafolio](docs/screenshots/projects.png) | ![Historial de versiones](docs/screenshots/project-history.png) | ![Centro de alertas](docs/screenshots/alerts.png) |
+| Filtra el portafolio y abre un proyecto. | Edita presupuesto o fecha: se registra una versión inmutable. | La regla dispara la alerta y queda el historial. |
+
 ## Índice
 
 - [Identidad](#identidad) · [Estado del proyecto](#estado-del-proyecto) ·
@@ -154,6 +161,12 @@ npm run db:deploy
 npm run db:seed
 ```
 
+En local, si tu shell define `NODE_ENV=production`, las escrituras quedan
+bloqueadas y la demo es de solo lectura. Arranca el backend con
+`DEMO_WRITES_ENABLED=true` y añade el origen del frontend a `CORS_ORIGINS`
+(`http://localhost:5173` por defecto). El E2E de integración usa el puerto 5173
+salvo que definas `E2E_APP_PORT`.
+
 Scripts disponibles:
 
 ```bash
@@ -209,23 +222,28 @@ de dominio no cambian. Detalle completo en
 ## Pruebas y calidad
 
 ```bash
-npm run lint && npm run typecheck && NODE_ENV=test npm run test && npm run build
+npm run lint && npm run typecheck && npm run format:check && npm run test:coverage && npm run build
 ```
 
 El backend se verifica por separado:
 
 ```bash
-cd backend && npm run lint && npm run typecheck && npm test && npm run build
+cd backend && npm run lint && npm run typecheck && npm run format:check && npm run test:coverage && npm run build
 ```
 
-Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinismo
-del dataset, repositorios sobre IndexedDB, diff de versiones, motor de reglas y
-alertas, feed de cambios, dashboard, filtros de portafolio, validación del
-formulario, historial/comparador, monitor, alertas, actividad, configuración,
-navegación y reportes (documentos, CSV y XLSX). La suite E2E cubre el flujo
-estrella, el reset, el simulador, la navegación móvil y una auditoría axe AA en
-las pantallas principales. El backend prueba los esquemas Zod del dominio y el
-esqueleto de la API (salud, errores, `x-request-id` y 404).
+Estado actual de la batería automatizada:
+
+- **199 pruebas unitarias** en el frontend con umbral de cobertura en CI.
+- **64 pruebas** en el backend (dominio, esquemas, seed, escenarios, guard de
+  solo lectura) con umbral de cobertura en CI.
+- **14 flujos E2E** con Playwright sobre el entorno mock: flujo estrella, reset,
+  simulador, navegación móvil y auditoría axe AA en las pantallas principales.
+- **E2E de integración** (`npm run test:e2e:api`): edita un proyecto contra la API
+  y SQL Server reales y comprueba la versión creada. Requiere el backend
+  arrancado con `DEMO_WRITES_ENABLED=true`, por lo que no corre en CI.
+
+El CI ejecuta lint, typecheck, formato, pruebas con cobertura y build en ambos
+proyectos, y la suite E2E del frontend sobre el entorno mock.
 
 ## Capturas
 
