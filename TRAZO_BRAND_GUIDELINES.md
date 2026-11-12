@@ -1,8 +1,8 @@
 # Trazo — Guía de marca y sistema visual
 
-> **Estado:** identidad vigente desde el rebranding de ProyTrack.
+> **Estado:** identidad vigente desde el rebranding de Trazo.
 > **Prioridad:** esta guía prevalece sobre las decisiones visuales anteriores.
-> Las especificaciones funcionales de `PROYTRACK_MASTER_SPEC.md` siguen vigentes.
+> Las especificaciones funcionales de `TRAZO_MASTER_SPEC.md` siguen vigentes.
 
 ## 1. Marca
 

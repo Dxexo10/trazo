@@ -51,7 +51,7 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 
 ## Evidence on Hand
 
-- `PROYTRACK_MASTER_SPEC.md`: alcance, módulos, reglas y roadmap.
+- `TRAZO_MASTER_SPEC.md`: alcance, módulos, reglas y roadmap.
 - `docs/ARCHITECTURE.md`, `docs/DECISIONS.md`, `docs/DESIGN_SYSTEM.md`, `docs/IMPLEMENTATION_STATUS.md`: arquitectura, ADRs, tokens y estado real.
 - Dataset determinista y utilidades en `frontend/src/data/mock` y `frontend/src/domain`.
 - Un perfil demo fijo (`DEMO_CURRENT_USER`); no existe autenticación real.

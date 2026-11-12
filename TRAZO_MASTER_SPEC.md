@@ -1,4 +1,4 @@
-# PROYTRACK — Documento maestro de producto y desarrollo
+# TRAZO — Documento maestro de producto y desarrollo
 
 > **Versión:** 1.2 · **Estado:** especificación inicial · **Modalidad:** proyecto personal de portafolio, demo funcional con datos ficticios claramente identificados.
 >
@@ -10,12 +10,12 @@
 
 ## 1. Resumen ejecutivo
 
-**Nombre:** ProyTrack  
+**Nombre:** Trazo  
 **Descriptor:** Project Management & Intelligence  
 **Eslogan:** Tus proyectos bajo control.  
 **Propuesta de valor:** Centralizar la gestión de proyectos empresariales, visualizar avances y presupuestos, detectar automáticamente cambios relevantes y convertirlos en alertas accionables e indicadores ejecutivos.
 
-ProyTrack es una plataforma SaaS conceptual para gerentes de proyectos, analistas, líderes de equipo y responsables de operaciones. La demo utilizará información ficticia pero coherente, y debe comportarse como un producto empresarial auténtico. Su funcionalidad distintiva es comparar versiones de un proyecto y explicar cambios presupuestales, de fechas, estado, responsable y avance.
+Trazo es una plataforma SaaS conceptual para gerentes de proyectos, analistas, líderes de equipo y responsables de operaciones. La demo utilizará información ficticia pero coherente, y debe comportarse como un producto empresarial auténtico. Su funcionalidad distintiva es comparar versiones de un proyecto y explicar cambios presupuestales, de fechas, estado, responsable y avance.
 
 ### 1.1 Visión
 Ser una plataforma de referencia para que equipos y empresas tengan visibilidad clara, oportuna y confiable sobre el estado y evolución de sus proyectos, anticipándose a desviaciones y tomando decisiones fundamentadas en datos.
@@ -128,7 +128,7 @@ Desarrollar una aplicación web full stack de gestión inteligente de proyectos 
 ## 4. Navegación y mapa de pantallas
 
 ```text
-ProyTrack
+Trazo
 ├── Resumen general          /dashboard
 ├── Proyectos                /projects
 │   ├── Listado              /projects
@@ -520,7 +520,7 @@ En la etapa frontend, ofrecer un **simulador de actualización** con escenarios 
 ## 12. Estructura sugerida del repositorio
 
 ```text
-proytrack/
+trazo/
 ├── README.md
 ├── docs/
 │   ├── PRODUCT_SPEC.md
@@ -572,7 +572,7 @@ Actúa como ingeniero frontend senior, diseñador de producto SaaS B2B y arquite
 7. Registrar avance en un archivo `docs/IMPLEMENTATION_STATUS.md` con tareas terminadas, pendientes y bloqueos.
 
 ### Definición de éxito
-Una persona que nunca ha visto ProyTrack puede entrar a la demo, entender el estado del portafolio, abrir y editar un proyecto, observar la detección de un cambio, revisar la alerta y consultar el historial, todo en una interfaz pulida y sin depender de un backend real.
+Una persona que nunca ha visto Trazo puede entrar a la demo, entender el estado del portafolio, abrir y editar un proyecto, observar la detección de un cambio, revisar la alerta y consultar el historial, todo en una interfaz pulida y sin depender de un backend real.
 
 ---
 
@@ -585,7 +585,7 @@ Una persona que nunca ha visto ProyTrack puede entrar a la demo, entender el est
 5. **1:50–2:20:** volver al dashboard y mostrar indicadores actualizados.
 6. **2:20–3:00:** explicar arquitectura frontend-first, pruebas y transición prevista a SQL Server.
 
-**Mensaje para CV (una vez implementado):** `Desarrollé ProyTrack, plataforma de gestión de proyectos con dashboard analítico, historial de versiones y motor de detección de cambios y alertas; frontend en React/TypeScript y arquitectura desacoplada preparada para API REST y SQL Server.`
+**Mensaje para CV (una vez implementado):** `Desarrollé Trazo, plataforma de gestión de proyectos con dashboard analítico, historial de versiones y motor de detección de cambios y alertas; frontend en React/TypeScript y arquitectura desacoplada preparada para API REST y SQL Server.`
 
 ---
 
@@ -604,7 +604,7 @@ Una persona que nunca ha visto ProyTrack puede entrar a la demo, entender el est
 
 ## 16. Estrategia Git y commits por tarea (OBLIGATORIA PARA CMDC)
 
-**Objetivo:** construir un historial público honesto, legible y profesional que permita a un reclutador revisar la evolución de ProyTrack. **No fabricar actividad ni crear commits vacíos para colorear el gráfico de contribuciones.**
+**Objetivo:** construir un historial público honesto, legible y profesional que permita a un reclutador revisar la evolución de Trazo. **No fabricar actividad ni crear commits vacíos para colorear el gráfico de contribuciones.**
 
 ### 16.1 Regla de trabajo
 
@@ -627,7 +627,7 @@ Ejemplos de tareas reales, **no commits a generar artificialmente**:
 
 ```text
 chore(app): initialize React and TypeScript workspace
-style(theme): define ProyTrack design tokens
+style(theme): define Trazo design tokens
 feat(layout): add responsive sidebar and top navigation
 feat(dashboard): implement project KPI cards
 feat(projects): add searchable project table
@@ -667,13 +667,13 @@ No usar `git add .` a ciegas. Si `user.name` o `user.email` no están configurad
 
 ## 17. GitHub atractivo para reclutadores y empresas
 
-### 17.1 Repositorio público `proytrack`
+### 17.1 Repositorio público `trazo`
 
 **Meta:** que en 30–60 segundos un visitante entienda el problema, vea el producto, encuentre una demo y compruebe la calidad del código.
 
 README recomendado, en este orden:
 
-1. **Hero:** nombre ProyTrack, descriptor breve, problema y propuesta de valor; imagen/banner original del producto.
+1. **Hero:** nombre Trazo, descriptor breve, problema y propuesta de valor; imagen/banner original del producto.
 2. **Enlaces visibles:** `Live Demo`, `Screenshots`, `Architecture`, `Getting Started` (solo habilitar enlaces que existan).
 3. **Capturas reales** de dashboard, proyectos, detalle, monitor y alertas; preferir capturas de la aplicación implementada y no renders ficticios.
 4. **Demo en 3 pasos:** abrir proyecto, modificar presupuesto, revisar alerta e historial.
@@ -704,9 +704,9 @@ docs/screenshots/
 ### 17.2 Presentación visual de GitHub
 
 - Mantener un nombre, descripción y temas del repositorio coherentes: `react`, `typescript`, `project-management`, `dashboard`, `portfolio`, `saas`, `vite` (solo los que correspondan).
-- Configurar una imagen social de portada propia, consistente con la paleta de ProyTrack: navy `#0F172A`, azul `#2563EB`, fondo `#F8FAFC`, verde `#10B981` y ámbar `#F59E0B`.
+- Configurar una imagen social de portada propia, consistente con la paleta de Trazo: navy `#0F172A`, azul `#2563EB`, fondo `#F8FAFC`, verde `#10B981` y ámbar `#F59E0B`.
 - Usar GIF/video corto del **flujo funcional real** cuando esté implementado, evitando imágenes engañosas o animaciones pesadas.
-- Destacar ProyTrack entre los repositorios fijados del perfil y agregar su enlace de demo al perfil cuando exista.
+- Destacar Trazo entre los repositorios fijados del perfil y agregar su enlace de demo al perfil cuando exista.
 - Opcional: README de perfil GitHub con presentación breve, tecnologías, 2–3 proyectos destacados y contacto profesional; no llenar el perfil con badges decorativos ni métricas que distraigan.
 - No colocar logos de empresas como si fueran clientes reales ni inventar usuarios, resultados o métricas de negocio.
 
