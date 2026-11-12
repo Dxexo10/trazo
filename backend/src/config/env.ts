@@ -7,6 +7,7 @@ const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().int().positive().max(65535).default(4000),
   CORS_ORIGINS: z.string().default('http://localhost:5173'),
+  DEMO_WRITES_ENABLED: z.enum(['true', 'false']).optional(),
   DATABASE_URL: z.string().min(1).optional(),
 })
 
@@ -26,11 +27,21 @@ const corsOrigins = raw.CORS_ORIGINS.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
 
+/**
+ * En producción las escrituras quedan desactivadas salvo que se habiliten
+ * explícitamente, para que la demo pública sea de solo lectura por defecto.
+ */
+const demoWritesEnabled =
+  raw.DEMO_WRITES_ENABLED === undefined
+    ? raw.NODE_ENV !== 'production'
+    : raw.DEMO_WRITES_ENABLED === 'true'
+
 export const env = {
   nodeEnv: raw.NODE_ENV,
   isProduction: raw.NODE_ENV === 'production',
   isTest: raw.NODE_ENV === 'test',
   port: raw.PORT,
   corsOrigins,
+  demoWritesEnabled,
   databaseUrl: raw.DATABASE_URL,
 } as const

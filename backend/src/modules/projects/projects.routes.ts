@@ -7,6 +7,7 @@ import { projectIdParamSchema } from '../../domain/schemas/project.js'
 import { updateProjectSchema } from '../../domain/schemas/project.js'
 import { DEMO_CURRENT_USER } from '../../domain/seed/users.js'
 import { NotFoundError } from '../../lib/errors.js'
+import { requireDemoWrites } from '../../middleware/demo-writes.js'
 import { parseOrThrow } from '../../lib/validate.js'
 import { changeRepository } from '../../data/repositories/change-repository.js'
 import { projectRepository } from '../../data/repositories/project-repository.js'
@@ -22,7 +23,7 @@ projectsRouter.get('/', async (req, res) => {
   res.json(await projectRepository.list(query))
 })
 
-projectsRouter.post('/', async (req, res) => {
+projectsRouter.post('/', requireDemoWrites, async (req, res) => {
   const input = parseOrThrow(createProjectSchema, req.body)
   const project = await projectRepository.create(input)
   res.status(201).json(project)
@@ -39,7 +40,7 @@ projectsRouter.get('/:id', async (req, res) => {
   res.json(project)
 })
 
-projectsRouter.patch('/:id', async (req, res) => {
+projectsRouter.patch('/:id', requireDemoWrites, async (req, res) => {
   const { id } = parseOrThrow(projectIdParamSchema, req.params)
   const input = parseOrThrow(updateProjectSchema, req.body)
   const { reason } = parseOrThrow(reasonQuerySchema, req.query)
@@ -53,7 +54,7 @@ projectsRouter.patch('/:id', async (req, res) => {
   res.json(result)
 })
 
-projectsRouter.post('/:id/archive', async (req, res) => {
+projectsRouter.post('/:id/archive', requireDemoWrites, async (req, res) => {
   const { id } = parseOrThrow(projectIdParamSchema, req.params)
   await projectRepository.archive(id)
   res.status(204).end()

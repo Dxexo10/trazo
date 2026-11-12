@@ -8,16 +8,17 @@ import {
 import { SCENARIOS } from '../../domain/scenarios.js'
 import { DEMO_CURRENT_USER } from '../../domain/seed/users.js'
 import { NotFoundError } from '../../lib/errors.js'
+import { requireDemoWrites } from '../../middleware/demo-writes.js'
 import { parseOrThrow } from '../../lib/validate.js'
 
 export const demoRouter = Router()
 
-demoRouter.post('/reset', async (_req, res) => {
+demoRouter.post('/reset', requireDemoWrites, async (_req, res) => {
   const result = await seedDatabase()
   res.json({ status: 'ok', ...result })
 })
 
-demoRouter.post('/scenarios/:id/run', async (req, res) => {
+demoRouter.post('/scenarios/:id/run', requireDemoWrites, async (req, res) => {
   const { id } = parseOrThrow(scenarioIdParamSchema, req.params)
   const { projectId } = parseOrThrow(runScenarioSchema, req.body)
 

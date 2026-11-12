@@ -68,6 +68,15 @@ sobre SQL Server 2022 Express (`localhost,1433`, base `Trazo`). La cadena
 
 **Nunca subas `.env` ni contraseñas al repositorio.**
 
+### Despliegue y modo solo lectura
+
+`CORS_ORIGINS` acepta una lista separada por comas. En producción las escrituras
+se desactivan por defecto: `POST`/`PATCH` de proyectos, alertas y reglas, el
+reset demo y los escenarios responden `403 demo_read_only`. Para habilitarlas
+explícitamente define `DEMO_WRITES_ENABLED=true`; no lo hagas en una demo
+pública. Con el valor por defecto, el despliegue queda de solo lectura y el
+frontend muestra el mensaje del backend en el toast.
+
 ## Dominio y validación
 
 `src/domain/models` contiene las entidades serializables de la API y
@@ -94,29 +103,29 @@ datos reales.
 
 ## API implementada
 
-| Método | Ruta                                        | Descripción                                      |
-| ------ | ------------------------------------------- | ------------------------------------------------ |
-| GET    | `/api/v1/health`                            | Estado del servicio                              |
-| GET    | `/api/v1/dashboard/summary?periodMonths=12` | KPIs, tendencia, distribución y atención         |
-| GET    | `/api/v1/projects`                          | Portafolio con filtros, orden y paginación       |
-| POST   | `/api/v1/projects`                          | Alta con versión 1 y auditoría                   |
-| GET    | `/api/v1/projects/:id`                      | Detalle                                          |
-| PATCH  | `/api/v1/projects/:id?reason=`              | Edición transaccional: versión, cambios, alertas |
-| POST   | `/api/v1/projects/:id/archive`              | Archivado lógico                                 |
-| GET    | `/api/v1/projects/:id/versions`             | Historial de versiones                           |
-| GET    | `/api/v1/projects/:id/changes`              | Cambios auditados del proyecto                   |
-| GET    | `/api/v1/alerts`                            | Alertas con filtros y paginación                 |
-| GET    | `/api/v1/alerts/count-open`                 | Alertas abiertas del portafolio activo           |
-| GET    | `/api/v1/alerts/:id`                        | Detalle de alerta                                |
-| PATCH  | `/api/v1/alerts/:id/status`                 | Revisar o resolver con auditoría                 |
-| GET    | `/api/v1/activity`                          | Timeline de actividad                            |
-| GET    | `/api/v1/versions`                          | Versiones globales                               |
-| GET    | `/api/v1/versions/:id`                      | Detalle de versión                               |
-| GET    | `/api/v1/changes`                           | Cambios globales con filtros                     |
-| GET    | `/api/v1/rules`                             | Configuración de reglas                          |
-| PATCH  | `/api/v1/rules/:id`                         | Umbral, severidad o habilitación                 |
-| GET    | `/api/v1/users`                             | Responsables del demo                            |
-| POST   | `/api/v1/demo/reset`                        | Restaura el dataset inicial                      |
+| Método | Ruta                                        | Descripción                                          |
+| ------ | ------------------------------------------- | ---------------------------------------------------- |
+| GET    | `/api/v1/health`                            | Estado del servicio                                  |
+| GET    | `/api/v1/dashboard/summary?periodMonths=12` | KPIs, tendencia, distribución y atención             |
+| GET    | `/api/v1/projects`                          | Portafolio con filtros, orden y paginación           |
+| POST   | `/api/v1/projects`                          | Alta con versión 1 y auditoría                       |
+| GET    | `/api/v1/projects/:id`                      | Detalle                                              |
+| PATCH  | `/api/v1/projects/:id?reason=`              | Edición transaccional: versión, cambios, alertas     |
+| POST   | `/api/v1/projects/:id/archive`              | Archivado lógico                                     |
+| GET    | `/api/v1/projects/:id/versions`             | Historial de versiones                               |
+| GET    | `/api/v1/projects/:id/changes`              | Cambios auditados del proyecto                       |
+| GET    | `/api/v1/alerts`                            | Alertas con filtros y paginación                     |
+| GET    | `/api/v1/alerts/count-open`                 | Alertas abiertas del portafolio activo               |
+| GET    | `/api/v1/alerts/:id`                        | Detalle de alerta                                    |
+| PATCH  | `/api/v1/alerts/:id/status`                 | Revisar o resolver con auditoría                     |
+| GET    | `/api/v1/activity`                          | Timeline de actividad                                |
+| GET    | `/api/v1/versions`                          | Versiones globales                                   |
+| GET    | `/api/v1/versions/:id`                      | Detalle de versión                                   |
+| GET    | `/api/v1/changes`                           | Cambios globales con filtros                         |
+| GET    | `/api/v1/rules`                             | Configuración de reglas                              |
+| PATCH  | `/api/v1/rules/:id`                         | Umbral, severidad o habilitación                     |
+| GET    | `/api/v1/users`                             | Responsables del demo                                |
+| POST   | `/api/v1/demo/reset`                        | Restaura el dataset inicial                          |
 | POST   | `/api/v1/demo/scenarios/:id/run`            | Aplica un escenario demo y registra versión simulada |
 
 Las escrituras usan el perfil demo fijo (`DEMO_CURRENT_USER`) porque todavía no

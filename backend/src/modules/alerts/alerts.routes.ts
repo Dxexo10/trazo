@@ -3,6 +3,7 @@ import { alertQuerySchema } from '../../domain/schemas/alert.js'
 import { alertStatusUpdateSchema } from '../../domain/schemas/alert.js'
 import { idParamSchema } from '../../domain/schemas/common.js'
 import { NotFoundError } from '../../lib/errors.js'
+import { requireDemoWrites } from '../../middleware/demo-writes.js'
 import { parseOrThrow } from '../../lib/validate.js'
 import { alertRepository } from '../../data/repositories/alert-repository.js'
 
@@ -28,7 +29,7 @@ alertsRouter.get('/:id', async (req, res) => {
   res.json(alert)
 })
 
-alertsRouter.patch('/:id/status', async (req, res) => {
+alertsRouter.patch('/:id/status', requireDemoWrites, async (req, res) => {
   const { id } = parseOrThrow(idParamSchema, req.params)
   const input = parseOrThrow(alertStatusUpdateSchema, req.body)
   res.json(await alertRepository.updateStatus(id, input))
