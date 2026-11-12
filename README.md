@@ -25,7 +25,9 @@
   <img src="docs/screenshots/dashboard.png" alt="Dashboard ejecutivo de Trazo" width="100%" />
 </p>
 
-Trazo centraliza el portafolio de proyectos de una empresa —presupuestos, avance, fechas, responsables y estado— y convierte cada cambio relevante en información trazable. No es un CRUD: cada edición genera una **versión inmutable** y un **evento por campo auditado**, y la interfaz explica **qué cambió, cuándo, quién lo hizo y qué regla disparó la alerta**. Dinero en céntimos enteros, fechas ISO-8601 UTC y un dataset determinista. Incluye reglas de control de desviación presupuestal —advertencia por encima del 10 %, crítica por encima del 20 %— con trazabilidad auditable de cada cambio.
+Trazo centraliza el portafolio de proyectos de una empresa —presupuestos, avance, fechas, responsables y estado— y convierte cada cambio relevante en información trazable. No es un CRUD: cada edición genera una **versión inmutable** y un **evento por campo auditado**, y la interfaz explica **qué cambió, cuándo, quién lo hizo y qué regla disparó la alerta**. Dinero en céntimos enteros, fechas ISO-8601 UTC y un dataset determinista.
+
+Incluye reglas de control de desviación presupuestal: advertencia por encima del 10 % y crítica por encima del 20 %.
 
 ## Aviso sobre la demo
 
@@ -97,7 +99,7 @@ Contexto y consecuencias en [docs/DECISIONS.md](docs/DECISIONS.md).
 
 Resultados de la última verificación local:
 
-- **199 pruebas unitarias** en el frontend, **82,34 % de líneas** cubiertas. En un equipo lento, la prueba de dashboard puede superar el timeout de 10 s; con `--testTimeout=30000` la suite pasa completa.
+- **199 pruebas unitarias** en el frontend, **82,34 % de líneas** cubiertas.
 - **64 pruebas** en el backend, **95,34 % de líneas** cubiertas (dominio, esquemas, rutas y middleware).
 - **14 flujos E2E** con Playwright sobre el entorno mock: flujo estrella, reset, simulador, móvil y auditoría axe AA.
 - **1 E2E de integración** contra la API y SQL Server reales; requiere backend y base de datos, por eso no se ejecuta en CI.
