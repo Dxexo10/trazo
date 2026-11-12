@@ -48,5 +48,15 @@ export default defineConfig({
     // "React.act is not a function".
     env: { NODE_ENV: 'test' },
     testTimeout: 10_000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary'],
+      thresholds: {
+        lines: 75,
+        statements: 74,
+        functions: 68,
+        branches: 60,
+      },
+    },
   },
 })
