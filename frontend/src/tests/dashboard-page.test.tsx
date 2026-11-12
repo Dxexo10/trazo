@@ -58,7 +58,9 @@ describe('DashboardPage', () => {
     ).toBeInTheDocument()
 
     expect(await screen.findByText('Total de proyectos')).toBeInTheDocument()
-    expect(await screen.findByText('Proyectos que requieren atención')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Proyectos que requieren atención'),
+    ).toBeInTheDocument()
     expect(await screen.findByText('Actividad reciente')).toBeInTheDocument()
 
     expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()

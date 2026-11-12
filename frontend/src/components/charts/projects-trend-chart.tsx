@@ -93,17 +93,11 @@ export function ProjectsTrendChart({ data }: ProjectsTrendChartProps) {
 
       <div className="mt-2 flex flex-wrap items-center gap-4 px-3 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-chart-1"
-          />
+          <span aria-hidden="true" className="size-2 rounded-full bg-chart-1" />
           Proyectos creados
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-chart-2"
-          />
+          <span aria-hidden="true" className="size-2 rounded-full bg-chart-2" />
           Proyectos completados
         </span>
       </div>

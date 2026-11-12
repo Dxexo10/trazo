@@ -15,7 +15,9 @@ interface StatusDistributionChartProps {
   data: StatusSlice[]
 }
 
-export function StatusDistributionChart({ data }: StatusDistributionChartProps) {
+export function StatusDistributionChart({
+  data,
+}: StatusDistributionChartProps) {
   const total = data.reduce((sum, slice) => sum + slice.count, 0)
   const visible = data.filter((slice) => slice.count > 0)
 
@@ -47,10 +49,7 @@ export function StatusDistributionChart({ data }: StatusDistributionChartProps) 
               strokeWidth={2}
             >
               {visible.map((slice) => (
-                <Cell
-                  key={slice.status}
-                  fill={STATUS_COLORS[slice.status]}
-                />
+                <Cell key={slice.status} fill={STATUS_COLORS[slice.status]} />
               ))}
             </Pie>
             <Tooltip

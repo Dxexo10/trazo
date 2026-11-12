@@ -5,12 +5,7 @@ const API_MAX_PAGE_SIZE = 100
 const API_DEFAULT_PAGE_SIZE = 20
 
 export type QueryValue =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | readonly (string | number)[]
+  string | number | boolean | null | undefined | readonly (string | number)[]
 
 export class ApiError extends Error {
   readonly status: number
@@ -127,11 +122,9 @@ export async function apiRequest<T>(
   const payload = await parseResponseBody(response)
 
   if (!response.ok) {
-    const errorBody = payload as
-      | {
-          error?: { code?: string; message?: string; details?: unknown }
-        }
-      | null
+    const errorBody = payload as {
+      error?: { code?: string; message?: string; details?: unknown }
+    } | null
 
     throw new ApiError(
       errorBody?.error?.message ??
@@ -217,7 +210,11 @@ export async function apiList<T>(
     }
 
     const reachedTotal = offset + body.items.length >= total
-    if (body.items.length === 0 || reachedTotal || offset + body.items.length >= end)
+    if (
+      body.items.length === 0 ||
+      reachedTotal ||
+      offset + body.items.length >= end
+    )
       break
 
     cursor += 1

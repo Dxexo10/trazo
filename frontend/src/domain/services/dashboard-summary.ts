@@ -257,7 +257,10 @@ export function buildDashboardSummary({
       plannedBudgetCents,
       currentBudgetCents,
     },
-    budgetVariationPct: percentageChange(plannedBudgetCents, currentBudgetCents),
+    budgetVariationPct: percentageChange(
+      plannedBudgetCents,
+      currentBudgetCents,
+    ),
     deltas: {
       projects: percentageChange(previous.length, current.length),
       inProgress: percentageChange(previousInProgress, periodInProgress),

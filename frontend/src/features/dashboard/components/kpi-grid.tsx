@@ -1,9 +1,4 @@
-import {
-  CircleCheck,
-  CirclePlay,
-  Layers,
-  TriangleAlert,
-} from 'lucide-react'
+import { CircleCheck, CirclePlay, Layers, TriangleAlert } from 'lucide-react'
 import { KpiCard } from '@/components/shared/kpi-card'
 import type { DashboardSummary } from '@/domain/services/dashboard-summary'
 import { formatNumber } from '@/lib/format-number'

@@ -42,9 +42,7 @@ export function resolveTheme(
   return preference
 }
 
-export function applyThemeToDocument(
-  resolvedTheme: ResolvedTheme,
-): void {
+export function applyThemeToDocument(resolvedTheme: ResolvedTheme): void {
   const root = document.documentElement
   root.classList.toggle('dark', resolvedTheme === 'dark')
   root.style.colorScheme = resolvedTheme

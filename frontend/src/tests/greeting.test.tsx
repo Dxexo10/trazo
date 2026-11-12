@@ -21,10 +21,7 @@ function DashboardGreetingProbe({ name }: { name: string }) {
   return <p>{useDashboardGreeting(name)}</p>
 }
 
-function expectedDashboardGreeting(
-  band: (typeof BANDS)[number],
-  seed: number,
-) {
+function expectedDashboardGreeting(band: (typeof BANDS)[number], seed: number) {
   return buildDashboardGreeting(
     band,
     'Sofía',

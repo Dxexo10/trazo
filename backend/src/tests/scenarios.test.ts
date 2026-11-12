@@ -41,12 +41,12 @@ describe('demo scenarios', () => {
   })
 
   it('bloquea el proyecto y eleva la prioridad', () => {
-    expect(
-      SCENARIOS['project-on-hold'].buildInput(createProject()),
-    ).toEqual({ status: 'on_hold' })
-    expect(
-      SCENARIOS['priority-critical'].buildInput(createProject()),
-    ).toEqual({ priority: 'critical' })
+    expect(SCENARIOS['project-on-hold'].buildInput(createProject())).toEqual({
+      status: 'on_hold',
+    })
+    expect(SCENARIOS['priority-critical'].buildInput(createProject())).toEqual({
+      priority: 'critical',
+    })
   })
 
   it('valida el id del escenario y el proyecto destino', () => {

@@ -89,14 +89,14 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
 
       <div className="mt-2 flex flex-wrap items-center gap-4 px-3 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden="true" className="size-2 rounded-full bg-chart-muted" />
+          <span
+            aria-hidden="true"
+            className="size-2 rounded-full bg-chart-muted"
+          />
           Presupuesto inicial
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-chart-1"
-          />
+          <span aria-hidden="true" className="size-2 rounded-full bg-chart-1" />
           Presupuesto actual
         </span>
         <span className="ml-auto">Montos en soles (PEN)</span>

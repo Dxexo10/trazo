@@ -18,7 +18,10 @@ export function overdueDays(project: Project, referenceDate: string): number {
 }
 
 export function budgetVariation(project: Project): number | null {
-  return percentageChange(project.initialBudgetCents, project.currentBudgetCents)
+  return percentageChange(
+    project.initialBudgetCents,
+    project.currentBudgetCents,
+  )
 }
 
 export type RiskLevel = 'low' | 'medium' | 'high'

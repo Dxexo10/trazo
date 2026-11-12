@@ -77,7 +77,11 @@ describe('Trazo token contrast — light', () => {
     ['Texto principal sobre marfil', 'text-primary', 'background'],
     ['Texto secundario sobre marfil', 'text-secondary', 'background'],
     ['Blanco sobre botón primario', 'primary-foreground', 'primary'],
-    ['Terracota accesible sobre superficie', 'brand-terracotta-hover', 'surface'],
+    [
+      'Terracota accesible sobre superficie',
+      'brand-terracotta-hover',
+      'surface',
+    ],
     ['Éxito sobre fondo suave', 'success', 'success-soft'],
     ['Advertencia sobre fondo suave', 'warning', 'warning-soft'],
     ['Error sobre fondo suave', 'danger', 'danger-soft'],
@@ -113,7 +117,11 @@ describe('Trazo token contrast — dark', () => {
     ['Advertencia sobre fondo suave', 'warning', 'warning-soft'],
     ['Error sobre fondo suave', 'danger', 'danger-soft'],
     ['Info sobre fondo suave', 'info', 'info-soft'],
-    ['Texto de sidebar sobre sidebar nocturna', 'sidebar-foreground', 'sidebar'],
+    [
+      'Texto de sidebar sobre sidebar nocturna',
+      'sidebar-foreground',
+      'sidebar',
+    ],
     ['Marfil sobre sidebar nocturna', 'brand-ivory', 'sidebar'],
   ]
 

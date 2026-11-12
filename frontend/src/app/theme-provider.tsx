@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 import {
   applyThemeToDocument,
   getSystemPrefersDark,
@@ -16,9 +22,8 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<ThemePreference>(readStoredTheme)
-  const [systemPrefersDark, setSystemPrefersDark] = useState(
-    getSystemPrefersDark,
-  )
+  const [systemPrefersDark, setSystemPrefersDark] =
+    useState(getSystemPrefersDark)
 
   const resolvedTheme = resolveTheme(theme, systemPrefersDark)
 

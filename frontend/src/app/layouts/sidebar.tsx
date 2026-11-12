@@ -158,8 +158,7 @@ export function SidebarContent({
 
           if (item.children) {
             const open =
-              groupOverrides[item.href] ??
-              (active || activeChildHref !== null)
+              groupOverrides[item.href] ?? (active || activeChildHref !== null)
 
             return (
               <SidebarGroup

@@ -108,8 +108,9 @@ describe('apiRequest', () => {
   it('devuelve undefined en respuestas 204', async () => {
     stubResponse(undefined, 204)
 
-    await expect(apiRequest('/projects/1/archive', { method: 'POST' })).resolves
-      .toBeUndefined()
+    await expect(
+      apiRequest('/projects/1/archive', { method: 'POST' }),
+    ).resolves.toBeUndefined()
   })
 })
 
@@ -131,7 +132,9 @@ describe('apiGetAllPages', () => {
       })
     vi.stubGlobal('fetch', fetchMock)
 
-    const items = await apiGetAllPages<number>('/activity', { source: 'manual' })
+    const items = await apiGetAllPages<number>('/activity', {
+      source: 'manual',
+    })
 
     expect(items).toEqual([1, 2, 3])
     expect(fetchMock).toHaveBeenCalledTimes(2)
@@ -143,7 +146,8 @@ describe('apiList', () => {
   it('agrega páginas cuando el pageSize solicitado supera el máximo del backend', async () => {
     const fetchMock = vi.fn().mockImplementation((url: string) => {
       const page = Number(new URL(url).searchParams.get('page'))
-      const items = page === 1 ? Array.from({ length: 100 }, (_, i) => i) : [100]
+      const items =
+        page === 1 ? Array.from({ length: 100 }, (_, i) => i) : [100]
 
       return Promise.resolve({
         status: 200,
@@ -154,7 +158,11 @@ describe('apiList', () => {
     })
     vi.stubGlobal('fetch', fetchMock)
 
-    const result = await apiList<number>('/projects', {}, { page: 1, pageSize: 250 })
+    const result = await apiList<number>(
+      '/projects',
+      {},
+      { page: 1, pageSize: 250 },
+    )
 
     expect(result.items).toHaveLength(101)
     expect(result.pageSize).toBe(250)

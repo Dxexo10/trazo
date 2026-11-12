@@ -35,9 +35,10 @@ describe('AppearanceControl', () => {
 
     expect(document.documentElement.classList.contains('dark')).toBe(true)
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark')
-    expect(
-      screen.getByRole('button', { name: 'Oscuro' }),
-    ).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Oscuro' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
   it('uses a labeled menu in compact mode', async () => {

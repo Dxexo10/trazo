@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
-import { BellRing, Info, OctagonAlert, TriangleAlert, Wallet } from 'lucide-react'
+import {
+  BellRing,
+  Info,
+  OctagonAlert,
+  TriangleAlert,
+  Wallet,
+} from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import type { SeveritySlice } from '@/domain/services/dashboard-summary'
 import { formatCurrency, formatPercentage } from '@/domain/utils/money'
@@ -110,7 +116,9 @@ export function AlertsSummaryCard({
     <Card className="gap-4 p-5">
       <div className="flex items-start justify-between gap-3 px-0">
         <div>
-          <p className="text-sm font-medium text-foreground">Alertas abiertas</p>
+          <p className="text-sm font-medium text-foreground">
+            Alertas abiertas
+          </p>
           <p className="text-xs text-muted-foreground">
             {openAlerts} pendientes de revisión
           </p>

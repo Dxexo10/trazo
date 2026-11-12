@@ -27,11 +27,11 @@ describe('date utils', () => {
   })
 
   it('describes relative time in Spanish', () => {
-    expect(formatRelative('2026-10-31T08:00:00.000Z', '2026-10-31T12:00:00.000Z')).toBe(
-      'hace 4 h',
-    )
-    expect(formatRelative('2026-10-30T12:00:00.000Z', '2026-10-31T12:00:00.000Z')).toBe(
-      'ayer',
-    )
+    expect(
+      formatRelative('2026-10-31T08:00:00.000Z', '2026-10-31T12:00:00.000Z'),
+    ).toBe('hace 4 h')
+    expect(
+      formatRelative('2026-10-30T12:00:00.000Z', '2026-10-31T12:00:00.000Z'),
+    ).toBe('ayer')
   })
 })

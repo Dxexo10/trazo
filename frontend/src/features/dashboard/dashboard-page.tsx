@@ -22,10 +22,7 @@ import {
 } from './components/financial-summary'
 import { KpiGrid } from './components/kpi-grid'
 import { RecentActivity } from './components/recent-activity'
-import {
-  parsePeriod,
-  useDashboardFilters,
-} from './hooks/use-dashboard-filters'
+import { parsePeriod, useDashboardFilters } from './hooks/use-dashboard-filters'
 import { useDashboardSummary } from './hooks/use-dashboard-summary'
 
 const ProjectsTrendChart = lazy(() =>
@@ -83,7 +80,8 @@ export function DashboardPage() {
 
   const summary = data?.summary
   const previousPeriod = parsePeriod(String(period))
-  const firstName = DEMO_CURRENT_USER.name.split(' ')[0] ?? DEMO_CURRENT_USER.name
+  const firstName =
+    DEMO_CURRENT_USER.name.split(' ')[0] ?? DEMO_CURRENT_USER.name
   const dashboardGreeting = useDashboardGreeting(firstName)
 
   return (

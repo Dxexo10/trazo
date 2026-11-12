@@ -11,34 +11,146 @@ interface ProjectBlueprint {
 }
 
 const BLUEPRINTS: readonly ProjectBlueprint[] = [
-  { name: 'Implementación de ERP corporativo', sector: 'technology', tags: ['ERP', 'procesos'] },
-  { name: 'Modernización de infraestructura tecnológica', sector: 'technology', tags: ['infraestructura', 'cloud'] },
-  { name: 'Migración a servicios cloud', sector: 'technology', tags: ['cloud', 'arquitectura'] },
-  { name: 'Implementación de sistema de inventarios', sector: 'technology', tags: ['logística', 'datos'] },
-  { name: 'Automatización de reportes financieros', sector: 'technology', tags: ['automatización', 'finanzas'] },
-  { name: 'Plataforma de comercio electrónico B2B', sector: 'technology', tags: ['e-commerce', 'producto'] },
-  { name: 'Rediseño del portal de clientes', sector: 'technology', tags: ['experiencia', 'producto'] },
-  { name: 'Integración de pasarela de pagos', sector: 'technology', tags: ['pagos', 'integración'] },
-  { name: 'Sistema de gestión documental', sector: 'technology', tags: ['documentos', 'procesos'] },
-  { name: 'Observabilidad y monitoreo de aplicaciones', sector: 'technology', tags: ['monitoreo', 'confiabilidad'] },
-  { name: 'Construcción de centro logístico', sector: 'construction', tags: ['logística', 'obra civil'] },
-  { name: 'Remodelación de sede administrativa', sector: 'construction', tags: ['remodelación', 'oficinas'] },
-  { name: 'Ampliación de planta industrial', sector: 'construction', tags: ['planta', 'capacidad'] },
-  { name: 'Construcción de oficinas corporativas', sector: 'construction', tags: ['oficinas', 'obra civil'] },
-  { name: 'Rehabilitación de almacén central', sector: 'construction', tags: ['almacén', 'infraestructura'] },
-  { name: 'Obra civil para data center', sector: 'construction', tags: ['obra civil', 'data center'] },
-  { name: 'Construcción de centro de distribución norte', sector: 'construction', tags: ['distribución', 'logística'] },
-  { name: 'Mejora de accesos y estacionamientos', sector: 'construction', tags: ['accesos', 'seguridad'] },
-  { name: 'Transformación de procesos comerciales', sector: 'consulting', tags: ['procesos', 'comercial'] },
-  { name: 'Diseño de modelo operativo', sector: 'consulting', tags: ['operaciones', 'diseño'] },
-  { name: 'Programa de eficiencia de costos', sector: 'consulting', tags: ['costos', 'eficiencia'] },
-  { name: 'Reestructuración organizacional', sector: 'consulting', tags: ['organización', 'talento'] },
-  { name: 'Plan de continuidad del negocio', sector: 'consulting', tags: ['riesgo', 'continuidad'] },
-  { name: 'Diagnóstico de madurez digital', sector: 'consulting', tags: ['digital', 'diagnóstico'] },
-  { name: 'Implementación de marco de gobierno de TI', sector: 'consulting', tags: ['gobierno', 'TI'] },
-  { name: 'Estrategia de expansión regional', sector: 'consulting', tags: ['estrategia', 'expansión'] },
-  { name: 'Optimización de cadena de suministro', sector: 'consulting', tags: ['suministro', 'logística'] },
-  { name: 'Programa de experiencia de cliente', sector: 'consulting', tags: ['experiencia', 'cliente'] },
+  {
+    name: 'Implementación de ERP corporativo',
+    sector: 'technology',
+    tags: ['ERP', 'procesos'],
+  },
+  {
+    name: 'Modernización de infraestructura tecnológica',
+    sector: 'technology',
+    tags: ['infraestructura', 'cloud'],
+  },
+  {
+    name: 'Migración a servicios cloud',
+    sector: 'technology',
+    tags: ['cloud', 'arquitectura'],
+  },
+  {
+    name: 'Implementación de sistema de inventarios',
+    sector: 'technology',
+    tags: ['logística', 'datos'],
+  },
+  {
+    name: 'Automatización de reportes financieros',
+    sector: 'technology',
+    tags: ['automatización', 'finanzas'],
+  },
+  {
+    name: 'Plataforma de comercio electrónico B2B',
+    sector: 'technology',
+    tags: ['e-commerce', 'producto'],
+  },
+  {
+    name: 'Rediseño del portal de clientes',
+    sector: 'technology',
+    tags: ['experiencia', 'producto'],
+  },
+  {
+    name: 'Integración de pasarela de pagos',
+    sector: 'technology',
+    tags: ['pagos', 'integración'],
+  },
+  {
+    name: 'Sistema de gestión documental',
+    sector: 'technology',
+    tags: ['documentos', 'procesos'],
+  },
+  {
+    name: 'Observabilidad y monitoreo de aplicaciones',
+    sector: 'technology',
+    tags: ['monitoreo', 'confiabilidad'],
+  },
+  {
+    name: 'Construcción de centro logístico',
+    sector: 'construction',
+    tags: ['logística', 'obra civil'],
+  },
+  {
+    name: 'Remodelación de sede administrativa',
+    sector: 'construction',
+    tags: ['remodelación', 'oficinas'],
+  },
+  {
+    name: 'Ampliación de planta industrial',
+    sector: 'construction',
+    tags: ['planta', 'capacidad'],
+  },
+  {
+    name: 'Construcción de oficinas corporativas',
+    sector: 'construction',
+    tags: ['oficinas', 'obra civil'],
+  },
+  {
+    name: 'Rehabilitación de almacén central',
+    sector: 'construction',
+    tags: ['almacén', 'infraestructura'],
+  },
+  {
+    name: 'Obra civil para data center',
+    sector: 'construction',
+    tags: ['obra civil', 'data center'],
+  },
+  {
+    name: 'Construcción de centro de distribución norte',
+    sector: 'construction',
+    tags: ['distribución', 'logística'],
+  },
+  {
+    name: 'Mejora de accesos y estacionamientos',
+    sector: 'construction',
+    tags: ['accesos', 'seguridad'],
+  },
+  {
+    name: 'Transformación de procesos comerciales',
+    sector: 'consulting',
+    tags: ['procesos', 'comercial'],
+  },
+  {
+    name: 'Diseño de modelo operativo',
+    sector: 'consulting',
+    tags: ['operaciones', 'diseño'],
+  },
+  {
+    name: 'Programa de eficiencia de costos',
+    sector: 'consulting',
+    tags: ['costos', 'eficiencia'],
+  },
+  {
+    name: 'Reestructuración organizacional',
+    sector: 'consulting',
+    tags: ['organización', 'talento'],
+  },
+  {
+    name: 'Plan de continuidad del negocio',
+    sector: 'consulting',
+    tags: ['riesgo', 'continuidad'],
+  },
+  {
+    name: 'Diagnóstico de madurez digital',
+    sector: 'consulting',
+    tags: ['digital', 'diagnóstico'],
+  },
+  {
+    name: 'Implementación de marco de gobierno de TI',
+    sector: 'consulting',
+    tags: ['gobierno', 'TI'],
+  },
+  {
+    name: 'Estrategia de expansión regional',
+    sector: 'consulting',
+    tags: ['estrategia', 'expansión'],
+  },
+  {
+    name: 'Optimización de cadena de suministro',
+    sector: 'consulting',
+    tags: ['suministro', 'logística'],
+  },
+  {
+    name: 'Programa de experiencia de cliente',
+    sector: 'consulting',
+    tags: ['experiencia', 'cliente'],
+  },
 ]
 
 const CLIENTS = [
@@ -57,15 +169,56 @@ const CLIENTS = [
 ] as const
 
 const STATUS_PATTERN: readonly ProjectStatus[] = [
-  'in_progress', 'completed', 'in_progress', 'planned', 'in_progress', 'on_hold',
-  'completed', 'in_progress', 'in_progress', 'cancelled', 'completed', 'in_progress',
-  'on_hold', 'in_progress', 'completed', 'planned', 'in_progress', 'completed',
-  'in_progress', 'on_hold', 'completed', 'in_progress', 'planned', 'in_progress',
-  'completed', 'in_progress', 'cancelled', 'completed', 'in_progress', 'on_hold',
-  'completed', 'in_progress', 'planned', 'in_progress', 'completed', 'in_progress',
-  'on_hold', 'completed', 'in_progress', 'cancelled', 'completed', 'in_progress',
-  'planned', 'completed', 'in_progress', 'on_hold', 'completed', 'in_progress',
-  'cancelled', 'planned',
+  'in_progress',
+  'completed',
+  'in_progress',
+  'planned',
+  'in_progress',
+  'on_hold',
+  'completed',
+  'in_progress',
+  'in_progress',
+  'cancelled',
+  'completed',
+  'in_progress',
+  'on_hold',
+  'in_progress',
+  'completed',
+  'planned',
+  'in_progress',
+  'completed',
+  'in_progress',
+  'on_hold',
+  'completed',
+  'in_progress',
+  'planned',
+  'in_progress',
+  'completed',
+  'in_progress',
+  'cancelled',
+  'completed',
+  'in_progress',
+  'on_hold',
+  'completed',
+  'in_progress',
+  'planned',
+  'in_progress',
+  'completed',
+  'in_progress',
+  'on_hold',
+  'completed',
+  'in_progress',
+  'cancelled',
+  'completed',
+  'in_progress',
+  'planned',
+  'completed',
+  'in_progress',
+  'on_hold',
+  'completed',
+  'in_progress',
+  'cancelled',
+  'planned',
 ]
 
 const BUDGET_RANGES: Record<Sector, readonly [number, number]> = {
@@ -133,7 +286,9 @@ export function generateProjects(random: () => number): Project[] {
 
     const [minBudget, maxBudget] = BUDGET_RANGES[blueprint.sector]
     const initialSoles =
-      index === 47 ? 0 : roundToTenThousand(randomBetween(random, minBudget, maxBudget))
+      index === 47
+        ? 0
+        : roundToTenThousand(randomBetween(random, minBudget, maxBudget))
 
     const [minVariance, maxVariance] = VARIANCE_RANGES[status]
     const variance = randomBetween(random, minVariance, maxVariance)
@@ -147,7 +302,10 @@ export function generateProjects(random: () => number): Project[] {
 
     const startDate = addDays(reference, -randomInt(random, 70, 560))
     const [minDuration, maxDuration] = DURATION_MONTHS[blueprint.sector]
-    let dueDate = addMonths(startDate, randomInt(random, minDuration, maxDuration))
+    let dueDate = addMonths(
+      startDate,
+      randomInt(random, minDuration, maxDuration),
+    )
 
     if (status === 'planned' && dueDate < reference) {
       dueDate = addDays(reference, randomInt(random, 20, 120))
@@ -160,23 +318,28 @@ export function generateProjects(random: () => number): Project[] {
     let completedAt: string | null = null
     if (status === 'completed') {
       const candidate = addDays(dueDate, randomInt(random, -10, 25))
-      completedAt = toISODate(candidate > reference ? addDays(reference, -randomInt(random, 2, 20)) : candidate)
+      completedAt = toISODate(
+        candidate > reference
+          ? addDays(reference, -randomInt(random, 2, 20))
+          : candidate,
+      )
     }
 
     const createdAt = new Date(
-      addDays(startDate, -randomInt(random, 8, 25)).getTime() + randomInt(random, 0, 8) * 3_600_000,
+      addDays(startDate, -randomInt(random, 8, 25)).getTime() +
+        randomInt(random, 0, 8) * 3_600_000,
     )
     let updatedAt = new Date(
-      reference.getTime() - randomInt(random, 0, 55) * 86_400_000 - randomInt(random, 0, 20) * 3_600_000,
+      reference.getTime() -
+        randomInt(random, 0, 55) * 86_400_000 -
+        randomInt(random, 0, 20) * 3_600_000,
     )
     if (updatedAt.getTime() <= createdAt.getTime()) {
       updatedAt = new Date(createdAt.getTime() + 86_400_000)
     }
 
     const name =
-      index < BLUEPRINTS.length
-        ? blueprint.name
-        : `${blueprint.name} — Fase II`
+      index < BLUEPRINTS.length ? blueprint.name : `${blueprint.name} — Fase II`
 
     return {
       id: `prj_${String(index + 1).padStart(4, '0')}`,

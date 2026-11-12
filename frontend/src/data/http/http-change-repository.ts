@@ -1,7 +1,4 @@
-import type {
-  ChangeEventRepository,
-  ChangeQuery,
-} from '@/data/contracts'
+import type { ChangeEventRepository, ChangeQuery } from '@/data/contracts'
 import type { ChangeEvent } from '@/domain/models'
 import { apiGetAllPages, apiList } from './client'
 

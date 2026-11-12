@@ -8,10 +8,7 @@ import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
 import { useUsers } from '@/features/users/hooks/use-users'
 import { useCreateProject } from './hooks/use-project-mutations'
 import { ProjectForm } from './project-form'
-import {
-  toProjectInput,
-  type ProjectFormValues,
-} from './project-form-schema'
+import { toProjectInput, type ProjectFormValues } from './project-form-schema'
 
 const DEFAULT_DATES: ProjectFormValues = {
   name: '',

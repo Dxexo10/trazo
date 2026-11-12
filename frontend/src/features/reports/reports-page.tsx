@@ -190,10 +190,7 @@ export function ReportsPage() {
       return buildProjectsReport({
         projects: projectQuery.data,
         users,
-        filters: describeProjectReportFilters(
-          toProjectFilters(filters),
-          users,
-        ),
+        filters: describeProjectReportFilters(toProjectFilters(filters), users),
         referenceDate: DEMO_REFERENCE_DATE,
         generatedAt,
       })

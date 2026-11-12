@@ -15,11 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  PRIORITY_LABELS,
-  SECTOR_LABELS,
-  STATUS_LABELS,
-} from '@/lib/labels'
+import { PRIORITY_LABELS, SECTOR_LABELS, STATUS_LABELS } from '@/lib/labels'
 import {
   PROJECT_PRIORITIES,
   PROJECT_STATUSES,
@@ -42,7 +38,14 @@ interface FieldProps {
   className?: string
 }
 
-function Field({ label, htmlFor, error, hint, children, className }: FieldProps) {
+function Field({
+  label,
+  htmlFor,
+  error,
+  hint,
+  children,
+  className,
+}: FieldProps) {
   return (
     <div className={cn('space-y-1.5', className)}>
       <Label htmlFor={htmlFor}>{label}</Label>
@@ -89,12 +92,8 @@ export function ProjectForm({
   })
 
   const status = useWatch({ control, name: 'status' })
-  const initialBudget = Number(
-    useWatch({ control, name: 'initialBudget' }),
-  )
-  const currentBudget = Number(
-    useWatch({ control, name: 'currentBudget' }),
-  )
+  const initialBudget = Number(useWatch({ control, name: 'initialBudget' }))
+  const currentBudget = Number(useWatch({ control, name: 'currentBudget' }))
   const variation =
     Number.isFinite(initialBudget) && Number.isFinite(currentBudget)
       ? percentageChange(initialBudget, currentBudget)
@@ -135,11 +134,7 @@ export function ProjectForm({
   )
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4"
-    >
+    <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Card className="gap-5 p-5">
         <div className="space-y-1">
           <h2 className="text-base font-semibold text-foreground">

@@ -54,7 +54,9 @@ describe('AppShell', () => {
     const user = userEvent.setup()
     const { unmount } = renderShell()
 
-    await user.click(screen.getByRole('button', { name: 'Expandir navegación' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Expandir navegación' }),
+    )
 
     expect(window.localStorage.getItem('trazo:nav-collapsed')).toBe('false')
 

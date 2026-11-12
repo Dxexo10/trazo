@@ -42,15 +42,13 @@ export const versionRepository: VersionRepository = isHttpBackendEnabled
   ? new HttpVersionRepository()
   : new MockVersionRepository()
 
-export const changeEventRepository: ChangeEventRepository =
-  isHttpBackendEnabled
-    ? new HttpChangeEventRepository()
-    : new MockChangeEventRepository()
+export const changeEventRepository: ChangeEventRepository = isHttpBackendEnabled
+  ? new HttpChangeEventRepository()
+  : new MockChangeEventRepository()
 
-export const ruleConfigRepository: RuleConfigRepository =
-  isHttpBackendEnabled
-    ? new HttpRuleConfigRepository()
-    : new MockRuleConfigRepository()
+export const ruleConfigRepository: RuleConfigRepository = isHttpBackendEnabled
+  ? new HttpRuleConfigRepository()
+  : new MockRuleConfigRepository()
 
 export const userRepository: UserRepository = isHttpBackendEnabled
   ? new HttpUserRepository()
