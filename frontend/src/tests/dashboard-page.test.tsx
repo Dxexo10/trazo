@@ -68,15 +68,21 @@ describe('DashboardPage', () => {
     expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
   })
 
-  it('keeps the full portfolio total when a shorter period is selected', async () => {
-    const user = userEvent.setup()
-    renderDashboard()
+  it(
+    'keeps the full portfolio total when a shorter period is selected',
+    async () => {
+      const user = userEvent.setup()
+      renderDashboard()
 
-    await screen.findByText('Total de proyectos', undefined, { timeout: 8000 })
-    expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
+      await screen.findByText('Total de proyectos', undefined, {
+        timeout: 8000,
+      })
+      expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '3 meses' }))
+      await user.click(screen.getByRole('button', { name: '3 meses' }))
 
-    expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
-  }, SLOW_TEST_TIMEOUT_MS)
+      expect(within(totalProjectsCard()).getByText('50')).toBeInTheDocument()
+    },
+    SLOW_TEST_TIMEOUT_MS,
+  )
 })
