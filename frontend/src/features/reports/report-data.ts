@@ -24,11 +24,7 @@ export type ReportColumnKind =
   'text' | 'integer' | 'currency' | 'percent' | 'date'
 
 export type ReportColumnRender =
-  | 'status'
-  | 'priority'
-  | 'progress'
-  | 'variation'
-  | 'dueDate'
+  'status' | 'priority' | 'progress' | 'variation' | 'dueDate'
 
 export type ReportColumnAlign = 'left' | 'right'
 

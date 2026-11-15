@@ -16,7 +16,10 @@ interface ReportCellContentProps {
   row: ReportRow
 }
 
-function variationTone(value: number): { className: string; Icon: typeof TrendingUp } {
+function variationTone(value: number): {
+  className: string
+  Icon: typeof TrendingUp
+} {
   if (value > 20) {
     return { className: 'bg-danger-soft text-danger', Icon: TrendingUp }
   }
