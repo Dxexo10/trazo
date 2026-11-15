@@ -81,6 +81,11 @@ describe('report documents', () => {
     expect(document.rows.map((row) => row.code)).toEqual(['PRJ-001', 'PRJ-002'])
     expect(document.metrics).toContainEqual({ label: 'Proyectos', value: '2' })
     expect(document.rows[0]?.owner).toBe('Sofía Herrera')
+    expect(document.rows[0]).toMatchObject({
+      statusKey: 'in_progress',
+      priorityKey: 'medium',
+      overdue: true,
+    })
   })
 
   it('builds an alert report with rule labels and metrics', () => {

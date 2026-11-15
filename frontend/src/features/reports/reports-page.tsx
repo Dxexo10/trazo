@@ -23,12 +23,12 @@ import type { AlertFilters } from '@/features/alerts/hooks/use-alert-filters'
 import type { ProjectFilters } from '@/features/projects/hooks/use-project-filters'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
 import { formatNumber } from '@/lib/format-number'
+import { cn } from '@/lib/utils'
 import {
   buildAlertsReport,
   buildProjectsReport,
   describeAlertReportFilters,
   describeProjectReportFilters,
-  formatReportCell,
   type ReportDocument,
 } from './report-data'
 import { downloadReportCsv, downloadReportXlsx } from './export/download'
@@ -42,6 +42,7 @@ import {
   type ReportTab,
 } from './hooks/use-report-filters'
 import { ReportsFilters } from './components/reports-filters'
+import { ReportCellContent } from './components/report-cell'
 
 const PREVIEW_ROWS = 12
 
@@ -134,7 +135,10 @@ function ReportPreview({ document }: { document: ReportDocument }) {
               <TableHead
                 key={column.key}
                 scope="col"
-                className="h-auto py-2 tracking-[0.06em] whitespace-nowrap"
+                className={cn(
+                  'sticky top-0 z-10 h-auto border-b-2 border-brand-terracotta/40 bg-sand-soft py-2 tracking-[0.06em] whitespace-nowrap',
+                  column.align === 'right' && 'text-right',
+                )}
               >
                 {column.label}
               </TableHead>
@@ -145,14 +149,18 @@ function ReportPreview({ document }: { document: ReportDocument }) {
           {rows.map((row, index) => (
             <TableRow
               key={index}
-              className="border-b border-border/50 align-top last:border-0"
+              className="border-b border-border/50 align-top transition-colors last:border-0"
             >
               {document.columns.map((column) => (
                 <TableCell
                   key={column.key}
-                  className="py-2 align-top text-foreground"
+                  className={cn(
+                    'py-2 align-top text-foreground',
+                    column.align === 'right' && 'text-right tabular-nums',
+                    column.key === 'name' && 'font-medium',
+                  )}
                 >
-                  {formatReportCell(column, row[column.key])}
+                  <ReportCellContent column={column} row={row} />
                 </TableCell>
               ))}
             </TableRow>

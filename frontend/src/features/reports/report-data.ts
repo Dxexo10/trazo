@@ -23,13 +23,24 @@ import type { PeriodDays } from '@/lib/period'
 export type ReportColumnKind =
   'text' | 'integer' | 'currency' | 'percent' | 'date'
 
+export type ReportColumnRender =
+  | 'status'
+  | 'priority'
+  | 'progress'
+  | 'variation'
+  | 'dueDate'
+
+export type ReportColumnAlign = 'left' | 'right'
+
 export interface ReportColumn {
   key: string
   label: string
   kind: ReportColumnKind
+  render?: ReportColumnRender
+  align?: ReportColumnAlign
 }
 
-export type ReportCellValue = string | number | null
+export type ReportCellValue = string | number | boolean | null
 
 export interface ReportRow {
   [key: string]: ReportCellValue
@@ -77,6 +88,7 @@ export function formatReportCell(
   value: ReportCellValue | undefined,
 ): string {
   if (value === null || value === undefined || value === '') return '—'
+  if (typeof value === 'boolean') return '—'
 
   switch (column.kind) {
     case 'currency':
@@ -159,19 +171,37 @@ const PROJECT_COLUMNS: ReportColumn[] = [
   { key: 'client', label: 'Cliente', kind: 'text' },
   { key: 'sector', label: 'Sector', kind: 'text' },
   { key: 'owner', label: 'Responsable', kind: 'text' },
-  { key: 'status', label: 'Estado', kind: 'text' },
-  { key: 'priority', label: 'Prioridad', kind: 'text' },
-  { key: 'progress', label: 'Avance (%)', kind: 'integer' },
+  { key: 'status', label: 'Estado', kind: 'text', render: 'status' },
+  { key: 'priority', label: 'Prioridad', kind: 'text', render: 'priority' },
+  {
+    key: 'progress',
+    label: 'Avance (%)',
+    kind: 'integer',
+    render: 'progress',
+    align: 'right',
+  },
   {
     key: 'initialBudget',
     label: 'Presupuesto inicial (PEN)',
     kind: 'currency',
+    align: 'right',
   },
-  { key: 'currentBudget', label: 'Presupuesto actual (PEN)', kind: 'currency' },
-  { key: 'variation', label: 'Variación (%)', kind: 'percent' },
-  { key: 'startDate', label: 'Inicio', kind: 'date' },
-  { key: 'dueDate', label: 'Entrega', kind: 'date' },
-  { key: 'updatedAt', label: 'Actualizado', kind: 'date' },
+  {
+    key: 'currentBudget',
+    label: 'Presupuesto actual (PEN)',
+    kind: 'currency',
+    align: 'right',
+  },
+  {
+    key: 'variation',
+    label: 'Variación (%)',
+    kind: 'percent',
+    render: 'variation',
+    align: 'right',
+  },
+  { key: 'startDate', label: 'Inicio', kind: 'date', align: 'right' },
+  { key: 'dueDate', label: 'Entrega', kind: 'date', render: 'dueDate' },
+  { key: 'updatedAt', label: 'Actualizado', kind: 'date', align: 'right' },
   { key: 'archived', label: 'Archivado', kind: 'text' },
 ]
 
@@ -212,6 +242,9 @@ export function buildProjectsReport({
       owner: userName.get(project.ownerId) ?? project.ownerId,
       status: STATUS_LABELS[project.status],
       priority: PRIORITY_LABELS[project.priority],
+      statusKey: project.status,
+      priorityKey: project.priority,
+      overdue: isOverdue(project, referenceDate),
       progress: project.progress,
       initialBudget: project.initialBudgetCents,
       currentBudget: project.currentBudgetCents,

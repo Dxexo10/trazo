@@ -1,6 +1,10 @@
 import { strToU8, zipSync } from 'fflate'
 import { formatDate } from '@/domain/utils/date'
-import type { ReportColumn, ReportDocument } from '../report-data'
+import type {
+  ReportCellValue,
+  ReportColumn,
+  ReportDocument,
+} from '../report-data'
 
 type XlsxValue = string | number | null
 type XlsxRow = XlsxValue[]
@@ -47,9 +51,10 @@ function columnLetter(index: number): string {
 
 function toXlsxValue(
   column: ReportColumn,
-  value: string | number | null | undefined,
+  value: ReportCellValue | undefined,
 ): XlsxValue {
   if (value === null || value === undefined || value === '') return null
+  if (typeof value === 'boolean') return null
   if (typeof value !== 'number') {
     return column.kind === 'date' ? formatDate(value) : value
   }
